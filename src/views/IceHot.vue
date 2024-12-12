@@ -259,7 +259,8 @@ onUnmounted(() => {
         }
 
         .hotitem:hover {
-            background-color: #2e32380d;
+            background-color: var(--semi-color-fill-0);
+            color: var(--semi-color-text-0);
         }
 
         .hotitem {
@@ -267,7 +268,7 @@ onUnmounted(() => {
             align-items: center;
             box-sizing: border-box;
             min-height: 35px;
-            color: #222;
+            color: var(--semi-color-text-1);
             border-radius: 6px;
             margin: 4px;
             padding: 4px 14px;
@@ -275,17 +276,17 @@ onUnmounted(() => {
 
 
         .hotindex.one {
-            background-color: #ea444d;
+            background-color: var(--semi-hottiem-bg-1);
             color: #fff;
         }
 
         .hotindex.two {
-            background-color: #ed702d;
+            background-color: var(--semi-hottiem-bg-2);
             color: #fff;
         }
 
         .hotindex.three {
-            background-color: #eead3f;
+            background-color: var(--semi-hottiem-bg-3);
             color: #fff;
         }
 
@@ -297,7 +298,7 @@ onUnmounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #efeff5;
+            background-color: var(--semi-hottiem-bg-0);
             border-radius: 8px;
             transition: all .3s;
             flex: 0 0 24px;

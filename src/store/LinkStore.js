@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 export const useLinkData = defineStore('LinkData', () => {
-  // 解析环境变量中的JSON数据
+  // 默认
   const defaultmenuList = ref([
     {
       "name": "AI时代",
@@ -2050,11 +2050,6 @@ export const useLinkData = defineStore('LinkData', () => {
       "active": false,
       "engines": [
         {
-          "name": "熊���学术",
-          "link": "https://sc.panda321.com/scholar?hl=zh-cn&q=",
-          "placeholder": "请输入中英文关键词"
-        },
-        {
           "name": "Bing学术",
           "link": "https://cn.bing.com/academic/search?q=",
           "placeholder": "请输入中英文关键词"
@@ -2450,9 +2445,17 @@ export const useLinkData = defineStore('LinkData', () => {
   const backgroundList = ref(['jqbg01/index.html', 'jqbg02/index.html', 'jqbg03/index.html', 'jqbg04/index.html']);
   const backgrounddata = ref(backgroundList.value[0]);
   let currentIndex = 0;
-  const updatebackground = () => {
-    currentIndex = (currentIndex + 1) % backgroundList.value.length;
-    backgrounddata.value = backgroundList.value[currentIndex];
+  const updatebackground = (updateIndex=null) => {
+    if (updateIndex == 'dark') {
+      backgrounddata.value = backgroundList.value[1];
+    }
+    else if(updateIndex == 'light'){
+      backgrounddata.value = backgroundList.value[0];
+    }
+    else{
+      currentIndex = (currentIndex + 1) % backgroundList.value.length;
+      backgrounddata.value = backgroundList.value[currentIndex];
+    }
   };
 
   return {

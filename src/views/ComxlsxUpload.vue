@@ -10,7 +10,7 @@
                         <div class="list_main">
                             <div class="list_card">
                                 <div class="card-preview">
-                                    <IconFile style="color: #fff;" />
+                                    <IconFile />
                                 </div>
                                 <div class="card-info-main">
                                     <!-- 文件信息 -->
@@ -76,6 +76,7 @@ const menuList = useLinkData().menuList; //初始化侧边栏数据
 const handleChange = (info) => {
     if (info.file.status === 'done') {
         console.log('上传成功', info.file);
+        uploadError.value = false;
 
         let data = convertData(excelData.value)
         useLinkData().updateMenuList(data)
@@ -205,7 +206,7 @@ const convertData = (originalDataArray) => {
     .setting {
         width: 100px;
         height: 100px;
-        background-color: #F4F5F5;
+        background-color: var(--semi-color-bg-1);
         border-radius: 6px;
         display: flex;
         align-items: center;
@@ -243,7 +244,7 @@ const convertData = (originalDataArray) => {
     // overflow-y: scroll;
 
     .list_card:hover {
-        background-color: #2e323817;
+        background-color: var(--semi-color-fill-1);
     }
 
     .list_card {
@@ -253,7 +254,7 @@ const convertData = (originalDataArray) => {
         justify-content: space-between;
         height: 52px;
         width: 250px;
-        background-color: #2e32380d;
+        background-color: var(--semi-color-fill-0);
         cursor: pointer;
 
         .card-preview {
@@ -265,8 +266,8 @@ const convertData = (originalDataArray) => {
             align-items: center;
             border-radius: 3px;
             flex-shrink: 0;
-            background-color: #a7abb0;
-            color: #fff;
+            background-color: rgba(var(--semi-grey-3), 1);
+            color: rgba(var(--semi-white), 1);
 
         }
 
@@ -290,7 +291,7 @@ const convertData = (originalDataArray) => {
                     font-size: 14px;
                     line-height: 20px;
                     font-weight: 600;
-                    color: #1c1f23;
+                    color: var(--semi-color-text-0);
 
                 }
 
@@ -299,7 +300,7 @@ const convertData = (originalDataArray) => {
                     line-height: 16px;
                     font-weight: 400;
                     margin-left: 8px;
-                    color: #1c1f239e;
+                    color: var(--semi-color-text-2);
                     margin-top: 1px;
                 }
             }
@@ -373,13 +374,14 @@ const convertData = (originalDataArray) => {
             margin: 8px;
             border: none;
             background: #2220;
-            color: #1c1f23cc;
+            color:  var(--semi-color-text-1);
             justify-content: center;
             align-items: center;
             display: inline-flex;
             height: 24px;
             transition: background-color 0 ease-in 0;
             border-radius: 3px;
+            cursor: pointer;
 
             .card-close-icon {
                 font-size: 16px;

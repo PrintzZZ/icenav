@@ -26,6 +26,8 @@ import IconMenu from './IconMenu.vue';
 import IconLive from './IconLive.vue';
 import IconDesktop from './IconDesktop.vue';
 import Icontabs from './Icontabs.vue';
+import IconDark from './IconDark.vue';
+import IconLight from './IconLight.vue';
 
 export {
     IconChecked,
@@ -56,4 +58,6 @@ export {
     IconLive,
     IconDesktop,
     Icontabs,
+    IconDark,
+    IconLight,
 };

@@ -257,8 +257,10 @@ const HotMorehandleOk = () => {
         hotSortableInstance.destroy();
         hotSortableInstance = null;
     }
-    // 更新热点列表状态
-    linkStore.updateHotList(HotListTemp.value);
+    // 更新热点列表状态 
+    if(HotListTemp.value.length > 0){   
+        linkStore.updateHotList(HotListTemp.value);
+    }
     // 更新热点列表请求
     IceHotRef.value.updategetList();
 };

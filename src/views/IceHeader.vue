@@ -2,6 +2,9 @@
     <div class="ice_header">
         <div class="ice_header_left"></div>
         <div class="ice_header_right">
+            <a-tooltip placement="bottom" title="切换主题">
+                <ThemeSwitch class="theme_switch_btn" />
+            </a-tooltip>
             <div class="easy_set">
                 <ul>
                     <a-tooltip placement="bottom" title="切换背景">
@@ -32,13 +35,13 @@
             </a-tooltip>
 
         </div>
-        <a-modal v-model:open="modelopen" title="" width="1200px" :footer="null" wrap-class-name="ice_setPanel_modal"
+        <a-modal v-model:open="modelOpen" title="" width="1200px" :footer="null" wrap-class-name="ice_setPanel_modal"
             @cancel="modelClose()">
             <div class="ice_setPanel">
                 <div class="setPanel_left setPanel_card">
                     <div class="card_title">相关设置</div>
                     <div class="card_content">
-                        <div class="card_item" v-for="(item, index) in settingdata" :key="index"
+                        <div class="card_item" v-for="(item, index) in setData" :key="index"
                             @click="itemClick(index)" :class="{ 'item_active': index === itemIndex }">
                             <div class="card_item_title">
                                 <i class="card_item_icon_icon">
@@ -50,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <a-table v-if="itemIndex === 0" :columns="columns" :data-source="dataSource" bordered>
+                <a-table v-if="itemIndex === 0" :columns="columns" :data-source="dataSource" bordered :scroll="{ y: 580 }">
                     <template #bodyCell="{ column, text, record }">
                         <template v-if="['name', 'link', 'placeholder'].includes(column.dataIndex)">
                             <div>
@@ -113,252 +116,222 @@
                 <div class="setPanel_right" v-if="itemIndex === 2"></div>
             </div>
         </a-modal>
-
     </div>
 </template>
-<script>
+<script setup>
 import { reactive, ref, createVNode, defineAsyncComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { useLinkData } from '../store/LinkStore';
 import { IconSet, IconToast, IconCheckbox, IconCalendar, IconWarning } from '../components/icons';
 import { message, Modal } from 'ant-design-vue';
 import * as XLSX from 'xlsx'
+import ThemeSwitch from './ThemeSwitch.vue';
 
 
 import ComxlsxUpload from './ComxlsxUpload.vue';
 import ComMenuDrag from './ComMenuDrag.vue';
 
 
-export default {
-    components: {
-        IconSet, IconToast, IconCheckbox, IconCalendar,ComxlsxUpload,ComMenuDrag
-    },
-    setup() {
-        //设置item数据
-        const settingdata = ref([{
-            name: '搜索引擎设置',
-            icon: 'IconToast',
-            desc: '包括搜索引擎名称、链接、提示词等。',
-        },
-        {
-            name: '侧边栏设置',
-            icon: 'IconCalendar',
-            desc: '侧边分类排序',
-        },
-        {
-            name: '其他设置',
-            icon: 'IconCheckbox',
-            desc: '私有化全自定义导航数据',
-        }]);
-        const itemIndex = ref(0);
-        const itemClick = index => {
-            itemIndex.value = index;
-        };
 
-        //设置面板开关
-        const modelopen = ref(false);
-        const showDrawer = () => {
-            modelopen.value = true;
+//设置item数据
+const setData = [{
+    name: '搜索引擎设置',
+    icon: IconToast,
+    desc: '包括搜索引擎名称、链接、提示词等。',
+},
+{
+    name: '侧边栏设置',
+    icon: IconCalendar,
+    desc: '侧边分类排序',
+},
+{
+    name: '其他设置',
+    icon: IconCheckbox,
+    desc: '私有化全自定义导航数据',
+}];
 
-        };
-        const modelClose = () => {
+const itemIndex = ref(0);
+const itemClick = index => {
+    itemIndex.value = index;
+};
 
-            const groupMap = dataSource.value.reduce((acc, item) => {
-                if (!acc[item.group]) {
-                    acc[item.group] = {
-                        name: item.group,
-                        value: item.group,
-                        active: true,
-                        engines: []
-                    };
-                }
-                acc[item.group].engines.push({
-                    name: item.name,
-                    link: item.link,
-                    placeholder: item.placeholder
-                });
-                return acc;
-            }, {});
-            useLinkData().updateSearchMenu(Object.values(groupMap))
-        };
+//设置面板开关
+const modelOpen = ref(false);
+const showDrawer = () => {
+    modelOpen.value = true;
 
+};
+const modelClose = () => {
 
-
-        //初始化搜索数据
-        const searchMenu = useLinkData().searchMenu;
-        const dataSource = ref([]);
-        const columns = ref([]);
-        columns.value.push({
-            title: '分组',
-            dataIndex: 'group',
-            key: 'group',
-            width: '10%',
-            ellipsis: true,
-        }, {
-            title: '名称',
-            dataIndex: 'name',
-            key: 'name',
-            width: '15%',
-            ellipsis: true,
-        }, {
-            title: '链接',
-            dataIndex: 'link',
-            key: 'link',
-            ellipsis: true,
-        }, {
-            title: '提示词',
-            dataIndex: 'placeholder',
-            key: 'placeholder',
-            ellipsis: true,
-        }, {
-            title: '编辑',
-            dataIndex: 'operation',
-            key: 'placeholder',
-            width: '17%',
-        },
-        )
-
-        //根据数据生成表格
-        searchMenu.forEach((item, index) => {
-            item.engines.forEach((ite, ind) => {
-                dataSource.value.push({
-                    key: `${index}-${ind}`,
-                    group: item.name,
-                    name: ite.name,
-                    link: ite.link,
-                    placeholder: ite.placeholder,
-                });
-            });
-        });
-
-        //编辑表格
-
-        const editableData = reactive({});
-        const edit = key => {
-            editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
-        };
-        const save = key => {
-            Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
-            // useLinkData().setSearchMenu(key, editableData[key])
-            delete editableData[key];
-        };
-        const cancel = key => {
-            delete editableData[key];
-        };
-        const onDelete = key => {
-            if (key.split('-')[1] === '0') {
-                message.info('不能删除第一项');
-                return;
-            }
-            Object.assign(dataSource.value = dataSource.value.filter(item => item.key !== key));
-        };
-        const add = addkey => {
-            const indexToInsert = dataSource.value.findIndex(item => item.key === addkey);
-            const group = dataSource.value[indexToInsert].group;
-            const newItem = {
-                key: `${addkey.split('-')[0]}-${new Date().getTime()}`,
-                group: group,
-                name: '',
-                link: '',
-                placeholder: ''
+    const groupMap = dataSource.value.reduce((acc, item) => {
+        if (!acc[item.group]) {
+            acc[item.group] = {
+                name: item.group,
+                value: item.group,
+                active: true,
+                engines: []
             };
-            Object.assign(dataSource.value.splice(indexToInsert + 1, 0, newItem));
-        };
+        }
+        acc[item.group].engines.push({
+            name: item.name,
+            link: item.link,
+            placeholder: item.placeholder
+        });
+        return acc;
+    }, {});
+    useLinkData().updateSearchMenu(Object.values(groupMap))
+};
 
 
 
-        const exportData = () => {
-            // 将数据转换为工作表
-            const data = useLinkData().menuList;
-            const excelData = formatDataForExcel(data);
-            // console.log(excelData);
-            // 设置列宽（例如：第一列宽度 100px，第二列宽度 200px，第三列宽度 150px）
+//初始化搜索数据
+const searchMenu = useLinkData().searchMenu;
+const dataSource = ref([]);
+const columns = ref([]);
+columns.value.push({
+    title: '分组',
+    dataIndex: 'group',
+    key: 'group',
+    width: '10%',
+    ellipsis: true,
+}, {
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name',
+    width: '15%',
+    ellipsis: true,
+}, {
+    title: '链接',
+    dataIndex: 'link',
+    key: 'link',
+    ellipsis: true,
+}, {
+    title: '提示词',
+    dataIndex: 'placeholder',
+    key: 'placeholder',
+    ellipsis: true,
+}, {
+    title: '编辑',
+    dataIndex: 'operation',
+    key: 'placeholder',
+    width: '17%',
+},
+)
 
-            const ws = XLSX.utils.json_to_sheet(excelData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-            XLSX.writeFile(wb, 'excelData.xlsx');
-        };
+//根据数据生成表格
+searchMenu.forEach((item, index) => {
+    item.engines.forEach((ite, ind) => {
+        dataSource.value.push({
+            key: `${index}-${ind}`,
+            group: item.name,
+            name: ite.name,
+            link: ite.link,
+            placeholder: ite.placeholder,
+        });
+    });
+});
 
-        // 格式化数据，将嵌套结构转换为平面数据
-        const formatDataForExcel = (data) => {
-            const result = [];
-            data.forEach(item => {
-                if (item.child) {
-                    item.child.map(ite => {
-                        if (ite.item) {
-                            ite.item.map(itechild => {
-                                result.push({
-                                    '一级分类': item.name,
-                                    '二级分类': ite.name,
-                                    '网站标题': itechild.title,
-                                    '网站描述': itechild.desc,
-                                    '网站链接': itechild.link,
-                                    '网站图标': itechild.avatar,
-                                });
-                            })
-                        }
-                    });
+//编辑表格
+
+const editableData = reactive({});
+const edit = key => {
+    editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
+};
+const save = key => {
+    Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
+    // useLinkData().setSearchMenu(key, editableData[key])
+    delete editableData[key];
+};
+const cancel = key => {
+    delete editableData[key];
+};
+const onDelete = key => {
+    if (key.split('-')[1] === '0') {
+        message.info('不能删除第一项');
+        return;
+    }
+    Object.assign(dataSource.value = dataSource.value.filter(item => item.key !== key));
+};
+const add = addkey => {
+    const indexToInsert = dataSource.value.findIndex(item => item.key === addkey);
+    const group = dataSource.value[indexToInsert].group;
+    const newItem = {
+        key: `${addkey.split('-')[0]}-${new Date().getTime()}`,
+        group: group,
+        name: '',
+        link: '',
+        placeholder: ''
+    };
+    Object.assign(dataSource.value.splice(indexToInsert + 1, 0, newItem));
+};
 
 
-                } else {
+
+const exportData = () => {
+    // 将数据转换为工作表
+    const data = useLinkData().menuList;
+    const excelData = formatDataForExcel(data);
+    // console.log(excelData);
+    // 设置列宽（例如：第一列宽度 100px，第二列宽度 200px，第三列宽度 150px）
+
+    const ws = XLSX.utils.json_to_sheet(excelData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'excelData.xlsx');
+};
+
+// 格式化数据，将嵌套结构转换为平面数据
+const formatDataForExcel = (data) => {
+    const result = [];
+    data.forEach(item => {
+        if (item.child) {
+            item.child.map(ite => {
+                if (ite.item) {
+                    ite.item.map(itechild => {
+                        result.push({
+                            '一级分类': item.name,
+                            '二级分类': ite.name,
+                            '网站标题': itechild.title,
+                            '网站描述': itechild.desc,
+                            '网站链接': itechild.link,
+                            '网站图标': itechild.avatar,
+                        });
+                    })
                 }
             });
 
-            return result;
-        };
 
-        // 重置数据
-        const resetData = () => {
-            Modal.confirm({
-                title: '确认恢复默认设置?',
-                content: createVNode('div', { style: 'color:red;' }, ' 恢复后将丢失所有自定义设置，请谨慎操作！ 建议备份数据后再恢复。'),
-                onOk() {
-                    const linkDataStore = useLinkData();
-                    let DefaultMenuList2 = useLinkData().defaultmenuList;
-                    linkDataStore.updateMenuList(DefaultMenuList2)
-                    message.success('恢复默认设置成功');
-                },
-                onCancel() {
-                    // console.log('Cancel');
-                },
-                class: 'test',
-            });
-        };
-
-        const easySetClick = (index) => {
-            useLinkData().updatebackground();
-            console.log(useLinkData().backgrounddata);
-        };
-
-        return {
-            //设置面板开关
-            modelopen,
-            showDrawer,
-            modelClose,
-            //搜索数据
-            columns,
-            dataSource,
-
-            //编辑状态
-            editableData,
-            edit,
-            save,
-            cancel,
-            onDelete,
-            add,
-
-            //设置item数据
-            settingdata,
-            itemIndex,
-            itemClick,
-
-            exportData,
-            resetData,
-            easySetClick,
+        } else {
         }
-    },
-}
+    });
+
+    return result;
+};
+
+// 重置数据
+const resetData = () => {
+    Modal.confirm({
+        title: '确认恢复默认设置?',
+        content: createVNode('div', { style: 'color:red;' }, ' 恢复后将丢失所有自定义设置，请谨慎操作！ 建议备份数据后再恢复。'),
+        onOk() {
+            const linkDataStore = useLinkData();
+            let DefaultMenuList2 = useLinkData().defaultmenuList;
+            linkDataStore.updateMenuList(DefaultMenuList2)
+            message.success('恢复默认设置成功');
+        },
+        onCancel() {
+            // console.log('Cancel');
+        },
+        class: 'test',
+    });
+};
+
+const easySetClick = (index) => {
+    useLinkData().updatebackground();
+    console.log(useLinkData().backgrounddata);
+};
+
+
 </script>
 <style lang="less">
 .ice_header {
@@ -409,7 +382,6 @@ export default {
 }
 
 .ant-modal-mask {
-    // background-color: #ffffffd9 !important;
     backdrop-filter: blur(2px);
 }
 
@@ -481,10 +453,10 @@ export default {
     }
 
     .setPanel_card {
-        background: #ffffff99;
+        background: var(--semi-color-bg-0);
         border-radius: 12px;
         overflow: hidden;
-        border: 1px solid #e3e8f7;
+        border: 1px solid var(--semi-color-border);
         box-shadow: 0 8px 16px -4px rgba(44, 45, 48, 0.047);
         padding: 20px;
         gap: 24px;
@@ -502,7 +474,7 @@ export default {
         }
 
         .card_desc {
-            color: #a5a5a5;
+            color: var(--semi-color-text-0);
             max-width: 90%;
             font-size: 14px;
             line-height: 1.5;
@@ -530,9 +502,9 @@ export default {
             position: relative;
             width: calc(100% / 2 - 8px);
             width: 100%;
-            background: #fff;
+            background: var(--semi-color-bg-1);
             border-radius: 12px;
-            border: 1px solid #e3e8f7;
+            border: 1px solid var(--semi-color-border);
             padding: 14px;
             cursor: pointer;
             transition: .3s;
@@ -549,14 +521,14 @@ export default {
                 text-overflow: ellipsis;
                 line-height: 1.5;
                 font-size: 14px;
-                color: #3c3c43cc;
+                color: var(--semi-color-text-2);
             }
 
             .card_item_title {
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                border-bottom: 1px solid #e3e8f7;
+                border-bottom: 1px solid var(--semi-color-border);
                 padding-bottom: 8px;
 
                 .card_item_title_text {
@@ -575,7 +547,6 @@ export default {
                     width: 30px;
                     height: 30px;
                     border-radius: 50%;
-                    background: #f5f5f5;
                     color: #363636;
                     font-size: 25px;
                 }
@@ -633,23 +604,23 @@ export default {
 .edit_option {
     margin-left: 5px;
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: stretch;
     justify-items: flex-start;
     // width: 100%;
     border-radius: 4px;
     padding: 2px;
-    color: #000000a6;
+    color: var(--semi-color-text-0);
     font-size: 14px;
     line-height: 1.5;
     list-style: none;
-    display: inline-block;
-    background-color: #f5f5f5;
+    background: var(--semi-color-fill-0);
     transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    gap: 2px;
 
     .edit_option_text:not(.selected):hover {
         color: #000000e0;
-        background-color: #0000000f;
+        background-color: var(--semi-color-fill-0);
     }
 
     .edit_option_text.selected:hover {
@@ -660,9 +631,9 @@ export default {
 
     .edit_option_text.selected {
         border-radius: 2px;
-        background-color: #ffffff;
+        background-color: var(--semi-edit-1);
         box-shadow: 0 1px 2px 0 #00000008, 0 1px 6px -1px #00000005, 0 2px 4px 0 #00000005;
-        color: #000000e0;
+        color: var(--semi-color-text-0);
         position: relative;
         text-align: center;
         cursor: pointer;
@@ -679,11 +650,25 @@ export default {
         padding: 0 7px;
         cursor: pointer;
         border-radius: 3px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
 .ice_header_right:hover .easy_set {
     opacity: 1;
+}
+
+.ice_header_right:hover .theme_switch_btn {
+    opacity: 1;
+}
+
+.theme_switch_btn {
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .ice_header_right {
@@ -698,8 +683,8 @@ export default {
 
     .easy_set {
         height: 35px;
-        color: #fff;
-        transition: .3s;
+        color:var(--semi-color-text-0);
+        transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
         opacity: 0;
 
         ul {
@@ -734,6 +719,7 @@ export default {
     .set_btn {
         height: 35px;
         width: 35px;
+        flex: 0 0 35px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -779,7 +765,6 @@ export default {
     }
 
     .set_btn:hover {
-        // background: #;
         transition: .3s;
 
         .btn_line {
@@ -809,6 +794,7 @@ export default {
         .ice_header {
             padding: 0 10px;
         }
+        
     }
 
 }

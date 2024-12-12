@@ -15,9 +15,8 @@
                 <span class="cardDrag_title">{{ item.name }}</span>
             </div>
         </transition-group>
-        <div class="cardDrag_iconList" v-if="changeIconIndex!== null">
-            <div v-for="(icon, index) in Icons" :key="index" class="cardDrag_iconItem"
-                @click="chooseIcon(index)">
+        <div class="cardDrag_iconList" v-if="changeIconIndex !== null">
+            <div v-for="(icon, index) in Icons" :key="index" class="cardDrag_iconItem" @click="chooseIcon(index)">
                 <component :is="icon" />
             </div>
         </div>
@@ -96,7 +95,8 @@ const onDragEnd = () => {
     display: flex;
 
     .cardDrag_item:hover {
-        background-color: #2e32380d;
+        background-color: var(--semi-color-fill-0);
+        color: var(--semi-color-text-0);
     }
 
     .cardDrag_item:active {
@@ -113,10 +113,12 @@ const onDragEnd = () => {
         align-items: flex-start;
         gap: 10px;
         font-size: 25px;
-        .cardDrag_iconItem:hover{
+
+        .cardDrag_iconItem:hover {
             background-color: #2e32380d;
         }
-        .cardDrag_iconItem{
+
+        .cardDrag_iconItem {
             padding: 5px;
             display: flex;
             cursor: pointer;
@@ -137,7 +139,7 @@ const onDragEnd = () => {
         align-items: center;
         justify-content: flex-start;
         flex-wrap: nowrap;
-        color: #1c1f23;
+        color: var(--semi-color-text-2);
         cursor: pointer;
         transition: transform 0.3s, background-color 0.3s;
         border-radius: 3px;
@@ -153,7 +155,7 @@ const onDragEnd = () => {
         }
 
         .cardDrag_title_icon.active {
-            border: 2px dashed #425aef;
+            border: 2px dashed var(--semi-color-primary);
             opacity: 0.5;
             border-radius: 3px;
             box-sizing: border-box;
@@ -178,7 +180,7 @@ const onDragEnd = () => {
 
     /* 拖拽预览动画 */
     .drag-preview {
-        background-color: #e0f7fa;
+        background-color: var(--semi-color-fill-0);
         transform: scale(1.1);
         transition: transform 0.2s ease,
             opacity 0.2s ease,
