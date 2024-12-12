@@ -1,0 +1,314 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    color: #1677ff;
+    text-decoration: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 100;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Thin.de9194d1.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Thin.fcc91246.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 100;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ThinItalic.ec0fcc99.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ThinItalic.6b5565d7.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 200;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraLight.21843ac6.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraLight.7b7bd05c.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 200;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraLightItalic.04abe79a.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraLightItalic.a7a00555.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 300;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Light.51f4d175.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Light.c08cfeeb.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 300;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-LightItalic.8942ebe8.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-LightItalic.203b9b31.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Regular.6cc68d6b.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Regular.8398b376.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 400;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Italic.e2f52803.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Italic.635afeed.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Medium.ba68c34a.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Medium.f5549f68.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 500;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-MediumItalic.d29ef50a.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-MediumItalic.2812ec5a.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 600;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-SemiBold.625474d6.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-SemiBold.25b1ffc9.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 600;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-SemiBoldItalic.c632fb96.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-SemiBoldItalic.80d799be.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 700;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Bold.a808c21a.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Bold.1c3dfbb0.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 700;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-BoldItalic.97443965.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-BoldItalic.32e2b20f.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 800;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraBold.1ca2a2cf.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraBold.30c3d891.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 800;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraBoldItalic.a0a103e5.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-ExtraBoldItalic.cd668286.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 900;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Black.ef2d12b9.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-Black.e258f998.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 900;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-BlackItalic.a1ea21b0.woff2) format("woff2"), url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-BlackItalic.70d2cf35.woff) format("woff")
+}
+
+@font-face {
+    font-named-instance: "Regular";
+    font-display: swap;
+    font-family: Inter var;
+    font-style: normal;
+    font-weight: 100 900;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-roman.var.b65534c5.woff2) format("woff2")
+}
+
+@font-face {
+    font-named-instance: "Italic";
+    font-display: swap;
+    font-family: Inter var;
+    font-style: italic;
+    font-weight: 100 900;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter-italic.var.b27297c1.woff2) format("woff2")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Inter var experimental;
+    font-style: oblique 0deg 10deg;
+    font-weight: 100 900;
+    src: url(//lf3-static.semi.design/obj/semi-tos/ies/semi-templates/font/Inter.var.9df5db38.woff2) format("woff2")
+}
+
+/* 移动端样式 */
+@media screen and (max-width: 768px) {
+   
+}

@@ -1,0 +1,589 @@
+<template>
+    <div class="ice_menu_like ice_menu_content" ref="LiketabRefs">
+        <a-tabs v-model:activeKey="LikeactiveKey" class="ice_menu_like_tabs" @change="onLikeTabChange">
+            <a-tab-pane key="0" tab="我的收藏">
+                <div class="ice_card_content" ref="sortLikeListRefs">
+                    <div class="ice_card" v-for="(item, key) in LikeList" :key="key" :data-id="key">
+                        <div class="drag-handle">⋮⋮</div>
+                        <span class="like_icon" @click.stop="LikeCancelitem(item)" style="color: #bfbfbf;">
+                            <IconClose />
+                        </span>
+                        <a :href="item.link" class="ice_card_meta" target="_blank">
+                            <div class="ice_card_avatar" :class="[item.avatar ? '' : 'error', 'skeleton-loading']">
+                                <template v-if="item.avatar">
+                                    <div class="avatar-container">
+                                        <div class="skeleton"></div>
+                                        <img :src="item.avatar" @error="item.avatar = null" @load="handleImageLoad"
+                                            :class="{ 'loaded': imageLoaded }" />
+                                    </div>
+                                </template>
+                                <div class="error_avatar" v-else style="background-color: #007FFF;">
+                                    {{ item.title.split(' ')[0][0] }}
+                                </div>
+                            </div>
+                            <div class="ice_card_detail">
+                                <div class="ice_card_title">{{ item.title }}</div>
+                                <a-tooltip placement="bottom" :title="item.desc">
+                                    <div class="ice_card_desc">{{ item.desc }}</div>
+                                </a-tooltip>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </a-tab-pane>
+            <a-tab-pane key="1" tab="今日热点" v-if="!isMobile">
+                <IceHot ref="IceHotRef" />
+            </a-tab-pane>
+            <template #rightExtra>
+                <i class="ice_menu_like_more" @click.stop="LikeMore">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                        focusable="false" aria-hidden="true">
+                        <rect x="1" y="4" width="22" height="16" rx="3" fill="#DDE3E8"></rect>
+                        <circle cx="6" cy="12" r="2" fill="#6A6F7F"></circle>
+                        <circle cx="12" cy="12" r="2" fill="#6A6F7F"></circle>
+                        <circle cx="18" cy="12" r="2" fill="#6A6F7F"></circle>
+                    </svg>
+                </i>
+                <!-- 添加收藏模态框 -->
+                <a-modal v-model:open="LikeMoreOpen" title="添加自定义收藏" @ok="LikeMorehandleOk" :maskClosable="false"
+                    :destroyOnClose="true" :confirmLoading="confirmLoading" @cancel="handleCancel">
+                    <div class="like-more-modal">
+                        <a-form :model="LikeMoreItem" :rules="rules" ref="formRef" layout="vertical">
+                            <div class="preview-card">
+                                <a-card style="width: 300px">
+                                    <a-card-meta :title="LikeMoreItem.title" :description="LikeMoreItem.desc">
+                                        <template #avatar>
+                                            <a-avatar shape="square" size="large" :src="LikeMoreItem.avatar"
+                                                @error="handleAvatarError" class="preview-avatar">
+                                                <template #icon>
+                                                    <div class="skeleton-avatar"></div>
+                                                </template>
+                                                {{ LikeMoreItem.title?.[0] || 'N/A' }}
+                                            </a-avatar>
+                                        </template>
+                                    </a-card-meta>
+                                </a-card>
+                            </div>
+
+                            <div class="form-items">
+                                <a-form-item label="标题" name="title">
+                                    <a-input v-model:value="LikeMoreItem.title" placeholder="请输入标题"
+                                        @change="debouncePreview" />
+                                </a-form-item>
+
+                                <a-form-item label="网址" name="link" :rules="[
+                                    { required: true, message: '请输入网址' },
+                                    { type: 'url', message: '请输入有效的网址' }
+                                ]">
+                                    <a-input v-model:value="LikeMoreItem.link" placeholder="请输入网址(http/https)"
+                                        @change="debouncePreview" />
+                                </a-form-item>
+
+                                <a-form-item label="描述" name="desc">
+                                    <a-textarea v-model:value="LikeMoreItem.desc" placeholder="请输入网站描述"
+                                        :auto-size="{ minRows: 2, maxRows: 4 }" @change="debouncePreview" />
+                                </a-form-item>
+
+                                <a-form-item label="图标" name="avatar">
+                                    <a-input v-model:value="LikeMoreItem.avatar" placeholder="请输入图标地址(http/https)"
+                                        @change="debouncePreview">
+                                        <template #suffix>
+                                            <a-tooltip title="支持http/https图片地址">
+                                                <IconWarning style="color: rgba(0, 0, 0, 0.45)" />
+                                            </a-tooltip>
+                                        </template>
+                                    </a-input>
+                                </a-form-item>
+                            </div>
+                        </a-form>
+                    </div>
+                </a-modal>
+                <!-- 热点设置模态框 -->
+                <a-modal v-model:open="HotMoreOpen" title="自定义热点、支持拖拽排序" @ok="HotMorehandleOk"
+                    :destroyOnClose="!HotMoreOpen">
+                    <div class="HotMore_modal_content">
+                        <ul class="ice_menu_like_hot_list" ref="sortHotListRefs">
+                            <li v-for="(item, index) in HotList" :key="index" :data-id="index" class="hot_item"
+                                :class="{ 'noshow': !item.show }" @click.stop="HotMorehandleClick(item)">
+                                <img class="item_img" :src="`/images/${item.name}.png`" alt="">
+                                <span class="item_title">{{ item.title }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </a-modal>
+            </template>
+        </a-tabs>
+    </div>
+</template>
+
+<script setup>
+import { ref, onMounted, computed, watch, nextTick, onUnmounted } from 'vue';
+import { message } from 'ant-design-vue';
+import { useLinkData } from '../store/LinkStore';
+import IceHot from './IceHot.vue';
+import { IconClose, IconWarning } from '../components/icons';
+import Sortable from "sortablejs";
+import { debounce } from 'lodash-es';
+
+const props = defineProps({
+    isMobile: {
+        type: Boolean,
+        default: false
+    },
+    isNavCollapsed: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const emit = defineEmits(['update:isNavCollapsed']);
+
+const LikeactiveKey = ref('0');
+const linkStore = useLinkData();
+const LikeList = computed(() => linkStore.LikeList);
+const HotList = computed(() => linkStore.HotList);
+const IceHotRef = ref(null);
+const LiketabRefs = ref(null);
+const sortHotListRefs = ref(null);
+const sortLikeListRefs = ref(null);
+
+// 收藏相关
+const LikeMoreOpen = ref(false);
+const LikeMoreItem = ref({
+    title: 'Iceooh',
+    desc: 'Iceooh冰屋数据网',
+    link: 'https://www.iceooh.com/',
+    avatar: '/images/favicon.png'
+});
+
+const LikeCancelitem = (item) => {
+    const newList = LikeList.value.filter(i => i.link !== item.link);
+    linkStore.updateLikeList(newList);
+};
+
+const LikeMore = () => {
+    if (LikeactiveKey.value === '0') {
+        LikeMoreOpen.value = true;
+    } else if (LikeactiveKey.value === '1') {
+        HotMoreOpen.value = true;
+        nextTick(() => {
+            if (hotSortableInstance) {
+                hotSortableInstance.destroy();
+            }
+            hotSortableInstance = initHotSort();
+        });
+    }
+};
+
+// 表单相关
+const formRef = ref(null);
+const confirmLoading = ref(false);
+const previewLoading = ref(false);
+
+// 表单验证规则
+const rules = {
+    title: [{ required: true, message: '请输入标题' }],
+    link: [
+        { required: true, message: '请输入网址' },
+        { type: 'url', message: '请输入有效的网址' }
+    ],
+    desc: [{ required: true, message: '请输入描述' }]
+};
+
+// 优化预览更新
+const debouncePreview = debounce(() => {
+    previewLoading.value = true;
+    setTimeout(() => {
+        previewLoading.value = false;
+    }, 300);
+}, 300);
+
+// 处理头像加载错误
+const handleAvatarError = () => {
+    LikeMoreItem.value.avatar = null;
+};
+
+// 优化提交处理
+const LikeMorehandleOk = async () => {
+    try {
+        confirmLoading.value = true;
+        await formRef.value.validate();
+
+        if (LikeList.value.some(i => i.link === LikeMoreItem.value.link)) {
+            message.warning('已收藏过了');
+            return;
+        }
+
+        const newList = [...LikeList.value, { ...LikeMoreItem.value }];
+        await linkStore.updateLikeList(newList);
+
+        message.success('添加成功');
+        LikeMoreOpen.value = false;
+        resetForm();
+    } catch (error) {
+        console.error('表单验证失败:', error);
+    } finally {
+        confirmLoading.value = false;
+    }
+};
+
+// 处理取消
+const handleCancel = () => {
+    LikeMoreOpen.value = false;
+    resetForm();
+};
+
+// 重置表单
+const resetForm = () => {
+    formRef.value?.resetFields();
+    imageLoaded.value = false;
+    LikeMoreItem.value = {
+        title: 'Iceooh',
+        desc: 'Iceooh冰屋数据网',
+        link: 'https://www.iceooh.com/',
+        avatar: '/images/favicon.png'
+    };
+};
+
+// 热点相关
+const HotMoreOpen = ref(false);
+let hotSortableInstance = null;
+
+// 热点排序临时变量，点击OK后更新
+const HotListTemp = ref([]);
+const HotMorehandleOk = () => {
+    HotMoreOpen.value = false;
+    if (hotSortableInstance) {
+        hotSortableInstance.destroy();
+        hotSortableInstance = null;
+    }
+    // 更新热点列表状态
+    linkStore.updateHotList(HotListTemp.value);
+    // 更新热点列表请求
+    IceHotRef.value.updategetList();
+};
+
+const HotMorehandleClick = (item) => {
+    item.show = !item.show;
+};
+
+// 修改热点排序初始化
+const initHotSort = () => {
+    if (!sortHotListRefs.value) return null;
+
+    return Sortable.create(sortHotListRefs.value, {
+        animation: 150,
+        handle: ".hot_item",
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        dragClass: "sortable-drag",
+        forceFallback: true,
+        store: {
+            get: () => [...Array(HotList.value.length)].map((_, i) => i),
+            set: async (sortable) => {
+                const order = sortable.toArray().map(Number);
+                const newList = order.map(i => HotList.value[i]);
+                
+                HotListTemp.value = newList;
+            }
+        },
+        onStart: (evt) => {
+            document.body.style.cursor = 'grabbing';
+        },
+        onEnd: (evt) => {
+            document.body.style.cursor = 'default';
+        }
+    });
+};
+
+const onLikeTabChange = () => {
+    if (props.isMobile) return;
+    if (LikeactiveKey.value === '1') {
+        emit('update:isNavCollapsed', true);
+        LiketabRefs.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        emit('update:isNavCollapsed', false);
+    }
+};
+
+// 添加图片加载状态控制
+const imageLoaded = ref(false);
+
+const handleImageLoad = (event) => {
+    event.target.classList.add('loaded');
+    imageLoaded.value = true;
+};
+
+// 修改收藏排序初始化
+const initLikeSort = () => {
+    if (!sortLikeListRefs.value) return null;
+
+    return Sortable.create(sortLikeListRefs.value, {
+        animation: 150,
+        handle: ".drag-handle",
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        dragClass: "sortable-drag",
+        forceFallback: true,
+        store: {
+            get: () => [...Array(LikeList.value.length)].map((_, i) => i),
+            set: async (sortable) => {
+                const order = sortable.toArray().map(Number);
+                const newList = order.map(i => LikeList.value[i]);
+                setTimeout(() => {
+                    linkStore.updateLikeList(newList);
+                }, 150);
+            }
+        },
+        onStart: (evt) => {
+            document.body.style.cursor = 'grabbing';
+        },
+        onEnd: (evt) => {
+            document.body.style.cursor = 'default';
+        }
+    });
+};
+
+// 确保组件卸载时清理Sortable实例
+let sortableInstance = null;
+
+onMounted(() => {
+    if (LikeactiveKey.value === '0') {
+        nextTick(() => {
+            sortableInstance = initLikeSort();
+        });
+    }
+});
+
+onUnmounted(() => {
+    if (sortableInstance) {
+        sortableInstance.destroy();
+    }
+    if (hotSortableInstance) {
+        hotSortableInstance.destroy();
+    }
+});
+
+// 监听列表变化，确保排序正确
+watch(LikeList, () => {
+    if (LikeactiveKey.value === '0') {
+        nextTick(() => {
+            if (sortableInstance) {
+                sortableInstance.destroy();
+            }
+            sortableInstance = initLikeSort();
+        });
+    }
+}, { deep: true });
+
+// 添加标签页切换时的清理
+watch(() => LikeactiveKey.value, (newVal, oldVal) => {
+    if (oldVal === '0' && sortableInstance) {
+        sortableInstance.destroy();
+        sortableInstance = null;
+    }
+});
+
+// 监听模态框关闭
+watch(() => HotMoreOpen.value, (newVal) => {
+    if (!newVal && hotSortableInstance) {
+        hotSortableInstance.destroy();
+        hotSortableInstance = null;
+    }
+});
+</script>
+
+<style lang="less" scoped>
+.like-more-modal {
+    .preview-card {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: center;
+        height: 100px;
+        max-height: 100px;
+    }
+
+    .form-items {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    :deep(.ant-form-item) {
+        margin-bottom: 16px;
+    }
+
+    :deep(.ant-input-affix-wrapper) {
+        width: 100%;
+    }
+}
+
+.ice_card_avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0; // 防止头像被压缩
+
+    .avatar-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .skeleton {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    rgba(190, 190, 190, 0.2) 25%,
+                    rgba(129, 129, 129, 0.24) 37%,
+                    rgba(190, 190, 190, 0.2) 63%);
+            background-size: 400% 100%;
+            animation: skeleton-loading 1.4s ease infinite;
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+
+            &.loaded {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.error {
+        background: rgba(0, 0, 0, 0.25);
+
+        .error_avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+}
+
+// 预览卡片中的头像样式
+.preview-avatar {
+    .skeleton-avatar {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg,
+                rgba(190, 190, 190, 0.2) 25%,
+                rgba(129, 129, 129, 0.24) 37%,
+                rgba(190, 190, 190, 0.2) 63%);
+        background-size: 400% 100%;
+        animation: skeleton-loading 1.4s ease infinite;
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.preview-card {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    max-height: 100px;
+
+    :deep(.ant-card-meta-avatar) {
+        width: 40px;
+        height: 40px;
+        margin-right: 16px;
+        flex-shrink: 0;
+    }
+}
+
+.ice_card_content {
+    .ice_card {
+        position: relative;
+
+        // 拖动把手样式
+        .drag-handle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: #bfbfbf;
+            font-size: 16px;
+            z-index: 1;
+            user-select: none;
+        }
+
+        &:hover .drag-handle {
+            opacity: 1;
+        }
+
+        // 拖动时的状态样式
+        &.sortable-ghost {
+            opacity: 0.2;
+            background: #f0f0f0;
+            transform: scale(0.95);
+        }
+
+        &.sortable-chosen {
+            background: #ffffff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        &.sortable-drag {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+// 拖动时的光标样式
+:deep(.sortable-drag) {
+    cursor: grabbing !important;
+}
+
+.HotMore_modal_content {
+    .ice_menu_like_hot_list {
+        .hot_item {
+            &.sortable-ghost {
+                opacity: 0.2;
+                background: #f0f0f0;
+                transform: scale(0.95);
+            }
+
+            &.sortable-chosen {
+                background: #ffffff;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+                transform: scale(1.02);
+            }
+
+            &.sortable-drag {
+                cursor: grabbing;
+                transform: scale(1.05);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            }
+        }
+    }
+}
+</style>
