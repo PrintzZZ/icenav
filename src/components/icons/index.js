@@ -28,6 +28,7 @@ import IconDesktop from './IconDesktop.vue';
 import Icontabs from './Icontabs.vue';
 import IconDark from './IconDark.vue';
 import IconLight from './IconLight.vue';
+import IconIceooh from './IconIceooh.vue';
 
 export {
     IconChecked,
@@ -60,4 +61,5 @@ export {
     Icontabs,
     IconDark,
     IconLight,
+    IconIceooh,
 };

@@ -1,0 +1,26 @@
+<template>
+  <IceSetPanel
+    v-model:dataSource="parentDataSource"
+    @update:dataSource="handleDataSourceUpdate"
+  />
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import IceSetPanel from './IceSetPanel.vue';
+
+const parentDataSource = ref([]);
+
+const handleDataSourceUpdate = (newData) => {
+  // 在这里处理从子组件传来的数据
+  parentDataSource.value = newData;
+  // 进行其他操作...
+};
+
+const panelRef = ref(null);
+
+const getData = () => {
+  const data = panelRef.value.getDataSource();
+  // 处理数据...
+};
+</script> 

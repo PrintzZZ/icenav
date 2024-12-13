@@ -130,18 +130,27 @@ icenav/
 [![Star History Chart](https://api.star-history.com/svg?repos=PrintzZZ/icenav&type=Date)](https://star-history.com/#PrintzZZ/icenav&Date)
 ```
 
-这份README包含了以下主要内容：
-1. 项目简介
-这是一个纯静态的导航页面，支持pc端、ipad pro 横屏、手机端自适应适配。
-允许用户自行设置搜索引擎与导航网站。
-2. 使用的技术栈
-vue3 + vite + pinia + less + axios + ant design vue
-3. 项目启动和构建指令
-```bash
-npm run dev
-npm run build
-```
 
-你可以根据实际项目需求，添加更多具体的内容，比如：
+## 已经实现的功能
+
+- 学术搜索
+- 热点聚合
+- AI工具导航
+- 个性化设置
+- 响应式设计
+- 主题切换
+- 布局调整
+- 自定义收藏
+- 多平台数据聚合
+- 支持自定义排序
+- 支持多搜索引擎切换
+- 支持主题切换
+
+## 计划任务
+
+- 云端数据持久化
+- 天气和时间
+- 待办事项和备忘录
+- 第三方服务整合 接入 RSS 订阅、社交媒体小组件等
 
 

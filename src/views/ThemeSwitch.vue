@@ -11,12 +11,14 @@
 import { ref, onMounted } from 'vue'
 import { IconDark, IconLight } from '../components/icons'
 import { useLinkData } from '../store/LinkStore'
+import { useSettingData } from '../store/SettingStore'
 
 const isDarkMode = ref(false)
 
 // 切换主题
 const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
+  useSettingData().updateOtherSettings({ defaultTheme: isDarkMode.value ? 'dark' : 'light' })
   document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
   //切换背景
   useLinkData().updatebackground(isDarkMode.value ? 'dark' : 'light');
@@ -24,8 +26,8 @@ const toggleTheme = () => {
 
 // 组件挂载时同步当前主题状态
 onMounted(() => {
-  const currentTheme = document.documentElement.getAttribute('data-theme')
-  isDarkMode.value = currentTheme === 'dark'
+  let otherSettings = useSettingData().otherSettings
+  otherSettings.defaultTheme === 'light' ? isDarkMode.value = false : isDarkMode.value = true
 })
 </script>
 

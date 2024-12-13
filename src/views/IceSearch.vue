@@ -3,7 +3,10 @@
 
         <IceHeader />
         <div class="search_video_bg">
+            <!-- <div class="search_bg_mask" :style="`backdrop-filter: blur(${backgroundImg.maskBlur}px);background-color: rgba(0, 0, 0, ${backgroundImg.mask});`"></div> -->
             <iframe class="search_bg" scrolling="no" sandbox="allow-scripts" :src="computedSrc"></iframe>
+            <!-- <img class="search_bg_img" src="https://www.dmoe.cc/random.php" alt=""> -->
+            <video class="search_bg" src="" autoplay loop muted></video>
         </div>
         <div class="search_container">
             <div class="search_title">
@@ -44,77 +47,54 @@
         </div>
     </div>
 </template>
-<script>
-import { ref,computed } from 'vue';
+<script setup>
+import { ref, computed } from 'vue';
 import { IconSearch, IconTriangle, IconClose } from '../components/icons';
 import IceHeader from '../views/IceHeader.vue';
 import { useLinkData } from '../store/LinkStore';
+import { useSettingData } from '../store/SettingStore';
 
-export default {
-    components: {
-        IconSearch, IconTriangle, IconClose, IceHeader
-    },
-    setup() {
 
-        const searchMenu = useLinkData().searchMenu;
-        
-        const searchMenuActiveIndex = ref(0);
-        const searchListActiveIndex = ref(0);
-        const lineStyle = ref({ left: 0, width: 0 });
-        const searchQuery = ref("");
-        const searchFrom = ref({
-            name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd'
-        });
 
-        const menuClick = (index, event) => {
-            searchMenu.forEach(item => {
-                item.active = false;
-            });
-            searchMenu[index].active = true;
-            const span = event.currentTarget.firstElementChild;
+const searchMenu = useLinkData().searchMenu;
 
-            // 更新下划线位置和宽度
-            lineStyle.value.left = span.offsetLeft + event.currentTarget.offsetLeft + 20;
-            lineStyle.value.width = span.offsetWidth - 40;
+const searchMenuActiveIndex = ref(0);
+const searchListActiveIndex = ref(0);
+const lineStyle = ref({ left: 0, width: 0 });
+const searchQuery = ref("");
+const searchFrom = ref({
+    name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd'
+});
 
-            searchMenuActiveIndex.value = index;
-            searchFrom.value = searchMenu[index].engines[0];
-            searchListActiveIndex.value = 0;
-        }
-        const listClick = (index) => {
-            searchListActiveIndex.value = index;
-            searchFrom.value = searchMenu[searchMenuActiveIndex.value].engines[index];
-        }
+const menuClick = (index, event) => {
+    searchMenu.forEach(item => {
+        item.active = false;
+    });
+    searchMenu[index].active = true;
+    const span = event.currentTarget.firstElementChild;
 
-        const handleSubmit = () => {
-            window.open(searchFrom.value.link + searchQuery.value, '_blank');
-        }
+    // 更新下划线位置和宽度
+    lineStyle.value.left = span.offsetLeft + event.currentTarget.offsetLeft + 20;
+    lineStyle.value.width = span.offsetWidth - 40;
 
-        const clearSearch = () => {
-            searchQuery.value = '';
-        };
-        
-        // const backgrounddata = useLinkData().backgrounddata;
-        const computedSrc = computed(() => {
-            return `${useLinkData().backgrounddata}`;
-        });
-
-        return {
-            searchMenu,
-            searchMenuActiveIndex,
-            searchListActiveIndex,
-            searchFrom,
-            menuClick,
-            listClick,
-            lineStyle,
-            searchQuery,
-            handleSubmit,
-            clearSearch,
-            // backgrounddata,
-            computedSrc 
-        }
-    },
+    searchMenuActiveIndex.value = index;
+    searchFrom.value = searchMenu[index].engines[0];
+    searchListActiveIndex.value = 0;
 }
+const listClick = (index) => {
+    searchListActiveIndex.value = index;
+    searchFrom.value = searchMenu[searchMenuActiveIndex.value].engines[index];
+}
+
+const handleSubmit = () => window.open(searchFrom.value.link + searchQuery.value, '_blank');
+const clearSearch = () => searchQuery.value = '';
+
+const computedSrc = computed(() =>  `${useLinkData().backgrounddata}`);
+
+const backgroundType = computed(() => useSettingData().otherSettings.backgroundType);
+const backgroundImg = computed(() => useSettingData().otherSettings.backgroundImg);
+
+console.log(backgroundImg.value);
 
 </script>
 <style lang="less">
@@ -133,11 +113,23 @@ export default {
         height: 100%;
         z-index: -2;
         background-color: #071336a8;
-
+        .search_bg_mask {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
         .search_bg {
             width: 100%;
             height: 100%;
             border-width: 0;
+        }
+        .search_bg_img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
 

@@ -111,7 +111,7 @@ const onDragEnd = () => {
         align-content: flex-start;
         justify-content: flex-start;
         align-items: flex-start;
-        gap: 10px;
+        gap: 5px;
         font-size: 25px;
 
         .cardDrag_iconItem:hover {
