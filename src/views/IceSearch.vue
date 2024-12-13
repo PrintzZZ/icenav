@@ -3,10 +3,10 @@
 
         <IceHeader />
         <div class="search_video_bg">
-            <!-- <div class="search_bg_mask" :style="`backdrop-filter: blur(${backgroundImg.maskBlur}px);background-color: rgba(0, 0, 0, ${backgroundImg.mask});`"></div> -->
-            <iframe class="search_bg" scrolling="no" sandbox="allow-scripts" :src="computedSrc"></iframe>
-            <!-- <img class="search_bg_img" src="https://www.dmoe.cc/random.php" alt=""> -->
-            <video class="search_bg" src="" autoplay loop muted></video>
+            <iframe v-if="backgroundType === 0" class="search_bg" scrolling="no" sandbox="allow-scripts" :src="computedSrc"></iframe>
+            <div class="search_bg_mask" :style="`backdrop-filter: blur(${backgroundImg.maskBlur}px);background-color: rgba(0, 0, 0, ${backgroundImg.mask});`"></div>
+            <img v-if="backgroundType === 1" class="search_bg_img" :src="backgroundImg.url" alt="">
+            <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
         <div class="search_container">
             <div class="search_title">
@@ -48,7 +48,7 @@
     </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { IconSearch, IconTriangle, IconClose } from '../components/icons';
 import IceHeader from '../views/IceHeader.vue';
 import { useLinkData } from '../store/LinkStore';
@@ -95,6 +95,12 @@ const backgroundType = computed(() => useSettingData().otherSettings.backgroundT
 const backgroundImg = computed(() => useSettingData().otherSettings.backgroundImg);
 
 // console.log(backgroundImg.value);
+onMounted(() => {
+    if (backgroundType.value === 1) {
+        console.log(backgroundImg.value);
+    }
+})
+
 
 </script>
 <style lang="less">

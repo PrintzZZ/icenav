@@ -7,7 +7,7 @@
                     <img src="/images/bgview1.png" alt="">
                 </div>
                 <div class="show_item" v-else-if="backgroundType === '图片'">
-                    <a-upload-dragger :showUploadList="false" @change="ImgUploadChange" v-if="upImgSrc == ''">
+                    <a-upload-dragger :showUploadList="false" :customRequest="fileUpload" @change="ImgUploadChange" v-if="upImgSrc == ''">
                         <IconImage style="font-size: 30px; color: #A5A5A5; " />
                         <p style="font-size: 12px; color:#A5A5A5;padding: 0 5px;">点击或拖拽文件到此处</p>
                     </a-upload-dragger>
@@ -38,6 +38,7 @@ import { reactive, ref } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { IconImage, IconLive, IconClose } from '../components/icons';
 import { message } from 'ant-design-vue';
+import { IndexDBCache } from '../utils/indexedDB'
 
 
 const backgroundTypeList = reactive(['网页', '图片', '视频']);
@@ -49,10 +50,65 @@ const backgroundTypeChange = (value) => {
     // 0:iframe 1:img 2:video
 }
 
-const ImgUploadChange = (info) => {
-    upImgSrc.value = URL.createObjectURL(info.file.originFileObj);
-    console.log(upImgSrc.value);
+// 上传文件
+const fileUpload = async ({ file, onSuccess, onError }) => {
+    clearIndexDB();
+    const data = await ChangeVal(file)
+    if (data.length === 0) { onError(); return; }
+    onSuccess();
+};
+
+// 初始化indexedDB
+const params = {
+	dbName: "test",
+	cacheTableName: "imageCache",
+	keyPath: "imageName",
+	indexs: [
+		{name: 'imageFile', unique: true}
+	]
 }
+let imageDB = new IndexDBCache(params)
+const initIndexDB = () => {
+	imageDB.initDB().then(res => {
+		if (res.type == 'upgradeneeded') {
+			console.log('indexDB 数据库创建或更新成功!')
+		} else {
+			console.log('indexDB 数据库初始化成功!')
+		}
+	}).catch((err) => {
+		console.log('indexDB 数据库初始化失败! ', err)
+	})
+}
+const ChangeVal = async (file) => {
+    initIndexDB();
+    setTimeout(() => {
+        const data = { imageName: file.name,  imageFile: file }
+        console.log(data);
+        imageDB.addData(data).then((res) => {
+            console.log('写入 indexDB 数据库成功', res)
+        }).catch((err) => {
+            console.log('写入 indexDB 数据库失败==>', err)
+        })
+    }, 1000)
+    return ['写入 indexDB 数据库成功']
+}
+
+const ImgUploadChange = async (info) => {
+    // 将图片保存到indexedDB
+    // 根据项目实际需求，设置对应数据库名、表名和数据库主键（主键需要为添加对象内的key，否则新增和获取会失败）
+    //  https://blog.csdn.net/weiCong_Ling/article/details/131437456
+    if (info.file.status === 'done') {
+        console.log('上传成功');
+
+    } else if (info.file.status === 'error') {
+        console.error('上传失败');
+    }
+}
+
+const clearIndexDB = () => {
+	imageDB.clearDB()
+}
+
 
 const VideoUploadChange = (info) => {
     console.log(info);
@@ -63,8 +119,11 @@ const saveBackground = () => {
     let storeIndex = useSettingData().otherSettings.backgroundType;
     let storeImg = useSettingData().otherSettings.backgroundImg;
     if (saveIndex !== storeIndex) {
-
-        useSettingData().updateOtherSettings({ backgroundType: saveIndex });
+        if (saveIndex === 1) {
+            useSettingData().updateOtherSettings({ backgroundType: saveIndex, backgroundImg: { url: upImgSrc.value } });
+        } else {
+            useSettingData().updateOtherSettings({ backgroundType: saveIndex });
+        }
         message.success('更换背景成功');
     } else {
         message.warning('背景类型未发生变化');
@@ -134,11 +193,11 @@ const saveBackground = () => {
         opacity: 0.2;
         transition: all 0.3s;
     }
+
     .ant-upload {
         width: 250px;
         height: 100px;
         border: none;
     }
 }
-
 </style>
