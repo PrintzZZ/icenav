@@ -8,16 +8,10 @@ export const useSettingData = defineStore( "SettingData", () => {
         defaultTheme: "light",
         backgroundTypeList: ["iframe", "img", "video"],
         backgroundType: 0,
-        backgroundImg: {
-          src: "https://loremflickr.com/1280/720",
-          mask: 0.5,
-          maskBlur: 2,
-        },
-        backgroundVideo: {
-          src: "https://loremflickr.com/1280/720",
-          mask: 0.2,
-          maskBlur: 0.1,
-        },
+        backgroundImgUrl: "",
+        backgroundVideoUrl: "",
+        mask: 0.5,
+        maskBlur: 2,
       },
     );
 

@@ -101,6 +101,7 @@ export class IndexDBCache {
 		return new Promise((resolve, reject) => {
 			const transaction = this._db.transaction(this._cacheTableName);
 			const objectStore = transaction.objectStore(this._cacheTableName);
+			console.log(objectStore);
 			// 通过主键读取数据
 			// const request = objectStore.get(key);
 			// getAll(key)同get(key)获取指定key对应数据，如果getAll不传参或者传null即返回所有数据

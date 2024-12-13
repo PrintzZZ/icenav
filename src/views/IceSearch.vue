@@ -3,9 +3,12 @@
 
         <IceHeader />
         <div class="search_video_bg">
-            <iframe v-if="backgroundType === 0" class="search_bg" scrolling="no" sandbox="allow-scripts" :src="computedSrc"></iframe>
-            <div class="search_bg_mask" :style="`backdrop-filter: blur(${backgroundImg.maskBlur}px);background-color: rgba(0, 0, 0, ${backgroundImg.mask});`"></div>
-            <img v-if="backgroundType === 1" class="search_bg_img" :src="backgroundImg.url" alt="">
+            <iframe v-if="backgroundType === 0" class="search_bg" scrolling="no" sandbox="allow-scripts"
+                :src="computedSrc"></iframe>
+            <div v-if="backgroundType === 1" class="search_bg_mask"
+                :style="`backdrop-filter: blur(${backgroundMaskBlur}px);background-color: rgba(0, 0, 0, ${backgroundMask});`">
+            </div>
+            <img v-if="backgroundType === 1" class="search_bg_img" :src="backgroundImgUrl" alt="">
             <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
         <div class="search_container">
@@ -48,12 +51,12 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { IconSearch, IconTriangle, IconClose } from '../components/icons';
 import IceHeader from '../views/IceHeader.vue';
 import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
-
+import { IndexDBCache } from '../utils/indexedDB'
 
 
 const searchMenu = useLinkData().searchMenu;
@@ -89,17 +92,54 @@ const listClick = (index) => {
 const handleSubmit = () => window.open(searchFrom.value.link + searchQuery.value, '_blank');
 const clearSearch = () => searchQuery.value = '';
 
-const computedSrc = computed(() =>  `${useLinkData().backgrounddata}`);
+const computedSrc = computed(() => `${useLinkData().backgrounddata}`);
 
 const backgroundType = computed(() => useSettingData().otherSettings.backgroundType);
-const backgroundImg = computed(() => useSettingData().otherSettings.backgroundImg);
+const backgroundImgUrl = computed(() => useSettingData().otherSettings.backgroundImgUrl);
+const backgroundMask = computed(() => useSettingData().otherSettings.mask);
+const backgroundMaskBlur = computed(() => useSettingData().otherSettings.maskBlur);
 
-// console.log(backgroundImg.value);
-onMounted(() => {
-    if (backgroundType.value === 1) {
-        console.log(backgroundImg.value);
+
+// 初始化 IndexDB 实例
+const backgroundImage = ref('');
+const imageDB = new IndexDBCache({
+    dbName: "imageStore",
+    cacheTableName: "imageCache",
+    keyPath: "imageName",
+    indexs: [{ name: 'imageFile', unique: true }]
+});
+// 从IndexDB读取图片
+const loadBackgroundImage = async () => {
+    try {
+        await imageDB.initDB();
+        // 获取所有数据
+        const allData = await imageDB.getDataByKey();
+
+        if (allData && allData.length > 0) {
+            const imageFile = allData[0].imageFile;
+            backgroundImage.value = URL.createObjectURL(imageFile);
+            useSettingData().updateOtherSettings({  
+                backgroundImgUrl:  backgroundImage.value 
+            });
+        }
+    } catch (err) {
+        console.error('读取背景图片失败:', err);
     }
+};
+
+
+onMounted(() => {   
+    loadBackgroundImage();
 })
+
+// 在组件销毁时清理URL
+onUnmounted(() => {
+    if (backgroundImage.value) {
+        URL.revokeObjectURL(backgroundImage.value);
+    }
+});
+
+
 
 
 </script>
@@ -119,6 +159,7 @@ onMounted(() => {
         height: 100%;
         z-index: -2;
         background-color: #071336a8;
+
         .search_bg_mask {
             width: 100%;
             height: 100%;
@@ -127,11 +168,13 @@ onMounted(() => {
             left: 0;
             z-index: 0;
         }
+
         .search_bg {
             width: 100%;
             height: 100%;
             border-width: 0;
         }
+
         .search_bg_img {
             width: 100%;
             height: 100%;
