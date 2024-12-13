@@ -2,29 +2,33 @@
     <div class="other_settings">
         <a-card style="width: 300px;overflow: hidden;">
             <div class="other_settings_title">背景设置</div>
-            <transition-group name="backgroundTypeFade" class="background_type_show" tag="div">
-                <img class="show_item" v-if="backgroundType === '网页'" src="/images/bgview1.png" alt="">
+            <transition name="backgroundTypeFade" tag="div">
+                <div class="show_item" v-if="backgroundType === '网页'">
+                    <img src="/images/bgview1.png" alt="">
+                </div>
                 <div class="show_item" v-else-if="backgroundType === '图片'">
-                    <a-upload-dragger :showUploadList="false" @change="ImgUploadChange">
+                    <a-upload-dragger :showUploadList="false" @change="ImgUploadChange" v-if="upImgSrc == ''">
                         <IconImage style="font-size: 30px; color: #A5A5A5; " />
                         <p style="font-size: 12px; color:#A5A5A5;padding: 0 5px;">点击或拖拽文件到此处</p>
                     </a-upload-dragger>
+                    <div class="show_item_img" v-else>
+                        <IconClose class="close_icon" @click="upImgSrc = ''" />
+                        <img :src="upImgSrc" alt="">
+                    </div>
                 </div>
                 <div class="show_item" v-else="backgroundType === '视频'">
-                    <img :src="upImgSrc"  alt="" v-if="upImgSrc">
                     <a-upload-dragger :showUploadList="false" @change="VideoUploadChange">
                         <IconLive style="font-size: 30px; color: #A5A5A5; " />
                         <p style="font-size: 12px; color:#A5A5A5;padding: 0 5px;">点击或拖拽文件到此处</p>
                     </a-upload-dragger>
-
                 </div>
-            </transition-group>
+            </transition>
             <div class="other_settings_bottom">
                 <a-segmented v-model:value="backgroundType" :options="backgroundTypeList"
                     @change="backgroundTypeChange" />
                 <a-button type="primary" @click="saveBackground" size="small">保存</a-button>
             </div>
-        
+
 
         </a-card>
     </div>
@@ -32,7 +36,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useSettingData } from '../store/SettingStore';
-import { IconImage, IconLive } from '../components/icons';
+import { IconImage, IconLive, IconClose } from '../components/icons';
 import { message } from 'ant-design-vue';
 
 
@@ -47,6 +51,7 @@ const backgroundTypeChange = (value) => {
 
 const ImgUploadChange = (info) => {
     upImgSrc.value = URL.createObjectURL(info.file.originFileObj);
+    console.log(upImgSrc.value);
 }
 
 const VideoUploadChange = (info) => {
@@ -64,7 +69,6 @@ const saveBackground = () => {
     } else {
         message.warning('背景类型未发生变化');
     }
-
 }
 
 </script>
@@ -98,22 +102,43 @@ const saveBackground = () => {
     align-items: center;
 }
 
-.background_type_show {
-    margin-bottom: 10px;
-    background-color: var(--semi-color-bg-0);
 
-    .show_item {
+
+
+.show_item {
+
+    width: 250px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    // position: relative;
+    border: 1px dashed var(--semi-color-border);
+    margin-bottom: 10px;
+
+    .close_icon:hover {
+        background-color: var(--semi-color-bg-1);
+        opacity: 1;
+    }
+
+    .close_icon {
+        position: absolute;
+        top: 65px;
+        right: 30px;
+        cursor: pointer;
+        background-color: var(--semi-color-bg-3);
+        border-radius: 3px;
+        color: var(--semi-color-text-0);
+        opacity: 0.2;
+        transition: all 0.3s;
+    }
+    .ant-upload {
         width: 250px;
         height: 100px;
-        object-fit: cover;
-        border: 1px dashed var(--semi-color-border);
-        border-radius: 10px;
-        padding: 0;
-        box-sizing: border-box;
-
-        .ant-upload {
-            border: none;
-        }
+        border: none;
     }
 }
+
 </style>

@@ -94,7 +94,7 @@ const computedSrc = computed(() =>  `${useLinkData().backgrounddata}`);
 const backgroundType = computed(() => useSettingData().otherSettings.backgroundType);
 const backgroundImg = computed(() => useSettingData().otherSettings.backgroundImg);
 
-console.log(backgroundImg.value);
+// console.log(backgroundImg.value);
 
 </script>
 <style lang="less">
