@@ -62,7 +62,6 @@ import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import { IndexDBCache } from '../utils/indexedDB'
 
-
 const searchMenu = useLinkData().searchMenu;
 
 const searchMenuActiveIndex = ref(0);
@@ -161,6 +160,12 @@ onUnmounted(() => {
     padding-top: 120px;
     padding-bottom: 200px;
     position: relative;
+    .search_weather{
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 100;
+    }
 
     .search_video_bg {
         width: 100%;

@@ -54,20 +54,19 @@
         </a-table>
         <div class="setPanel_right " v-if="itemIndex === 1">
             <div class="setPanel_right_left">
-                <a-card style="height: 210px;">
+                <a-card>
                     <div class="export_item">
                         <p class="card_title">导入设置<span class="card_desc"> 支持xlsx,建议备份数据后再导入。</span></p>
-                        
                         <ComXlsxUpload />
                     </div>
                 </a-card>
-                <a-card style="height: 100px;">
+                <a-card>
                     <div class="export_item ">
                         <p class="card_title">备份数据<span class="card_desc">导出数据为xlsx格式</span></p>
                         <a-button type="primary" @click="exportData">导出设置</a-button>
                     </div>
                 </a-card>
-                <a-card style="height: 100px;">
+                <a-card>
                     <div class="export_item">
                         <p class="card_title">恢复默认<span class="card_desc">恢复初始化默认设置</span></p>
                         <a-button type="dashed" @click="resetData">重置默认</a-button>
@@ -75,9 +74,8 @@
                 </a-card>
             </div>
             <div class="setPanel_right_right">
-                <a-card>
-                    <p class="card_title">侧边栏排序</p>
-                    <p class="card_desc">拖拽排序、点击图标设置Icon</p>
+                <a-card style="width: 96%; min-height: 100px;">
+                    <p class="card_title">侧边栏排序<span class="card_desc">拖拽排序、点击图标设置Icon</span></p>
                     <ComMenuDrag />
                 </a-card>
             </div>
@@ -448,38 +446,57 @@ defineExpose({
         align-content: flex-start;
         align-items: flex-start;
         gap: 10px;
+
         .ant-card {
             width: 320px;
+            transition: height 0.3s;
         }
 
         .setPanel_right_left {
-            width: 40%;
+            width: 320px;
             min-width: 260px;
             display: flex;
             flex-direction: column;
             gap: 10px;
 
             .export_item {
-                height: auto;
-                .card_title{
+                display: flex;
+                flex-direction: column;
+
+                .card_title {
                     font-size: 16px;
                     font-weight: 700;
-                    margin-bottom: 5px;
+                    margin-bottom: 10px;
                     color: var(--semi-color-text-0);
-                    .card_desc{
+
+                    .card_desc {
                         font-size: 12px;
                         font-weight: 400;
                         margin-left: 10px;
                         color: var(--semi-color-text-2);
                     }
                 }
+
             }
         }
 
         .setPanel_right_right {
-            width: 40%;
+            // width: 40%;
             min-width: 260px;
             flex: 1;
+            .card_title {
+                    font-size: 16px;
+                    font-weight: 700;
+                    margin-bottom: 10px;
+                    color: var(--semi-color-text-0);
+
+                    .card_desc {
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-left: 10px;
+                        color: var(--semi-color-text-2);
+                    }
+                }
         }
     }
 

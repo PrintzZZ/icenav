@@ -2,6 +2,7 @@
     <div class="ice_header">
         <div class="ice_header_left"></div>
         <div class="ice_header_right">
+            <Comweather />
             <a-tooltip placement="bottom" title="切换主题">
                 <ThemeSwitch class="theme_switch_btn" />
             </a-tooltip>
@@ -47,7 +48,7 @@ import { ref } from 'vue';
 import { useLinkData } from '../store/LinkStore';
 import ThemeSwitch from './ThemeSwitch.vue';
 import IceSetPanel from './IceSetPanel.vue';
-
+import Comweather from './ComWeather.vue';
 // 切换背景
 const easySetClick = () => useLinkData().updatebackground();
 
@@ -235,11 +236,12 @@ const modelClose = () => {
     opacity: 1;
 }
 
-.ice_header_right:hover .theme_switch_btn {
+.ice_header_right:hover .theme_switch_btn
+, .ice_header_right:hover .weather_container {
     opacity: 1;
 }
 
-.theme_switch_btn {
+.weather_container,.theme_switch_btn {
     opacity: 0;
     transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }

@@ -203,7 +203,7 @@ const convertData = (originalDataArray) => {
     transition: height 0.3s;
 
     .setting {
-        width: 250px;
+        width: 270px;
         height: 100px;
         background-color: var(--semi-color-bg-1);
         border-radius: 6px;
@@ -213,7 +213,7 @@ const convertData = (originalDataArray) => {
     }
 
     .upload_dragger {
-        width: 250px;
+        width: 270px;
         height: 100%;
 
         .ant-upload-drag {
