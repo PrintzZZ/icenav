@@ -1,10 +1,9 @@
 <template>
     <div class="ComMenuDrag">
-        <transition-group name="list" tag="div" class="cardDrag_container">
-            <div class="cardDrag_item" v-for="(item, index) in menuList" :key="item.activeKey" draggable="true"
-                :class="{ 'drag-preview': previewIndex === index }" @dragstart="onDragStart(index)"
-                @dragover.prevent="onDragOver(index)" @dragenter.prevent="onDragEnter(index)" @drop="onDrop(index)"
-                @dragend="onDragEnd">
+        <div class="cardDrag_container" ref="dragContainer">
+            <div class="cardDrag_item" v-for="(item, index) in menuList" :key="`${item.name}-${index}`"
+                :data-id="index"
+                :class="{ 'drag-preview': previewIndex === index }">
                 <span class="cardDrag_icon">
                     <component :is="Icons.IconDraggable" />
                 </span>
@@ -14,7 +13,7 @@
                 </span>
                 <span class="cardDrag_title">{{ item.name }}</span>
             </div>
-        </transition-group>
+        </div>
         <div class="cardDrag_iconList" v-if="changeIconIndex !== null">
             <div v-for="(icon, index) in Icons" :key="index" class="cardDrag_iconItem" @click="chooseIcon(index)">
                 <component :is="icon" />
@@ -23,76 +22,81 @@
     </div>
 </template>
 
-
-
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useLinkData } from '../store/LinkStore';
 import * as Icons from '../components/icons';
+import Sortable from 'sortablejs';
 
 const menuList = ref(useLinkData().menuList);
-const IconShow = ref({});
-
+const dragContainer = ref(null);
+const previewIndex = ref(null);
 const changeIconIndex = ref(null);
+
+// 图标选择相关方法
 const changeIcon = (index) => {
     changeIconIndex.value = index;
 };
+
 const chooseIcon = (index) => {
     if (changeIconIndex.value === null) return;
     menuList.value[changeIconIndex.value].icon = index;
     changeIconIndex.value = null;
 };
 
+// 修改收藏排序初始化
+const initMenuSort = () => {
+    if (!dragContainer.value) return null;
 
-// 保存拖拽开始和预览位置索引
-const dragIndex = ref(null);
-const previewIndex = ref(null);
-
-// 拖拽开始事件
-const onDragStart = (index) => {
-    dragIndex.value = index;
-};
-
-// 拖拽进入事件，用于更新预览位置
-const onDragEnter = (index) => {
-    previewIndex.value = index;
-};
-
-// 拖拽悬停事件，防止无效的触发
-const onDragOver = (index) => {
-    if (dragIndex.value !== index) {
-        previewIndex.value = index;
-    }
-};
-
-// 拖拽放下事件
-const onDrop = (dropIndex) => {
-    if (dragIndex.value !== null && dragIndex.value !== dropIndex) {
-        const temp = menuList.value[dragIndex.value];
-        menuList.value.splice(dragIndex.value, 1);
-        menuList.value.splice(dropIndex, 0, temp);
-    }
-    dragIndex.value = null;
-    previewIndex.value = null;
-};
-
-// 拖拽结束事件，用于清理状态
-const onDragEnd = () => {
-    dragIndex.value = null;
-    previewIndex.value = null;
-    // console.log(menuList.value);
-    //重置activeKey
-    menuList.value.forEach((item, index) => {
-        item.activeKey = `${index}-0`;
+    return Sortable.create(dragContainer.value, {
+        animation: 150,
+        handle: ".cardDrag_item",
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        dragClass: "sortable-drag",
+        forceFallback: false,
+        dataIdAttr: 'data-id',
+        onEnd: (evt) => {
+            document.body.style.cursor = 'default';
+            const order = evt.to.children;
+            const newList = Array.from(order).map(el => {
+                const id = el.getAttribute('data-id');
+                return menuList.value[id];
+            });
+            newList.forEach((item, index) => {
+                item.activeKey = `${index}-0`;
+            });
+            useLinkData().updateMenuList(newList);
+        }
     });
 };
+
+
+let sortableInstance = null;
+// 初始化Sortable
+onMounted(() => {
+    sortableInstance = initMenuSort();
+});
+
+onUnmounted(() => {
+    if (sortableInstance) {
+        sortableInstance.destroy();
+    }
+});
+
 </script>
-
-
 
 <style lang="less">
 .ComMenuDrag {
     display: flex;
+
+    .cardDrag_container {
+        width: 250px;
+        
+        > * {
+            transition: all 0.3s ease;
+        }
+    }
 
     .cardDrag_item:hover {
         background-color: var(--semi-color-fill-0);
@@ -141,7 +145,7 @@ const onDragEnd = () => {
         flex-wrap: nowrap;
         color: var(--semi-color-text-2);
         cursor: pointer;
-        transition: transform 0.3s, background-color 0.3s;
+        transition: all 0.3s ease;
         border-radius: 3px;
         cursor: grab;
         padding: 12px 0;
@@ -178,44 +182,20 @@ const onDragEnd = () => {
         }
     }
 
-    /* 拖拽预览动画 */
-    .drag-preview {
+    .sortable-chosen {
         background-color: var(--semi-color-fill-0);
-        transform: scale(1.1);
-        transition: transform 0.2s ease,
-            opacity 0.2s ease,
-            background-color 0.2s ease;
-        opacity: 0.2;
+        opacity: 1 !important;
     }
 
-    /* 过渡动画 */
-    .list-move {
-        transition: transform 0.3s;
+    .sortable-ghost {
+        opacity: 0.3;
+        background-color: var(--semi-color-fill-0);
     }
 
-    .list-enter-active,
-    .list-leave-active {
-        transition: all 0.3s;
-    }
-
-    .list-enter-from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-
-    .list-enter-to {
+    .sortable-drag {
         opacity: 1;
-        transform: translateY(0);
-    }
-
-    .list-leave-from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .list-leave-to {
-        opacity: 0;
-        transform: translateY(20px);
+        background-color: var(--semi-color-fill-0);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 }
 </style>

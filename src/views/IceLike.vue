@@ -322,7 +322,7 @@ const initLikeSort = () => {
 
     return Sortable.create(sortLikeListRefs.value, {
         animation: 150,
-        handle: ".drag-handle",
+        handle: ".ice_card",
         ghostClass: "sortable-ghost",
         chosenClass: "sortable-chosen",
         dragClass: "sortable-drag",
