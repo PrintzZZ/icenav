@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { IconDark, IconLight } from '../components/icons'
 import { useLinkData } from '../store/LinkStore'
 import { useSettingData } from '../store/SettingStore'
@@ -23,6 +23,13 @@ const toggleTheme = () => {
   //切换背景
   useLinkData().updatebackground(isDarkMode.value ? 'dark' : 'light');
 }
+
+ // 自动监听并响应变化
+watchEffect(() => {
+  // console.log('Other settings updated:', useSettingData().otherSettings.defaultTheme); 
+  isDarkMode.value = useSettingData().otherSettings.defaultTheme === 'dark' ? true : false
+});
+
 
 // 组件挂载时同步当前主题状态
 onMounted(() => {

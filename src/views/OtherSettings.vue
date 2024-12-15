@@ -1,12 +1,12 @@
 <template>
     <div class="other_settings">
-        <div class="background_box">
-            <a-card style="width: 300px;height: 210px;overflow: hidden;">
+        <div class="background_box setting_item">
+            <a-card style="height: 210px;overflow: hidden;">
                 <div class="other_settings_title">背景设置</div>
                 <transition name="backgroundTypeFade" tag="div">
                     <div class="show_item" v-if="backgroundState.type === 0">
                         <img src="/images/bgview1.png" alt=""
-                            style="width: 260px;object-fit: cover;border-radius: 10px;">
+                            style="width: 100%;object-fit: cover;border-radius: 10px;">
                     </div>
                     <div class="show_item" v-else-if="backgroundState.type === 1">
                         <a-upload-dragger :showUploadList="false" :customRequest="fileUpload" @change="ImgUploadChange"
@@ -29,15 +29,15 @@
                     <a-button type="primary" @click="saveBackground" size="small">保存</a-button>
                 </div>
             </a-card>
-            <a-card style="width: 300px;height: 100px;">
+            <a-card style="height: 100px;">
                 <a-slider v-model:value="backgroundState.mask" :min="0" :max="1" :step="0.1""
-                    :disabled="backgroundState.type !== 1|| backgroundState.imgSrc == ''" />
+                    :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
                 <a-slider v-model:value="backgroundState.maskBlur" :min="0" :max="10" :step="1"
                     :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
             </a-card>
         </div>
-        <div class="title_card_box">
-            <a-card class="title_card">
+        <div class="title_card_box setting_item">
+            <a-card class="title_card" style="height: 100px;">
                 <div class="other_settings_title">标题设置</div>
                 <div class="title_card_bottom">
                     <a-input v-model:value="titleState.value" :placeholder="useSettingData().otherSettings.searchTitle"
@@ -45,7 +45,7 @@
                     <a-switch v-model:checked="titleState.show" checked-children="显" un-checked-children="隐" />
                 </div>
             </a-card>
-            <a-card style="width: 300px;height: 100px;">
+            <a-card style="height: 100px;">
                 <div class="other_settings_title">字体颜色</div>
                 <div class="color_card">
                     <div class="color_item_box">
@@ -57,9 +57,9 @@
                     <a-button type="primary" size="small" @click="saveColor">应用</a-button>
                 </div>
             </a-card>
-            <a-card style="width: 300px;height: 100px;">
+            <a-card style="height: 100px;">
                 <div class="other_settings_title">搜索框颜色 <span style="font-size: 12px;color: #A5A5A5;">透明度:{{
-                        searchState.opacity }}</span></div>
+                    searchState.opacity }}</span></div>
                 <div class="color_card">
                     <a-slider v-model:value="searchState.opacity" :min="0" :max="1" :step="0.1" style="flex: 1;" />
                     <a-switch v-model:checked="searchState.isDark" checked-children="深" un-checked-children="浅" />
@@ -67,14 +67,35 @@
 
             </a-card>
         </div>
+        <div class="disPaly_box setting_item">
+            <a-card style="width: 100px;height: 100px;cursor: pointer;" @click="toggleTheme">
+                <div class="theme_switch_icon">
+                    <IconLight v-if="isDarkMode" />
+                    <IconDark v-else />
+                </div>
+            </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip title="每行卡片数" placement="bottom">
+                    <div class="disPaly_title" @click="changeCardNum">
+                        {{ cardNum }}
+                    </div>
+                </a-tooltip>
+            </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <div class="other_settings_title">背景设置</div>
+            </a-card>
+        </div>
     </div>
 </template>
 <script setup>
-import { reactive, ref, onMounted, watch, computed } from 'vue';
+import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
-import { IconImage, IconLive, IconClose } from '../components/icons';
+import { useLinkData } from '../store/LinkStore';
+import { IconImage, IconLive, IconClose, IconLight, IconDark } from '../components/icons';
 import { message } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
+
+
 
 
 const settings = useSettingData().otherSettings;
@@ -83,9 +104,10 @@ const backgroundState = reactive({
     typeList: ['网页', '图片'],
     type: settings.backgroundType || 0,
     imgSrc: settings.backgroundImgUrl || '',
-    mask: settings.backgroundMask || 0.5,
-    maskBlur: settings.backgroundMaskBlur || 2
+    mask: settings.mask == 0 ? 0 : settings.mask || 0.5,
+    maskBlur: settings.maskBlur == 0 ? 0 : settings.maskBlur || 2
 });
+
 
 // 标题设置相关状态
 const titleState = reactive({
@@ -180,7 +202,7 @@ const SaveImage = async (file) => {
         // console.error('保存图片失败', err);
         return false;
     })
-    
+
 };
 
 // 背景保存逻辑优化
@@ -203,6 +225,34 @@ const saveBackground = () => {
     message.success(`更换${saveIndex === 0 ? '动态' : '图片'}背景成功`);
 };
 
+// 切换主题
+const isDarkMode = ref(false)
+const toggleTheme = () => {
+    isDarkMode.value = !isDarkMode.value
+    useSettingData().updateOtherSettings({ defaultTheme: isDarkMode.value ? 'dark' : 'light' })
+    document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
+    //切换背景
+    useLinkData().updatebackground(isDarkMode.value ? 'dark' : 'light');
+}
+// 自动监听并响应变化
+watchEffect(() => {
+    // console.log('Other settings updated:', useSettingData().otherSettings.defaultTheme); 
+    isDarkMode.value = useSettingData().otherSettings.defaultTheme === 'dark' ? true : false
+});
+
+// 每行卡片数
+const cardNum = ref(5);
+const changeCardNum = () => {
+    //递增,最小1,最大7
+    cardNum.value = cardNum.value + 1;
+    if (cardNum.value > 7) {
+        cardNum.value = 1;
+    }
+    useSettingData().updateOtherSettings({
+        cardNum: cardNum.value
+    });
+}
+
 // 初始化
 onMounted(() => {
     imageDB.initDB();
@@ -215,25 +265,62 @@ onMounted(() => {
     gap: 10px;
     flex-wrap: wrap;
 
-    .background_box {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        flex-direction: column;
+    .ant-card {
+        width: 320px;
+
+        .ant-card-body {
+            padding: 20px;
+        }
     }
 
-    .title_card_box {
+    .setting_item {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
         flex-direction: column;
+        width: 320px;
+    }
+
+    .background_box {}
+
+    .title_card_box {}
+
+    .disPaly_box {
+        width: 100px;
+
+        .theme_switch_icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .disPaly_title:hover {
+            background-color: var(--semi-color-fill-0);
+        }
+
+        .disPaly_title {
+            width: 60px;
+            height: 60px;
+            padding: 5px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: 700;
+            color: var(--semi-color-text-0);
+            cursor: pointer;
+            line-height: 60px;
+            user-select: none;
+        }
     }
 
     .title_card {
-        width: 300px;
-        height: 100px;
         overflow: hidden;
-        cursor: pointer;
         position: relative;
 
         .title_card_bottom {
@@ -280,6 +367,8 @@ onMounted(() => {
 
     }
 
+
+
     .backgroundTypeFade-move,
     .backgroundTypeFade-enter-active,
     .backgroundTypeFade-leave-active {
@@ -302,6 +391,7 @@ onMounted(() => {
         .close_icon {
             display: none;
         }
+
 
         .show_item_img_mask {
             display: none;
@@ -331,15 +421,11 @@ onMounted(() => {
     }
 
 
-    .ant-card {
-        .ant-card-body {
-            padding: 20px;
-        }
-    }
+
 
     .show_item {
 
-        width: 260px;
+        width: 100%;
         height: 100px;
         object-fit: cover;
         border-radius: 10px;
@@ -349,10 +435,13 @@ onMounted(() => {
         // position: relative;
         border: 1px dashed var(--semi-color-border);
 
+        img {
+            max-width: 276px;
+        }
 
         .show_item_img_mask {
             position: absolute;
-            width: 260px;
+            // width: 260px;
             height: 100px;
             // top: calc(20px + 30px + 10px);
             // left: 20px;
@@ -380,7 +469,7 @@ onMounted(() => {
         }
 
         .ant-upload {
-            width: 260px;
+            width: 276px;
             height: 100px;
             border: none;
         }

@@ -17,6 +17,7 @@ export const useSettingData = defineStore( "SettingData", () => {
         fontColor: "#ffffff",
         searchInputColor: true,
         searchInputOpacity: 0.6,
+        cardNum: 5,
       },
     );
 

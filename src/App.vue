@@ -19,7 +19,9 @@
                 :title="child.name">
 
                 <div class="ice_card_content">
-                  <div class="ice_card" v-for="(item, itemindex) in child.item" :key="itemindex">
+                  <div class="ice_card" 
+                  v-for="(item, itemindex) in child.item" 
+                  :key="itemindex" :style="`flex: 0 0 calc(${100 / cardNum}% - 10px);max-width: calc(${100 / cardNum}% - 10px);`">
                     <span class="like_icon" @click.stop="Likeitem(item)">
                       <IconRating />
                     </span>
@@ -52,7 +54,7 @@
 
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted, onBeforeUpdate } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUpdate, watchEffect } from 'vue';
 import IceSearch from './views/IceSearch.vue'
 import { useLinkData } from './store/LinkStore';
 import { useSettingData } from './store/SettingStore';
@@ -67,6 +69,12 @@ import IceSide from './views/IceSide.vue'
 import ThemeSwitch from './views/ThemeSwitch.vue'
 import { debounce } from 'lodash';
 
+
+const cardNum = ref(5);
+
+watchEffect(() => {
+  cardNum.value = useSettingData().otherSettings.cardNum;
+})
 
 const menuList = useLinkData().menuList;
 const LikeList = useLinkData().LikeList;

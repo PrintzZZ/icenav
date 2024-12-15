@@ -322,6 +322,7 @@ defineExpose({
             align-items: center;
             justify-content: flex-start;
             margin: 0 0 16px 0;
+            color: var(--semi-color-text-0);
 
             .card_title_icon {
                 color: #4CC3FA;
@@ -366,7 +367,7 @@ defineExpose({
             border: 1px solid var(--semi-color-border);
             padding: 14px;
             cursor: pointer;
-            transition: .3s;
+            transition: 0.3s;
             overflow: hidden;
             gap: .5rem;
             display: flex;
@@ -375,7 +376,7 @@ defineExpose({
             overflow: hidden;
 
             .card_item_desc {
-                transition: .3s;
+                transition: 0.3s;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 line-height: 1.5;
@@ -397,6 +398,7 @@ defineExpose({
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    color: var(--semi-color-text-0);
                 }
 
                 .card_item_icon_icon {
@@ -419,7 +421,7 @@ defineExpose({
         margin-right: .5rem;
         width: 28%;
         height: 100%;
-        transition: .3s;
+        transition: 0.3s;
         min-width: 100px;
     }
 
