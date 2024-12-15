@@ -75,7 +75,7 @@ const menuList = useLinkData().menuList; //初始化侧边栏数据
 // 处理上传状态变化
 const handleChange = (info) => {
     if (info.file.status === 'done') {
-        console.log('上传成功', info.file);
+        // console.log('上传成功', info.file);
         uploadError.value = false;
 
         let data = convertData(excelData.value)

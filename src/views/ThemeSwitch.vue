@@ -54,7 +54,7 @@ onMounted(() => {
 }
 
 .theme-switch-icon:hover {
-  background-color: #45428f9c;
+  background-color: #45428f52;
 
 }
 

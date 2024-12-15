@@ -12,8 +12,14 @@ export const useSettingData = defineStore( "SettingData", () => {
         backgroundVideoUrl: "",
         mask: 0.5,
         maskBlur: 2,
+        searchTitle: "学术搜索引擎",
+        showTitle: true,
+        fontColor: "#ffffff",
+        searchInputColor: true,
+        searchInputOpacity: 0.6,
       },
     );
+
 
     // 更新设置项
     const updateOtherSettings = (datavalue) => {

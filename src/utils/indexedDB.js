@@ -101,7 +101,6 @@ export class IndexDBCache {
 		return new Promise((resolve, reject) => {
 			const transaction = this._db.transaction(this._cacheTableName);
 			const objectStore = transaction.objectStore(this._cacheTableName);
-			console.log(objectStore);
 			// 通过主键读取数据
 			// const request = objectStore.get(key);
 			// getAll(key)同get(key)获取指定key对应数据，如果getAll不传参或者传null即返回所有数据
@@ -122,7 +121,7 @@ export class IndexDBCache {
 		const request = index.get(params.value);
 		request.onsuccess = function (e) {
 			const result = e.target.result;
-			console.log('getDataByIndex', result)
+			// console.log('getDataByIndex', result)
 		}
 	}
 	// 遍历数据
@@ -132,11 +131,11 @@ export class IndexDBCache {
 			const cursor = event.target.result;
 
 			if (cursor) {
-			console.log('key: ' + cursor.key);
-			console.log('Value: ' + JSON.stringify(cursor.value));
+			// console.log('key: ' + cursor.key);
+			// console.log('Value: ' + JSON.stringify(cursor.value));
 			cursor.continue();
 			} else {
-			console.log('没有更多数据了！');
+			// console.log('没有更多数据了！');
 			}
 		};
 	}
@@ -146,10 +145,10 @@ export class IndexDBCache {
 			.objectStore(this._cacheTableName)
 			.put(params);
 		request.onsuccess = function (event) {
-			console.log('数据更新成功');
+			// console.log('数据更新成功');
 		};
 		request.onerror = function (event) {
-			console.log('数据更新失败');
+			// console.log('数据更新失败');
 		}
 	}
 	// 关闭数据库
@@ -158,13 +157,13 @@ export class IndexDBCache {
 	}
 	// 删除数据库
 	deleteDB() {
-		console.log('开始删除数据库')
+		// console.log('开始删除数据库')
 		let DBDeleteRequest = indexDB.deleteDatabase(this._dbName)
 		DBDeleteRequest.onsuccess = function (event) {
-			console.log('删除数据库成功')
+			// console.log('删除数据库成功')
 		}
 		DBDeleteRequest.onerror = function (event) {
-			console.log('删除数据库失败')
+			// console.log('删除数据库失败')
 		}
 	}
 }

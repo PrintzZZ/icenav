@@ -286,7 +286,7 @@ defineExpose({
     transition: 0.3s;
     margin: 0 30px;
     transform: translateY(10px);
-    width: calc(100% - 30px);
+    width: 100%;
     height: calc(100% - 30px);
     overflow: hidden;
     min-height: 700px;

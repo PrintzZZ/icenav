@@ -80,7 +80,7 @@ const onDrop = (dropIndex) => {
 const onDragEnd = () => {
     dragIndex.value = null;
     previewIndex.value = null;
-    console.log(menuList.value);
+    // console.log(menuList.value);
     //重置activeKey
     menuList.value.forEach((item, index) => {
         item.activeKey = `${index}-0`;

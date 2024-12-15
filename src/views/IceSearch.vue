@@ -11,21 +11,25 @@
             <img v-if="backgroundType === 1" class="search_bg_img" :src="backgroundImgUrl" alt="">
             <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
-        <div class="search_container">
-            <div class="search_title">
-                <h2>学术搜索引擎</h2>
+        <div class="search_container" :style="{ color: fontColor }">
+            <div class="search_title" v-if="useSettingData().otherSettings.showTitle">
+                <h2>{{ useSettingData().otherSettings.searchTitle }}</h2>
             </div>
             <div class="search_menu">
                 <div class="search_menu_line" :style="{ left: lineStyle.left + 'px', width: lineStyle.width + 'px' }">
                 </div>
-                <div class="search_menu_item" :class="{ active: menu.active }" v-for="(menu, index) in searchMenu"
-                    :key="index" @click="menuClick(index, $event)">
+                <div class="search_menu_item"  :class="{ active: menu.active }" v-for="(menu, index) in searchMenu"
+                    :key="index" @click="menuClick(index, $event)"  >
                     <span class="search_menu_name">{{ menu.name }}</span>
                 </div>
             </div>
             <form @submit.prevent="handleSubmit" method="get" target="_blank" class="search_form">
                 <input type="text" class="search_input" :placeholder="searchFrom.placeholder" v-model="searchQuery"
-                    autocomplete="off" />
+                    autocomplete="off" name="search_input" 
+                    :style="{ 
+                        backgroundColor: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})` 
+                    }"
+                    />
                 <i class="close_icon" @click="clearSearch" v-if="searchQuery.length > 0">
                     <IconClose />
                 </i>
@@ -35,7 +39,7 @@
                     </i>
                 </button>
             </form>
-            <div class="search_list">
+            <div class="search_list" :style="{ color: fontColor }">
                 <ul>
                     <li v-for="(item, itemindex) in searchMenu[searchMenuActiveIndex].engines" :key="itemindex"
                         class="search_list_item" :class="{ active: searchListActiveIndex == itemindex }"
@@ -69,6 +73,8 @@ const searchFrom = ref({
     name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd'
 });
 
+
+
 const menuClick = (index, event) => {
     searchMenu.forEach(item => {
         item.active = false;
@@ -98,7 +104,9 @@ const backgroundType = computed(() => useSettingData().otherSettings.backgroundT
 const backgroundImgUrl = computed(() => useSettingData().otherSettings.backgroundImgUrl);
 const backgroundMask = computed(() => useSettingData().otherSettings.mask);
 const backgroundMaskBlur = computed(() => useSettingData().otherSettings.maskBlur);
-
+const fontColor = computed(() => useSettingData().otherSettings.fontColor);
+const searchInputOpacity = computed(() => useSettingData().otherSettings.searchInputOpacity);
+const searchInputColor = computed(() => useSettingData().otherSettings.searchInputColor);
 
 // 初始化 IndexDB 实例
 const backgroundImage = ref('');
@@ -129,7 +137,9 @@ const loadBackgroundImage = async () => {
 
 
 onMounted(() => {   
-    loadBackgroundImage();
+    if(backgroundType.value === 1){
+        loadBackgroundImage();
+    }
 })
 
 // 在组件销毁时清理URL
@@ -199,7 +209,7 @@ onUnmounted(() => {
         }
 
         .search_icon {
-            color: #fff;
+            // color: #fff;
             font-size: 25px;
             display: inline-flex;
             flex-direction: row;
@@ -243,7 +253,7 @@ onUnmounted(() => {
             cursor: pointer;
             padding: 0 10px;
             border-right: #23232399 solid 2px;
-            opacity: 0.8;
+            opacity: 0.3;
             transition: opacity 0.3s ease-in-out;
         }
 
@@ -256,12 +266,12 @@ onUnmounted(() => {
             font-size: 1pc;
             transition: 0.3s;
             border-radius: 50px;
-            color: #fff;
+            // color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 9px 20px;
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
-            background-color: rgba(0, 0, 0, 0.6);
+            // background-color: rgba(0, 0, 0, 0.6);
             outline: 0;
             border: none;
         }
@@ -272,7 +282,7 @@ onUnmounted(() => {
             line-height: 1.2;
             font-size: 2.5rem;
             letter-spacing: 6px;
-            color: #fff;
+            // color: #fff;
         }
 
         .search_menu {
@@ -301,7 +311,7 @@ onUnmounted(() => {
                 opacity: .5;
                 transition: opacity .3s;
                 cursor: pointer;
-                color: #fff;
+                // color: #fff;
                 font-size: 15px;
                 text-align: center;
                 font-weight: normal;
@@ -377,7 +387,8 @@ onUnmounted(() => {
             .search_list_item {
                 height: 100%;
                 cursor: pointer;
-                color: #fff;
+                // color: #fff;
+                text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
                 font-size: 12px;
                 text-align: center;
                 font-weight: normal;

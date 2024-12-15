@@ -97,7 +97,7 @@ defineExpose({
 const getList = ref([]);
 const refetchData = (index) => {
     getList.value[index].isloading = true;
-    console.log(getList.value[index].name)
+    // console.log(getList.value[index].name)
     axios.get(`${baseURL}/${getList.value[index].name}?limit=20`).then(res => {
         const api = getList.value[index];
         const data = res.data;
