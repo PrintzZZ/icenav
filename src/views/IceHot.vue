@@ -110,7 +110,7 @@ const refetchData = (index) => {
     });
 };
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://159.75.224.203:6688'
+const baseURL = import.meta.env.VITE_API_URL;
 
 const fetchData = async () => {
     try {
