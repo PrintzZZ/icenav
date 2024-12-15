@@ -1,5 +1,5 @@
 <template>
-    <div class="ice_upload_set">
+    <div class="ice_upload_set" :style="{height: `${fileList.length > 0 ? 160 : 100}px`}">
         <div class="setting upload">
             <a-upload-dragger class="upload_dragger" v-model:file-list="fileList" name="file" accept=".xlsx"
                 :max-count="1" :customRequest="fileUpload" :before-upload="beforeUpload" @change="handleChange">
@@ -199,12 +199,11 @@ const convertData = (originalDataArray) => {
     align-content: flex-start;
     justify-content: space-between;
     align-items: flex-start;
-    height: 200px;
     flex-direction: row;
-    height: 180px;
+    transition: height 0.3s;
 
     .setting {
-        width: 100px;
+        width: 250px;
         height: 100px;
         background-color: var(--semi-color-bg-1);
         border-radius: 6px;
@@ -224,7 +223,7 @@ const convertData = (originalDataArray) => {
 
 
     .upload {
-        width: 250px;
+        width: 100%;
     }
 
 

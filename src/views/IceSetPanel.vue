@@ -52,28 +52,34 @@
                 </template>
             </template>
         </a-table>
-        <div class="setPanel_right setPanel_card" v-if="itemIndex === 1">
+        <div class="setPanel_right " v-if="itemIndex === 1">
             <div class="setPanel_right_left">
-                <p class="card_title">导入设置</p>
-                <p class="card_desc"> 支持xlsx表格, 建议备份数据后再导入。</p>
-                <ComXlsxUpload />
-                <a-divider />
-                <div class="export_btn">
-                    <p class="card_title">备份数据</p>
-                    <p class="card_desc">导出数据为xlsx格式</p>
-                    <a-button type="primary" @click="exportData">导出设置</a-button>
-                </div>
-                <a-divider />
-                <div class="export_btn">
-                    <p class="card_title">恢复默认</p>
-                    <p class="card_desc">恢复初始化默认设置</p>
-                    <a-button type="dashed" @click="resetData">重置默认</a-button>
-                </div>
+                <a-card style="height: 210px;">
+                    <div class="export_item">
+                        <p class="card_title">导入设置<span class="card_desc"> 支持xlsx,建议备份数据后再导入。</span></p>
+                        
+                        <ComXlsxUpload />
+                    </div>
+                </a-card>
+                <a-card style="height: 100px;">
+                    <div class="export_item ">
+                        <p class="card_title">备份数据<span class="card_desc">导出数据为xlsx格式</span></p>
+                        <a-button type="primary" @click="exportData">导出设置</a-button>
+                    </div>
+                </a-card>
+                <a-card style="height: 100px;">
+                    <div class="export_item">
+                        <p class="card_title">恢复默认<span class="card_desc">恢复初始化默认设置</span></p>
+                        <a-button type="dashed" @click="resetData">重置默认</a-button>
+                    </div>
+                </a-card>
             </div>
             <div class="setPanel_right_right">
-                <p class="card_title">侧边栏排序</p>
-                <p class="card_desc">拖拽排序、点击图标设置Icon</p>
-                <ComMenuDrag />
+                <a-card>
+                    <p class="card_title">侧边栏排序</p>
+                    <p class="card_desc">拖拽排序、点击图标设置Icon</p>
+                    <ComMenuDrag />
+                </a-card>
             </div>
         </div>
         <div class="setPanel_right" v-if="itemIndex === 2">
@@ -374,6 +380,7 @@ defineExpose({
             flex-direction: column;
             max-height: 98px;
             overflow: hidden;
+            // transition: height 0.3s;
 
             .card_item_desc {
                 transition: 0.3s;
@@ -440,15 +447,32 @@ defineExpose({
         min-width: 500px;
         align-content: flex-start;
         align-items: flex-start;
-        gap: 40px;
+        gap: 10px;
+        .ant-card {
+            width: 320px;
+        }
 
         .setPanel_right_left {
-            padding: 0 10px;
             width: 40%;
             min-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
 
-            .export_btn {
-                margin-bottom: 10px;
+            .export_item {
+                height: auto;
+                .card_title{
+                    font-size: 16px;
+                    font-weight: 700;
+                    margin-bottom: 5px;
+                    color: var(--semi-color-text-0);
+                    .card_desc{
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-left: 10px;
+                        color: var(--semi-color-text-2);
+                    }
+                }
             }
         }
 

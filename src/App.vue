@@ -21,7 +21,7 @@
                 <div class="ice_card_content">
                   <div class="ice_card" 
                   v-for="(item, itemindex) in child.item" 
-                  :key="itemindex" :style="`flex: 0 0 calc(${100 / cardNum}% - 10px);max-width: calc(${100 / cardNum}% - 10px);`">
+                  :key="itemindex" :style="cardStyle">
                     <span class="like_icon" @click.stop="Likeitem(item)">
                       <IconRating />
                     </span>
@@ -54,7 +54,7 @@
 
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted, onBeforeUpdate, watchEffect } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUpdate, watchEffect, computed } from 'vue';
 import IceSearch from './views/IceSearch.vue'
 import { useLinkData } from './store/LinkStore';
 import { useSettingData } from './store/SettingStore';
@@ -69,12 +69,6 @@ import IceSide from './views/IceSide.vue'
 import ThemeSwitch from './views/ThemeSwitch.vue'
 import { debounce } from 'lodash';
 
-
-const cardNum = ref(5);
-
-watchEffect(() => {
-  cardNum.value = useSettingData().otherSettings.cardNum;
-})
 
 const menuList = useLinkData().menuList;
 const LikeList = useLinkData().LikeList;
@@ -165,7 +159,18 @@ onMounted(() => {
   })
 })
 
-
+// 计算卡片样式
+const cardStyle = computed(() => {
+  if(isMobile.value){return {}}
+    const num = useSettingData().otherSettings.cardNum || 5;
+    const gap = 10; // 卡片间距
+    const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
+    return {
+        flex: `0 0 ${width}`,
+        maxWidth: width,
+        minWidth: '150px', // 设置最小宽度
+    };
+});
 
 </script>
 <style lang="less">
@@ -540,5 +545,10 @@ onMounted(() => {
     }
 
   }
+}
+
+.ice_card {
+    margin-bottom: 10px;
+    transition: all 0.3s ease; // 添加过渡效果，使宽度变化更平滑
 }
 </style>

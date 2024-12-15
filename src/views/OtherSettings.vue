@@ -69,20 +69,17 @@
         </div>
         <div class="disPaly_box setting_item">
             <a-card style="width: 100px;height: 100px;cursor: pointer;" @click="toggleTheme">
-                <div class="theme_switch_icon">
+                <div class="theme_switch_icon" :class="{'isDark':isDarkMode}">
                     <IconLight v-if="isDarkMode" />
                     <IconDark v-else />
                 </div>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip title="每行卡片数" placement="bottom">
+                <a-tooltip :title="`每行显示${cardNum}个卡片`" placement="bottom">
                     <div class="disPaly_title" @click="changeCardNum">
                         {{ cardNum }}
                     </div>
                 </a-tooltip>
-            </a-card>
-            <a-card style="width: 100px;height: 100px;">
-                <div class="other_settings_title">背景设置</div>
             </a-card>
         </div>
     </div>
@@ -101,7 +98,7 @@ import { IndexDBCache } from '../utils/indexedDB';
 const settings = useSettingData().otherSettings;
 // 背景设置相关状态
 const backgroundState = reactive({
-    typeList: ['网页', '图片'],
+    typeList: ['动态', '图片'],
     type: settings.backgroundType || 0,
     imgSrc: settings.backgroundImgUrl || '',
     mask: settings.mask == 0 ? 0 : settings.mask || 0.5,
@@ -128,10 +125,10 @@ const saveColor = () => {
     });
 };
 
-// 背景类型defaultType用于初始化控制器
+// 背景类型defaultType用于初始化控制��
 const defaultType = ref(backgroundState.typeList[backgroundState.type]);
 const backgroundTypeChange = (value) => {
-    backgroundState.type = value === '网页' ? 0 : 1;
+    backgroundState.type = value === '图片' ? 1 : 0;
 };
 
 // 重写上传文件action
@@ -241,9 +238,8 @@ watchEffect(() => {
 });
 
 // 每行卡片数
-const cardNum = ref(5);
+const cardNum = ref(useSettingData().otherSettings.cardNum || 5);
 const changeCardNum = () => {
-    //递增,最小1,最大7
     cardNum.value = cardNum.value + 1;
     if (cardNum.value > 7) {
         cardNum.value = 1;
@@ -285,9 +281,22 @@ onMounted(() => {
 
     .title_card_box {}
 
+    @media (max-width: 769px) {
+        .setting_item.disPaly_box {
+            width: 320px !important;
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
     .disPaly_box {
         width: 100px;
-
+        .theme_switch_icon.isDark:hover{
+            color: #FBCD2C;
+        }
+        .theme_switch_icon:hover{
+            color: #FBCD2C;
+        }
         .theme_switch_icon {
             width: 60px;
             height: 60px;
@@ -295,10 +304,7 @@ onMounted(() => {
             align-items: center;
             justify-content: center;
             font-size: 30px;
-        }
-
-        .disPaly_title:hover {
-            background-color: var(--semi-color-fill-0);
+            transition: color .5s;
         }
 
         .disPaly_title {
@@ -310,12 +316,18 @@ onMounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 40px;
             font-weight: 700;
             color: var(--semi-color-text-0);
             cursor: pointer;
             line-height: 60px;
             user-select: none;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                background-color: var(--semi-color-fill-0);
+                transform: scale(1.05);
+            }
         }
     }
 
