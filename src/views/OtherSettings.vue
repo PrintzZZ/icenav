@@ -152,6 +152,7 @@ import { useLinkData } from '../store/LinkStore';
 import { IconImage, IconLive, IconClose, IconLight, IconDark, IconSave, IconDatePicker, IconImport, IconExport } from '../components/icons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
+import LZString from 'lz-string';
 
 const allData = ref()
 const dataState = ref({
@@ -199,7 +200,6 @@ const exportData = async () => {
         isExporting.value = true;
         message.loading('正在准备导出数据...', 0);
 
-        // 确保数据是最新的
         await getAllData();
         
         const data = allData.value;
@@ -207,14 +207,18 @@ const exportData = async () => {
             throw new Error('数据为空');
         }
 
+        // 压缩 JSON
+        const jsonString = JSON.stringify(data);
+        const compressed = LZString.compressToBase64(jsonString);
+        
         // 创建 Blob
-        const blob = new Blob([JSON.stringify(data, null, 2)], { 
+        const blob = new Blob([compressed], { 
             type: 'application/json' 
         });
 
         // 获取当前日期时间字符串
         const dateStr = new Date().toISOString().split('T')[0];
-        const fileName = `ice_backup_${dateStr}.json`;
+        const fileName = `ice_backup_${dateStr}.ice`;  // 使用自定义扩展名
 
         // 使用 URL.createObjectURL 创建下载链接
         const url = URL.createObjectURL(blob);
@@ -222,16 +226,14 @@ const exportData = async () => {
         a.href = url;
         a.download = fileName;
         
-        // 触发下载
         document.body.appendChild(a);
         a.click();
         
-        // 清理
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
         message.destroy();
-        message.success(`成功导出网页数据和设置`);
+        message.success('成功导出网页数据和设置');
     } catch (error) {
         message.error('导出失败：' + error.message);
     } finally {
@@ -267,8 +269,8 @@ const validateImportData = (data) => {
 
 // 读取json文件
 const readJson = (file) => {
-    if (file.type !== 'application/json') {
-        message.error('请选择JSON格式的备份文件');
+    if (!file.name.endsWith('.ice')) {
+        message.error('请选择.ice格式的备份文件');
         return;
     }
 
@@ -277,7 +279,10 @@ const readJson = (file) => {
     
     reader.onload = () => {
         try {
-            const data = JSON.parse(reader.result);
+            // 解压缩数据
+            const decompressed = LZString.decompressFromBase64(reader.result);
+            const data = JSON.parse(decompressed);
+            
             if (validateImportData(data)) {
                 allData.value = data;
                 importData();
@@ -286,7 +291,7 @@ const readJson = (file) => {
             message.error('文件解析失败：' + error.message);
         } finally {
             isImporting.value = false;
-            importFile.value = []; // 清空文件列表
+            importFile.value = [];
         }
     };
 
