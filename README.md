@@ -47,6 +47,8 @@ git fetch --all: 获取远程仓库的所有更新，不会修改本地代码。
 git reset --hard origin/main: 强制将本地分支的代码重置为远程分支的状态.
 git pull: 从远程仓库拉取最新的提交，确保本地代码是最新的。
 
+git push -u origin main: 将本地分支的代码推送到远程仓库。
+
 ```
 
 ### 配置
