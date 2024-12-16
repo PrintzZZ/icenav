@@ -357,6 +357,7 @@ const cardStyle = computed(() => {
             flex-direction: column;
             flex-wrap: nowrap;
             justify-content: center;
+            color: var(--semi-color-text-0);
           }
 
           .error_avatar::before {

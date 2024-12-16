@@ -6,11 +6,11 @@
         <div class="ice_side" :style="{ width: isNavCollapsed ? '60px' : '200px', }">
             <div class="ice_nav_header">
                 <div class="ice_logo" :class="{ collapsed: isNavCollapsed }">
-                    <a href="https://nav.iceooh.com" target="">
+                    <a href="/" target="">
                         <img src="/images/favicon.png" alt="ICEOOH冰屋学术导航logo" class="ice_logo_icon">
                     </a>
                     <span class="ice_logo_text" v-if="!isNavCollapsed">
-                        <span class="ice_logo_main">冰屋学术导航</span>
+                        <span class="ice_logo_main">冰屋综合导航</span>
                         <span class="ice_logo_sub">ICEOOH.COM</span>
                     </span>
                 </div>

@@ -29,6 +29,10 @@ import Icontabs from './Icontabs.vue';
 import IconDark from './IconDark.vue';
 import IconLight from './IconLight.vue';
 import IconIceooh from './IconIceooh.vue';
+import IconSave from './IconSave.vue';
+import IconImport from './IconImport.vue';
+import IconExport from './IconExport.vue';
+
 
 export {
     IconChecked,
@@ -62,4 +66,7 @@ export {
     IconDark,
     IconLight,
     IconIceooh,
+    IconSave,
+    IconImport,
+    IconExport,
 };

@@ -102,6 +102,8 @@ icenav/
    - 主题切换
    - 布局调整
 
+5. 数据导入导出
+   - 支持数据导入导出
 
 
 - API文档链接
@@ -135,7 +137,8 @@ icenav/
 ## 🌟 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=PrintzZZ/icenav&type=Date)](https://star-history.com/#PrintzZZ/icenav&Date)
-```
+
+
 
 
 ## 已经实现的功能
@@ -148,15 +151,16 @@ icenav/
 - 主题切换
 - 布局调整
 - 自定义收藏
-- 多平台数据聚合
 - 支持自定义排序
 - 支持多搜索引擎切换
 - 支持主题切换
+- 支持天气
+- 支持本地数据持久化
+- 支持数据导入导出
 
 ## 计划任务
 
 - 云端数据持久化
-- 天气和时间
 - 待办事项和备忘录
 - 第三方服务整合 接入 RSS 订阅、社交媒体小组件等
 
