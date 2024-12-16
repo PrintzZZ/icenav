@@ -2,15 +2,11 @@
   <a-config-provider :theme="isDarkMode ? { algorithm: theme.darkAlgorithm } : {}" :locale="zhCN">
     <div class="ice_main" :class="{ mobile: isMobile }">
 
-
       <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile" />
 
-
       <div class="ice_content" id="ice_content">
-
         <IceSearch />
         <div class="ice_main_content">
-
           <IceLike :is-mobile="isMobile" v-model:is-nav-collapsed="isNavCollapsed" />
           <div class="ice_menu_content" v-for="(menu, index) in menuList" :key="index" :id="menu.name"
             :ref="(el) => setTabRef(el, index)">
@@ -48,8 +44,6 @@
         <a-back-top :target="iceContentDom" />
       </div>
     </div>
-
-
   </a-config-provider>
 
 </template>
@@ -74,6 +68,14 @@ const menuList = useLinkData().menuList;
 const LikeList = useLinkData().LikeList;
 const isMobile = ref(false);
 
+//检测版本
+const checkVersion = () => {
+  const version = useSettingData().otherSettings.iceVersion;
+  if (version != '0.0.1') {
+    message.warning('当前版本为' + version + ', 请更新到最新版本');
+  }
+}
+
 // 当前选中的菜单索引
 const isNavCollapsed = ref(false);
 
@@ -89,8 +91,6 @@ const setTabRef = (el, index) => {
     tabRefs.value[index] = el;
   }
 };
-
-
 
 // 监听窗口大小变化
 const checkWindowSize = () => {
@@ -113,6 +113,7 @@ const debouncedCheckSize = debounce(checkWindowSize, 200);
 
 onMounted(() => {
   checkWindowSize(); // 初始检查
+  // checkVersion();
   window.addEventListener('resize', debouncedCheckSize);
 });
 
@@ -125,9 +126,6 @@ const iceContentDom = () => {
   return document.getElementById('ice_content');
 };
 
-
-
-
 // 点击收藏
 const Likeitem = (item) => {
   var likeListTemp = [];
@@ -135,6 +133,7 @@ const Likeitem = (item) => {
   if (likeListTemp.findIndex(i => i.link === item.link) === -1) {
     likeListTemp.push(item);
     useLinkData().updateLikeList(likeListTemp)
+    message.success('收藏成功')
   } else {
     message.warning('已收藏过了')
   }
@@ -327,7 +326,7 @@ const cardStyle = computed(() => {
             border: 1px solid transparent;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            // border-radius: 50%;
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -349,15 +348,15 @@ const cardStyle = computed(() => {
             text-align: center;
             background: #00000000;
             border: 1px solid transparent;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             flex-direction: column;
             flex-wrap: nowrap;
             justify-content: center;
-            color: var(--semi-color-text-0);
+            color: #fff;
           }
 
           .error_avatar::before {
@@ -377,7 +376,7 @@ const cardStyle = computed(() => {
           }
 
           .ice_card_avatar.error {
-            background: #00000040;
+            // background: #00000040;
           }
 
           .ice_card_detail {

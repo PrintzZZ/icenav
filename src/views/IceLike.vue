@@ -12,7 +12,7 @@
                             <div class="ice_card_avatar" :class="[item.avatar ? '' : 'error', 'skeleton-loading']">
                                 <template v-if="item.avatar">
                                     <div class="avatar-container">
-                                        <div class="skeleton"></div>
+                                        <!-- <div class="skeleton" ></div> -->
                                         <img :src="item.avatar" @error="item.avatar = null" @load="handleImageLoad"
                                             :class="{ 'loaded': imageLoaded }" />
                                     </div>
@@ -423,7 +423,7 @@ watch(() => HotMoreOpen.value, (newVal) => {
     position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    // border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0; // 防止头像被压缩
 
