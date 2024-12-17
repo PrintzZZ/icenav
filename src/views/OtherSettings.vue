@@ -111,7 +111,7 @@
             </a-card>
         </div>
         <div class="setting_item ">
-            <a-card>
+            <a-card style="width: 320px;height: 100px;">
                 <p style="font-size: 12px;color: #A5A5A5;">截止: {{ new Date().toLocaleDateString() }}</p>
                 <!-- 引擎数  网页数  收藏数 -->
                 <a-tag color="blue">引擎数: {{ dataState.engineNum }}</a-tag>
@@ -145,10 +145,11 @@
                 </a-tooltip>
             </a-card>
         </div>
-        <div class="setting_item ">
+        <div class="setting_item get_gold_box">
             <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`${showGetGold ? '关闭今日进度' : '开启今日进度'}`" placement="bottom">
-                    <i class="icon_box" @click="closeGetGold" :style="{'filter':`blur(${showGetGold ? '0' : '5'}px)`}">
+                    <i class="icon_box" @click="closeGetGold"
+                        :style="{ 'filter': `blur(${showGetGold ? '0' : '5'}px)` }">
                         <svg class="icon" style="vertical-align: middle;fill: currentColor;overflow: hidden;"
                             viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9890"
                             width="1em" height="1em">
@@ -172,6 +173,19 @@
                                 fill="#FFFEFD" p-id="9896"></path>
                         </svg>
                     </i>
+                </a-tooltip>
+            </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`我要反馈`" placement="bottom">
+                    <a href="https://txc.qq.com/products/679436" target="_blank" class="feedback_box">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                            focusable="false" aria-hidden="true">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="m10.14 1.88-8.26 8.26a3 3 0 0 0 0 4.24l8.26 8.26a3 3 0 0 0 4.24 0l8.26-8.26a3 3 0 0 0 0-4.24l-8.26-8.26a3 3 0 0 0-4.24 0Zm4.82 5.67a1 1 0 1 0-1.41 1.41l1.3 1.3h-5.6a1 1 0 0 0-1 1v5a1 1 0 0 0 2 0v-4h4.6l-1.3 1.29a1 1 0 1 0 1.41 1.41l3-3a1 1 0 0 0 0-1.41l-3-3Z"
+                                fill="currentColor">
+                            </path>
+                        </svg>
+                    </a>
                 </a-tooltip>
             </a-card>
         </div>
@@ -519,6 +533,12 @@ const setupWatchers = () => {
             searchInputColor: newIsDark
         });
     });
+
+    watch(() => settings.showGetGold, (newVal) => {
+        useSettingData().updateOtherSettings({
+            showGetGold: newVal
+        });
+    });
 };
 
 // 图片处理相关逻辑优化
@@ -673,6 +693,35 @@ onMounted(() => {
             color: var(--semi-color-text-0);
             transition: all 0.3s;
             cursor: pointer;
+
+            &:hover {
+                background-color: var(--semi-color-fill-0);
+                transform: scale(1.15);
+            }
+        }
+    }
+
+    .get_gold_box {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .feedback_box {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--semi-color-text-0);
+            text-decoration: none;
 
             &:hover {
                 background-color: var(--semi-color-fill-0);
