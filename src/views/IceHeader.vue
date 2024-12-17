@@ -50,7 +50,7 @@ import ThemeSwitch from './ThemeSwitch.vue';
 import IceSetPanel from './IceSetPanel.vue';
 import Comweather from './ComWeather.vue';
 // 切换背景
-const easySetClick = () => useLinkData().updatebackground();
+const easySetClick = () => useLinkData().updateBackground();
 
 //设置面板开关
 const modelOpen = ref(false);

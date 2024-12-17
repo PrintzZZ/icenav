@@ -54,8 +54,11 @@ import axios from 'axios';
 import { useLinkData } from '../store/LinkStore';
 import { message } from 'ant-design-vue';
 import { debounce } from 'lodash-es';
+const baseURL = import.meta.env.VITE_API_URL;
 
 
+
+// 按照屏幕宽度计算列数
 const screenWidth = ref(window.innerWidth);
 const colSpan = computed(() => {
     if (screenWidth.value >= 1680) {
@@ -71,10 +74,13 @@ const colSpan = computed(() => {
     }
 });
 
+// 监听屏幕宽度变化
 const updateScreenWidth = debounce(() => {
     screenWidth.value = window.innerWidth;
 }, 200);
 
+
+// 更新热点列表
 const updategetList = () => {
     getList.value = filteredList.value.map((item, index) => ({
         key: index,
@@ -89,11 +95,12 @@ const updategetList = () => {
     fetchData();
 };
 
+// 暴露更新热点列表的方法
 defineExpose({
     updategetList
 });
 
-
+//刷新数据
 const getList = ref([]);
 const refetchData = (index) => {
     getList.value[index].isloading = true;
@@ -110,8 +117,8 @@ const refetchData = (index) => {
     });
 };
 
-const baseURL = import.meta.env.VITE_API_URL;
 
+// 获取数据
 const fetchData = async () => {
     try {
         const batchSize = 3;  // 增加并发数到3个
@@ -142,12 +149,16 @@ const fetchData = async () => {
     }
 };
 
+// 时间单位
 const timeUnits = [
-    { unit: 60, text: '分钟' },
-    { unit: 3600, text: '小时' },
-    { unit: 86400, text: '天' }
+    { unit: 60, text: '秒' },           // 60秒
+    { unit: 60 * 60, text: '分钟' },    // 60分钟
+    { unit: 60 * 60 * 24, text: '小时' }, // 24小时
+    { unit: 60 * 60 * 24 * 30, text: '天' }, // 30天
+    { unit: 60 * 60 * 24 * 365, text: '月' } // 365天
 ];
 
+// 格式化时间
 const formatDate = (dateString) => {
     if (!dateString) return '';
     
@@ -155,17 +166,24 @@ const formatDate = (dateString) => {
     const now = new Date();
     const diffInSeconds = Math.floor((now - date) / 1000);
 
-    if (diffInSeconds < 60) return '刚刚更新';
+    // 小于5秒显示"刚刚"
+    if (diffInSeconds < 5) return '刚刚更新';
 
-    // 使用预定义的时间单位进行计算
+    // 遍历时间单位进行计算
     for (const { unit, text } of timeUnits) {
-        if (diffInSeconds < unit * 24) {
-            const value = Math.floor(diffInSeconds / unit);
+        if (diffInSeconds < unit) {
+            // 根据不同单位使用不同的除数
+            const divisor = text === '秒' ? 1 : 
+                          text === '分钟' ? 60 :
+                          text === '小时' ? 3600 :
+                          text === '天' ? 86400 : 2592000;
+            
+            const value = Math.floor(diffInSeconds / divisor);
             return `${value}${text}前更新`;
         }
     }
 
-    // 缓存DateTimeFormat实例
+    // 超过时间范围则显示具体日期
     if (!formatDate.formatter) {
         formatDate.formatter = new Intl.DateTimeFormat('zh-CN', {
             year: 'numeric',
@@ -179,15 +197,18 @@ const formatDate = (dateString) => {
     return `更新于 ${formatDate.formatter.format(date)}`;
 };
 
+// 过滤列表,给列表添加show，用于控制是否显示
 const filteredList = computed(() => {
     return useLinkData().HotList.filter(item => item.show);
 });
 
+// 初始化
 onMounted(() => {
     window.addEventListener('resize', updateScreenWidth);
     updategetList();
 });
 
+// 卸载监听宽度
 onUnmounted(() => {
     window.removeEventListener('resize', updateScreenWidth);
 });

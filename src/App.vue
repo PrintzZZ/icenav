@@ -16,9 +16,9 @@
 
                 <div class="ice_card_content">
                   <div class="ice_card" 
-                  v-for="(item, itemindex) in child.item" 
-                  :key="itemindex" :style="cardStyle">
-                    <span class="like_icon" @click.stop="Likeitem(item)">
+                  v-for="(item, itemIndex) in child.item" 
+                  :key="itemIndex" :style="cardStyle">
+                    <span class="like_icon" @click.stop="LikeItem(item)">
                       <IconRating />
                     </span>
                     <a :href="item.link" class="ice_card_meta" target="_blank">
@@ -127,7 +127,7 @@ const iceContentDom = () => {
 };
 
 // 点击收藏
-const Likeitem = (item) => {
+const LikeItem = (item) => {
   var likeListTemp = [];
   likeListTemp = [...LikeList]
   if (likeListTemp.findIndex(i => i.link === item.link) === -1) {
@@ -234,6 +234,7 @@ const cardStyle = computed(() => {
       background: var(--semi-color-bg-1);
       margin: 24px 0;
       padding: 20px;
+      // transition: background-color .2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
       .ice_menu_content_tabs {
         width: 100%;

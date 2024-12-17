@@ -21,7 +21,7 @@ const toggleTheme = () => {
   useSettingData().updateOtherSettings({ defaultTheme: isDarkMode.value ? 'dark' : 'light' })
   document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
   //切换背景
-  useLinkData().updatebackground(isDarkMode.value ? 'dark' : 'light');
+  useLinkData().updateBackground(isDarkMode.value ? 'dark' : 'light');
 }
 
  // 自动监听并响应变化

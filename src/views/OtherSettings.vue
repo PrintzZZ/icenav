@@ -120,26 +120,58 @@
             </a-card>
         </div>
         <div class="setting_item export_box">
-            <a-card style="width: 155px;height: 100px;">
+            <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`导出所有数据`" placement="bottom">
-                    <div class="export_btn" 
-                         @click="exportData"
-                         :class="{ 'disabled': isExporting }">
+                    <div class="export_btn" @click="exportData" :class="{ 'disabled': isExporting }">
                         <IconExport />
                     </div>
                 </a-tooltip>
             </a-card>
-            <a-card style="width: 155px;height: 100px;">
+            <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`恢复备份数据`" placement="bottom">
-                    <a-upload 
-                        :file-list="importFile" 
-                        :before-upload="beforeUpload" 
-                        :show-upload-list="false"
+                    <a-upload :file-list="importFile" :before-upload="beforeUpload" :show-upload-list="false"
                         :disabled="isImporting">
                         <div class="export_btn" :class="{ 'disabled': isImporting }">
                             <IconImport />
                         </div>
                     </a-upload>
+                </a-tooltip>
+            </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`重置所有数据`" placement="bottom">
+                    <div class="export_btn" @click="resetData" :class="{ 'disabled': isResetting }">
+                        <IconReset />
+                    </div>
+                </a-tooltip>
+            </a-card>
+        </div>
+        <div class="setting_item ">
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`${showGetGold ? '关闭今日进度' : '开启今日进度'}`" placement="bottom">
+                    <i class="icon_box" @click="closeGetGold" :style="{'filter':`blur(${showGetGold ? '0' : '5'}px)`}">
+                        <svg class="icon" style="vertical-align: middle;fill: currentColor;overflow: hidden;"
+                            viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9890"
+                            width="1em" height="1em">
+                            <path
+                                d="M631.466667 375.466667l-19.2-32c32-19.2 93.866667-96 102.4-140.8 2.133333-10.666667 2.133333-27.733333-6.4-38.4-8.533333-8.533333-25.6-12.8-44.8-8.533334-17.066667 2.133333-23.466667 10.666667-34.133334 21.333334-6.4 6.4-12.8 14.933333-21.333333 19.2-10.666667 6.4-23.466667 4.266667-38.4-2.133334-10.666667-4.266667-17.066667-12.8-23.466667-21.333333-10.666667-12.8-19.2-23.466667-44.8-23.466667-10.666667 0-19.2 8.533333-32 21.333334-14.933333 17.066667-36.266667 38.4-70.4 29.866666-8.533333-2.133333-17.066667-6.4-25.6-8.533333-12.8-6.4-27.733333-10.666667-40.533333-12.8-10.666667 0-14.933333 2.133333-19.2 12.8-4.266667 10.666667-4.266667 25.6 4.266667 42.666667 8.533333 14.933333 21.333333 32 38.4 49.066666 32 32 68.266667 53.333333 68.266666 53.333334l-19.2 34.133333c-2.133333 0-40.533333-25.6-74.666666-59.733333-21.333333-21.333333-36.266667-40.533333-46.933334-59.733334-12.8-25.6-14.933333-51.2-4.266666-72.533333 10.666667-23.466667 29.866667-34.133333 53.333333-34.133333 17.066667 0 36.266667 8.533333 53.333333 14.933333 8.533333 2.133333 14.933333 6.4 19.2 6.4 10.666667 2.133333 19.2-4.266667 34.133334-19.2 14.933333-14.933333 32-34.133333 57.6-34.133333 44.8 0 61.866667 21.333333 74.666666 36.266666 4.266667 6.4 8.533333 10.666667 10.666667 10.666667 2.133333 2.133333 6.4 2.133333 6.4 2.133333l10.666667-10.666666c10.666667-12.8 25.6-29.866667 55.466666-34.133334 32-4.266667 59.733333 2.133333 76.8 21.333334 17.066667 17.066667 21.333333 40.533333 17.066667 70.4-10.666667 57.6-78.933333 142.933333-117.333333 166.4z"
+                                fill="#FFB600" p-id="9891"></path>
+                            <path
+                                d="M497.066667 334.933333c-40.533333 0-81.066667 8.533333-117.333334 27.733334-34.133333 17.066667-66.133333 42.666667-96 76.8-53.333333 61.866667-93.866667 147.2-113.066666 241.066666-10.666667 53.333333-2.133333 96 23.466666 130.133334 25.6 29.866667 66.133333 53.333333 123.733334 68.266666 49.066667 12.8 108.8 19.2 179.2 19.2 70.4 0 130.133333-6.4 179.2-19.2 57.6-14.933333 100.266667-36.266667 125.866666-68.266666 27.733333-34.133333 38.4-76.8 27.733334-130.133334-17.066667-91.733333-55.466667-177.066667-113.066667-238.933333-57.6-70.4-134.4-106.666667-219.733333-106.666667z"
+                                fill="#FFB600" p-id="9892"></path>
+                            <path
+                                d="M503.466667 913.066667c-155.733333 0-260.266667-32-311.466667-93.866667-32-38.4-42.666667-89.6-29.866667-151.466667 19.2-91.733333 57.6-177.066667 113.066667-238.933333 61.866667-72.533333 140.8-108.8 224-108.8 89.6 0 170.666667 38.4 236.8 108.8 57.6 64 98.133333 149.333333 113.066667 241.066667 10.666667 61.866667 0 113.066667-34.133334 151.466666-53.333333 59.733333-157.866667 91.733333-311.466666 91.733334z m-4.266667-556.8c-38.4 0-74.666667 8.533333-108.8 25.6-32 17.066667-61.866667 40.533333-87.466667 70.4-49.066667 57.6-87.466667 136.533333-104.533333 221.866666-10.666667 51.2-2.133333 89.6 23.466667 121.6 23.466667 27.733333 61.866667 49.066667 115.2 64 44.8 10.666667 102.4 17.066667 166.4 17.066667s121.6-6.4 166.4-17.066667c53.333333-12.8 91.733333-34.133333 115.2-61.866666 25.6-32 34.133333-70.4 25.6-121.6-14.933333-85.333333-51.2-164.266667-104.533334-221.866667-55.466667-66.133333-128-98.133333-206.933333-98.133333z"
+                                fill="#FFB600" p-id="9893"></path>
+                            <path
+                                d="M488.533333 761.6V704h-72.533333v-23.466667h72.533333v-25.6h-72.533333v-25.6h59.733333L405.333333 503.466667h36.266667l51.2 91.733333c6.4 10.666667 10.666667 19.2 12.8 27.733333 2.133333-6.4 8.533333-14.933333 14.933333-27.733333l49.066667-89.6h38.4L533.333333 627.2h59.733334v25.6h-72.533334v25.6h72.533334V704h-72.533334v57.6h-32z"
+                                fill="#F9F9F9" p-id="9894"></path>
+                            <path
+                                d="M392.533333 352l-102.4-110.933333V196.266667l23.466667-29.866667h44.8l23.466667 14.933333 10.666666 2.133334h14.933334l57.6-27.733334 32-23.466666 74.666666 46.933333 19.2-4.266667 42.666667-23.466666 25.6-12.8 40.533333 4.266666 14.933334 17.066667 8.533333 23.466667v34.133333l-14.933333 40.533333L661.333333 320l-36.266666 32z"
+                                fill="#FFB600" p-id="9895"></path>
+                            <path
+                                d="M480 341.333333c-6.4 0-12.8-4.266667-17.066667-10.666666 0 0-6.4-12.8-10.666666-27.733334-10.666667-27.733333-10.666667-38.4-10.666667-44.8 0-10.666667 10.666667-17.066667 19.2-17.066666 10.666667 0 17.066667 10.666667 17.066667 19.2 0 6.4 8.533333 32 19.2 55.466666 4.266667 8.533333 0 19.2-8.533334 23.466667-4.266667 2.133333-6.4 2.133333-8.533333 2.133333z m44.8 12.8c-4.266667 0-10.666667-2.133333-12.8-6.4-6.4-8.533333-6.4-19.2 2.133333-25.6 0 0 6.4-8.533333 17.066667-46.933333 6.4-21.333333 10.666667-40.533333 10.666667-40.533333 2.133333-10.666667 12.8-17.066667 21.333333-14.933334 10.666667 2.133333 17.066667 12.8 14.933333 21.333334 0 0-4.266667 21.333333-10.666666 44.8-12.8 44.8-21.333333 55.466667-27.733334 61.866666-6.4 4.266667-10.666667 6.4-14.933333 6.4z"
+                                fill="#FFFEFD" p-id="9896"></path>
+                        </svg>
+                    </i>
                 </a-tooltip>
             </a-card>
         </div>
@@ -149,12 +181,25 @@
 import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { useLinkData } from '../store/LinkStore';
-import { IconImage, IconLive, IconClose, IconLight, IconDark, IconSave, IconDatePicker, IconImport, IconExport } from '../components/icons';
+import { IconImage, IconLive, IconClose, IconLight, IconDark, IconSave, IconDatePicker, IconImport, IconExport, IconReset } from '../components/icons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
 import LZString from 'lz-string';
 
 const allData = ref()
+const showGetGold = ref(false)
+
+
+const closeGetGold = () => {
+    showGetGold.value = !showGetGold.value;
+    useSettingData().updateOtherSettings({ showGetGold: showGetGold.value });
+    if (showGetGold.value) {
+        message.success('已开启今日进度');
+    } else {
+        message.success('已关闭今日进度');
+    }
+}
+
 const dataState = ref({
     engineNum: 0,
     pageNum: 0,
@@ -188,6 +233,39 @@ const getAllData = () => {
 
 // 导出相关状态
 const isExporting = ref(false);
+const isResetting = ref(false);
+
+// 重置数据
+const resetData = () => {
+    try {
+        // 使用 Modal 确认导入
+        Modal.confirm({
+            title: '确认重置',
+            content: '将恢复所有默认数据（包括网页数据），建议备份后重置，是否继续？',
+            okText: '确认',
+            cancelText: '取消',
+            onOk: () => {
+                isResetting.value = true;
+                message.loading('正在重置数据...', 0);
+                localStorage.clear();
+                message.destroy();
+                isResetting.value = false;
+                message.success('数据重置成功，3秒后刷新页面');
+                // 延迟刷新页面
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            },
+            onCancel: () => {
+                isResetting.value = false;
+            }
+
+        });
+    } catch (error) {
+        message.error('重置失败：' + error.message);
+        isResetting.value = false;
+    }
+}
 
 // 导出数据
 const exportData = async () => {
@@ -201,7 +279,7 @@ const exportData = async () => {
         message.loading('正在准备导出数据...', 0);
 
         await getAllData();
-        
+
         const data = allData.value;
         if (!data) {
             throw new Error('数据为空');
@@ -210,10 +288,10 @@ const exportData = async () => {
         // 压缩 JSON
         const jsonString = JSON.stringify(data);
         const compressed = LZString.compressToBase64(jsonString);
-        
+
         // 创建 Blob
-        const blob = new Blob([compressed], { 
-            type: 'application/json' 
+        const blob = new Blob([compressed], {
+            type: 'application/json'
         });
 
         // 获取当前日期时间字符串
@@ -225,10 +303,10 @@ const exportData = async () => {
         const a = document.createElement('a');
         a.href = url;
         a.download = fileName;
-        
+
         document.body.appendChild(a);
         a.click();
-        
+
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
@@ -248,17 +326,17 @@ const isImporting = ref(false);
 // 数据校验函数
 const validateImportData = (data) => {
     if (!data) return false;
-    
+
     const requiredKeys = ['settingsData', 'hotData', 'searchData', 'menuData', 'likeData'];
     const hasAllKeys = requiredKeys.every(key => key in data);
-    
+
     if (!hasAllKeys) {
         message.error('备份文件格式错误：缺少必要数据');
         return false;
     }
 
     // 验证各个数据的结构
-    if (!Array.isArray(data.hotData) || !Array.isArray(data.searchData) || 
+    if (!Array.isArray(data.hotData) || !Array.isArray(data.searchData) ||
         !Array.isArray(data.menuData) || !Array.isArray(data.likeData)) {
         message.error('备份文件数据结构错误');
         return false;
@@ -276,13 +354,13 @@ const readJson = (file) => {
 
     isImporting.value = true;
     const reader = new FileReader();
-    
+
     reader.onload = () => {
         try {
             // 解压缩数据
             const decompressed = LZString.decompressFromBase64(reader.result);
             const data = JSON.parse(decompressed);
-            
+
             if (validateImportData(data)) {
                 allData.value = data;
                 importData();
@@ -316,7 +394,7 @@ const importData = () => {
             onOk: async () => {
                 // 显示加载状态
                 message.loading('正在导入数据...', 0);
-                
+
                 // 使用 Promise.all 并行更新数据
                 await Promise.all([
                     useLinkData().updateHotList(allData.value.hotData),
@@ -329,7 +407,7 @@ const importData = () => {
                 // 关闭加载提示
                 message.destroy();
                 message.success('数据导入成功，3秒后刷新页面');
-                
+
                 // 延迟刷新页面
                 setTimeout(() => {
                     window.location.reload();
@@ -347,7 +425,7 @@ const beforeUpload = (file) => {
         message.warning('正在处理上一个导入请求，请稍候...');
         return false;
     }
-    
+
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
         message.error('备份文件大小不能超过 5MB');
@@ -493,7 +571,7 @@ const toggleTheme = () => {
     useSettingData().updateOtherSettings({ defaultTheme: isDarkMode.value ? 'dark' : 'light' })
     document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
     //切换背景
-    useLinkData().updatebackground(isDarkMode.value ? 'dark' : 'light');
+    useLinkData().updateBackground(isDarkMode.value ? 'dark' : 'light');
 }
 // 自动监听并响应变化
 watchEffect(() => {
@@ -505,7 +583,7 @@ watchEffect(() => {
 const cardNum = ref(useSettingData().otherSettings.cardNum || 5);
 const changeCardNum = () => {
     cardNum.value = cardNum.value + 1;
-    if (cardNum.value > 7) {
+    if (cardNum.value > 8) {
         cardNum.value = 1;
     }
     useSettingData().updateOtherSettings({
@@ -554,6 +632,27 @@ onMounted(() => {
         width: 320px;
     }
 
+    .icon_box {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 40px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #FFB600;
+
+        &:hover {
+            background-color: var(--semi-color-fill-0);
+            transform: scale(1.15);
+        }
+    }
+
     .export_box {
         flex-direction: row;
 
@@ -564,7 +663,7 @@ onMounted(() => {
         }
 
         .export_btn {
-            width: 100px;
+            width: 60px;
             height: 60px;
             border-radius: 5px;
             display: flex;
@@ -829,7 +928,7 @@ onMounted(() => {
         &.disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            
+
             &:hover {
                 transform: none !important;
             }
@@ -844,6 +943,7 @@ onMounted(() => {
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }

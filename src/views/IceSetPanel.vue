@@ -68,7 +68,7 @@
                 </a-card>
                 <a-card>
                     <div class="export_item">
-                        <p class="card_title">恢复默认<span class="card_desc">恢复初始化默认设置</span></p>
+                        <p class="card_title">恢复默认<span class="card_desc">恢复初始化导航数据</span></p>
                         <a-button type="dashed" @click="resetData">重置默认</a-button>
                     </div>
                 </a-card>
@@ -108,12 +108,12 @@ const setData = [{
 {
     name: '侧边栏设置',
     icon: IconCalendar,
-    desc: '侧边分类排序',
+    desc: '侧边分类与导航网页相关设置',
 },
 {
     name: '其他设置',
     icon: IconCheckbox,
-    desc: '私有化全自定义导航数据',
+    desc: '私有化外观与数据备份恢复',
 }];
 
 //设置item点击
@@ -254,12 +254,14 @@ const formatDataForExcel = (data) => {
 const resetData = () => {
     Modal.confirm({
         title: '确认恢复默认设置?',
-        content: createVNode('div', { style: 'color:red;' }, ' 恢复后将丢失所有自定义设置，请谨慎操作！ 建议备份数据后再恢复。'),
+        content: createVNode('div', { style: 'color:red;' }, ' 恢复后将丢失所有导航数据，请谨慎操作！ 建议备份数据后再恢复。'),
         onOk() {
-            const linkDataStore = useLinkData();
-            let DefaultMenuList2 = useLinkData().defaultmenuList;
-            linkDataStore.updateMenuList(DefaultMenuList2)
-            message.success('恢复默认设置成功');
+            localStorage.removeItem('LinkData');
+            message.success('恢复默认设置成功，3秒后刷新页面');
+            // 延迟刷新页面
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
         },
         onCancel() {
             // console.log('Cancel');

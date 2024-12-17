@@ -32,6 +32,7 @@ import IconIceooh from './IconIceooh.vue';
 import IconSave from './IconSave.vue';
 import IconImport from './IconImport.vue';
 import IconExport from './IconExport.vue';
+import IconReset from './IconReset.vue';
 
 
 export {
@@ -69,4 +70,5 @@ export {
     IconSave,
     IconImport,
     IconExport,
+    IconReset,
 };

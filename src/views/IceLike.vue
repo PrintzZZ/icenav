@@ -1,11 +1,11 @@
 <template>
-    <div class="ice_menu_like ice_menu_content" ref="LiketabRefs">
-        <a-tabs v-model:activeKey="LikeactiveKey" class="ice_menu_like_tabs" @change="onLikeTabChange">
+    <div class="ice_menu_like ice_menu_content" ref="LiketabRefs" :class="{'ice_hot':LikeActiveKey==='1'}">
+        <a-tabs v-model:activeKey="LikeActiveKey" class="ice_menu_like_tabs" @change="onLikeTabChange">
             <a-tab-pane key="0" tab="我的收藏">
                 <div class="ice_card_content" ref="sortLikeListRefs">
-                    <div class="ice_card" v-for="(item, key) in LikeList" :key="key" :data-id="key">
+                    <div class="ice_card" v-for="(item, key) in LikeList" :key="key" :data-id="key" :style="cardStyle">
                         <div class="drag-handle">⋮⋮</div>
-                        <span class="like_icon" @click.stop="LikeCancelitem(item)" style="color: #bfbfbf;">
+                        <span class="like_icon" @click.stop="LikeCancelItem(item)" style="color: #bfbfbf;">
                             <IconClose />
                         </span>
                         <a :href="item.link" class="ice_card_meta" target="_blank">
@@ -45,7 +45,7 @@
                     </svg>
                 </i>
                 <!-- 添加收藏模态框 -->
-                <a-modal v-model:open="LikeMoreOpen" title="添加自定义收藏" @ok="LikeMorehandleOk" :maskClosable="false"
+                <a-modal v-model:open="LikeMoreOpen" title="添加自定义收藏" @ok="LikeMoreHandleOk" :maskClosable="false"
                     :destroyOnClose="true" :confirmLoading="confirmLoading" @cancel="handleCancel">
                     <div class="like-more-modal">
                         <a-form :model="LikeMoreItem" :rules="rules" ref="formRef" layout="vertical">
@@ -99,7 +99,7 @@
                     </div>
                 </a-modal>
                 <!-- 热点设置模态框 -->
-                <a-modal v-model:open="HotMoreOpen" title="自定义热点、支持拖拽排序" @ok="HotMorehandleOk"
+                <a-modal v-model:open="HotMoreOpen" title="自定义热点、支持拖拽排序" @ok="HotMoreHandleOk"
                     :destroyOnClose="!HotMoreOpen">
                     <div class="HotMore_modal_content">
                         <ul class="ice_menu_like_hot_list" ref="sortHotListRefs">
@@ -120,6 +120,7 @@
 import { ref, onMounted, computed, watch, nextTick, onUnmounted } from 'vue';
 import { message } from 'ant-design-vue';
 import { useLinkData } from '../store/LinkStore';
+import { useSettingData } from '../store/SettingStore';
 import IceHot from './IceHot.vue';
 import { IconClose, IconWarning } from '../components/icons';
 import Sortable from "sortablejs";
@@ -138,7 +139,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isNavCollapsed']);
 
-const LikeactiveKey = ref('0');
+const LikeActiveKey = ref('0');
 const linkStore = useLinkData();
 const LikeList = computed(() => linkStore.LikeList);
 const HotList = computed(() => linkStore.HotList);
@@ -156,15 +157,15 @@ const LikeMoreItem = ref({
     avatar: '/images/favicon.png'
 });
 
-const LikeCancelitem = (item) => {
+const LikeCancelItem = (item) => {
     const newList = LikeList.value.filter(i => i.link !== item.link);
     linkStore.updateLikeList(newList);
 };
 
 const LikeMore = () => {
-    if (LikeactiveKey.value === '0') {
+    if (LikeActiveKey.value === '0') {
         LikeMoreOpen.value = true;
-    } else if (LikeactiveKey.value === '1') {
+    } else if (LikeActiveKey.value === '1') {
         HotMoreOpen.value = true;
         nextTick(() => {
             if (hotSortableInstance) {
@@ -204,7 +205,7 @@ const handleAvatarError = () => {
 };
 
 // 优化提交处理
-const LikeMorehandleOk = async () => {
+const LikeMoreHandleOk = async () => {
     try {
         confirmLoading.value = true;
         await formRef.value.validate();
@@ -236,7 +237,7 @@ const handleCancel = () => {
 // 重置表单
 const resetForm = () => {
     formRef.value?.resetFields();
-    imageLoaded.value = false;
+    // imageLoaded.value = false;
     LikeMoreItem.value = {
         title: 'Iceooh',
         desc: 'Iceooh冰屋数据网',
@@ -251,7 +252,7 @@ let hotSortableInstance = null;
 
 // 热点排序临时变量，点击OK后更新
 const HotListTemp = ref([]);
-const HotMorehandleOk = () => {
+const HotMoreHandleOk = () => {
     HotMoreOpen.value = false;
     if (hotSortableInstance) {
         hotSortableInstance.destroy();
@@ -300,7 +301,7 @@ const initHotSort = () => {
 
 const onLikeTabChange = () => {
     if (props.isMobile) return;
-    if (LikeactiveKey.value === '1') {
+    if (LikeActiveKey.value === '1') {
         emit('update:isNavCollapsed', true);
         LiketabRefs.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
@@ -350,7 +351,7 @@ const initLikeSort = () => {
 let sortableInstance = null;
 
 onMounted(() => {
-    if (LikeactiveKey.value === '0') {
+    if (LikeActiveKey.value === '0') {
         nextTick(() => {
             sortableInstance = initLikeSort();
         });
@@ -366,9 +367,23 @@ onUnmounted(() => {
     }
 });
 
+// 计算卡片样式
+
+const cardStyle = computed(() => {
+  if(props.isMobile){return {}}
+    const num = useSettingData().otherSettings.cardNum || 5;
+    const gap = 10; // 卡片间距
+    const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
+    return {
+        flex: `0 0 ${width}`,
+        maxWidth: width,
+        minWidth: '150px', // 设置最小宽度
+    };
+});
+
 // 监听列表变化，确保排序正确
 watch(LikeList, () => {
-    if (LikeactiveKey.value === '0') {
+    if (LikeActiveKey.value === '0') {
         nextTick(() => {
             if (sortableInstance) {
                 sortableInstance.destroy();
@@ -379,7 +394,7 @@ watch(LikeList, () => {
 }, { deep: true });
 
 // 添加标签页切换时的清理
-watch(() => LikeactiveKey.value, (newVal, oldVal) => {
+watch(() => LikeActiveKey.value, (newVal, oldVal) => {
     if (oldVal === '0' && sortableInstance) {
         sortableInstance.destroy();
         sortableInstance = null;
@@ -396,6 +411,10 @@ watch(() => HotMoreOpen.value, (newVal) => {
 </script>
 
 <style lang="less" scoped>
+.ice_hot{
+    background-color: var(--semi-color-bg-main)!important;
+    border: none!important;
+}
 .like-more-modal {
     .preview-card {
         margin-bottom: 24px;

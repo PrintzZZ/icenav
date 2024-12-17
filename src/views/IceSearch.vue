@@ -44,7 +44,9 @@
                     <li v-for="(item, itemindex) in searchMenu[searchMenuActiveIndex].engines" :key="itemindex"
                         class="search_list_item" :class="{ active: searchListActiveIndex == itemindex }"
                         @click="listClick(itemindex)">
-                        <i class="search_list_icon">
+                        <i class="search_list_icon" :style="{ 
+                        color: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})` 
+                    }">
                             <IconTriangle />
                         </i>
                         {{ item.name }}
@@ -52,12 +54,14 @@
                 </ul>
             </div>
         </div>
+        <ComGetGold style="position: absolute;bottom: 10px;right: 10px;z-index: 100;"/>
     </div>
 </template>
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { IconSearch, IconTriangle, IconClose } from '../components/icons';
 import IceHeader from '../views/IceHeader.vue';
+import ComGetGold from '../views/ComGetGold.vue';
 import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import { IndexDBCache } from '../utils/indexedDB'
@@ -97,7 +101,7 @@ const listClick = (index) => {
 const handleSubmit = () => window.open(searchFrom.value.link + searchQuery.value, '_blank');
 const clearSearch = () => searchQuery.value = '';
 
-const computedSrc = computed(() => `${useLinkData().backgrounddata}`);
+const computedSrc = computed(() => `${useLinkData().backgroundData}`);
 
 const backgroundType = computed(() => useSettingData().otherSettings.backgroundType);
 const backgroundImgUrl = computed(() => useSettingData().otherSettings.backgroundImgUrl);
