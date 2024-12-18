@@ -54,11 +54,11 @@
                 </ul>
             </div>
         </div>
-        <ComGetGold style="position: absolute;bottom: 10px;right: 10px;z-index: 100;"/>
+        <ComGetGold style="position: absolute;bottom: 10px;right: 10px;z-index: 100;" v-if="isMobile"/>
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { IconSearch, IconTriangle, IconClose } from '../components/icons';
 import IceHeader from '../views/IceHeader.vue';
 import ComGetGold from '../views/ComGetGold.vue';
@@ -76,7 +76,18 @@ const searchFrom = ref({
     name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd'
 });
 
-
+//判断是否是移动端
+// 监听窗口大小变化
+const isMobile = ref(false);
+const checkWindowSize = () => {
+  const window_width = window.innerWidth;
+  // 根据不同宽度设置不同状态
+  if (window_width < 768) {
+    isMobile.value = false;
+  } else {
+    isMobile.value = true;
+  }
+};
 
 const menuClick = (index, event) => {
     searchMenu.forEach(item => {
@@ -143,6 +154,7 @@ onMounted(() => {
     if(backgroundType.value === 1){
         loadBackgroundImage();
     }
+    checkWindowSize()
 })
 
 // 在组件销毁时清理URL
