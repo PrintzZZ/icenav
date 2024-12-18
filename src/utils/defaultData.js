@@ -2421,7 +2421,7 @@ export const defaultData = {
       searchInputOpacity: 0.6,
       cardNum: 5,
       showGetGold: true, // 是否显示激励小组件
-      monthlySalary: 10000, // 月薪
+      monthlySalary: 1800, // 月薪
       startHour: 8, // 上班小时
       endHour: 18, // 下班小时
       startMinute: 0, // 上班分钟
