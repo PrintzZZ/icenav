@@ -85,7 +85,7 @@
             </a-card>
             <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`打赏作者`" placement="bottom">
-                    <div class="donate easy_item">
+                    <div class="donate easy_item" @click="showDonate">
                         <i>
                             <svg t="1734327317060" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" p-id="10132" width="1em" height="1em">
@@ -189,6 +189,18 @@
                 </a-tooltip>
             </a-card>
         </div>
+        <a-modal v-model:visible="showDonateModel" title="✨️感谢你赋予我前进的力量！" footer destroyOnClose>
+            <div class="pay-group">
+                <div class="pay-item">
+                    <a-image :width="150" src="/images/alipay.png" alt="支付宝" />
+                    <span class="pay-item-text">支付宝扫一扫</span>
+                </div>
+                <div class="pay-item">
+                    <a-image :width="150" src="/images/wechat.png" alt="微信" />
+                    <span class="pay-item-text">微信扫一扫</span>
+                </div>
+            </div>
+        </a-modal>
     </div>
 </template>
 <script setup>
@@ -201,8 +213,12 @@ import { IndexDBCache } from '../utils/indexedDB';
 import LZString from 'lz-string';
 
 const allData = ref()
-const showGetGold = ref(false)
+const showGetGold = ref(true)
+const showDonateModel = ref(false)
 
+const showDonate = () => {
+    showDonateModel.value = true
+}
 
 const closeGetGold = () => {
     showGetGold.value = !showGetGold.value;
@@ -619,10 +635,32 @@ onMounted(() => {
 });
 </script>
 <style lang="less">
+.pay-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.pay-item {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.pay-item-text {
+    font-size: 12px;
+    color: var(--semi-color-text-2);
+}
+
 .other_settings {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+
+
 
     .ant-slider {
         &.hover {

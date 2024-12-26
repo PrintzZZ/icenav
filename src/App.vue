@@ -42,6 +42,7 @@
           </div>
         </div>
         <a-back-top :target="iceContentDom" />
+        <Footer />
       </div>
     </div>
   </a-config-provider>
@@ -60,6 +61,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import { IconRating } from './components/icons';
 import IceLike from './views/IceLike.vue'
 import IceSide from './views/IceSide.vue'
+import Footer from './views/Footer.vue';
 import ThemeSwitch from './views/ThemeSwitch.vue'
 import { debounce } from 'lodash';
 
