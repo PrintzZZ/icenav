@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <a-table v-if="itemIndex === 0" :columns="columns" :data-source="dataSource" bordered :scroll="{ y: 580 }">
+        <a-table v-if="itemIndex === 0" :columns="columns" :data-source="dataSource"  :scroll="{ y: 580 }">
             <template #bodyCell="{ column, text, record }">
                 <template v-if="['name', 'link', 'placeholder'].includes(column.dataIndex)">
                     <div>

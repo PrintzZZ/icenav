@@ -198,7 +198,7 @@ a {
     --semi-color-fill-0: rgba(var(--semi-white), .12);
     --semi-color-fill-1: rgba(var(--semi-white), .16);
     --semi-color-fill-2: rgba(var(--semi-white), .20);
-    --semi-color-border: rgba(var(--semi-white), .08);
+    --semi-color-border: rgba(var(--semi-white), .0);
     --semi-color-text-0: rgba(var(--semi-grey-9), 1);
     --semi-color-text-1: rgba(var(--semi-grey-9), .8);
     --semi-color-text-2: rgba(var(--semi-grey-9), .6);
