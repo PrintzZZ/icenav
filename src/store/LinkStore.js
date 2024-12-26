@@ -17,7 +17,7 @@ export const useLinkData = defineStore('LinkData', () => {
   };
 
   // 我的收藏
-  const LikeList = ref([]);
+  const LikeList = ref([...defaultData.likeList]);
   
   // 更新收藏列表
   const updateLikeList = (dataValue) => {

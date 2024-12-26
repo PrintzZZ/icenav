@@ -290,7 +290,7 @@ defineExpose({
     align-items: flex-start;
     justify-content: space-between;
     transition: 0.3s;
-    margin: 0 30px;
+    margin: 0 auto;
     transform: translateY(10px);
     width: 100%;
     height: calc(100% - 30px);
@@ -314,7 +314,7 @@ defineExpose({
         border-radius: 12px;
         overflow: hidden;
         border: 1px solid var(--semi-color-border);
-        box-shadow: 0 8px 16px -4px rgba(44, 45, 48, 0.047);
+        // box-shadow: 0 8px 16px -4px rgba(44, 45, 48, 0.047);
         padding: 20px;
         gap: 24px;
         display: flex;

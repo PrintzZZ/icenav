@@ -26,7 +26,7 @@
             <span class="footer-bar-link">©️</span>
         </div>
     </div>
-    <a-modal v-model:visible="visible" title="✨️感谢你赋予我前进的力量！" footer >
+    <a-modal v-model:visible="visible" title="✨️感谢你赋予我前进的力量！" footer>
         <div class="pay-group">
             <div class="pay-item">
                 <a-image :width="150" src="/images/alipay.png" alt="支付宝" />
@@ -58,7 +58,7 @@ const handleClick = () => {
     flex-wrap: wrap;
     align-items: center;
     line-height: 1;
-    padding: 20px ;
+    padding: 20px;
 }
 
 .cursor {
@@ -194,5 +194,22 @@ img.beian-icon {
 .pay-item-text {
     font-size: 12px;
     color: var(--semi-color-text-2);
+}
+
+@media screen and (max-width: 767px) {
+    .footer-bar-links {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .beian-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+    }
 }
 </style>

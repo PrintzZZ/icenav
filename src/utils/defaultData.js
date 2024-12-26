@@ -2404,6 +2404,14 @@ export const defaultData = {
           ]
         },
       ],
+    likeList: [
+      {
+        "title": "Iceooh",
+        "desc": "Iceooh冰屋数据网",
+        "link": "https://www.iceooh.com/",
+        "avatar": "/images/favicon.png"
+    }
+    ],
     backgroundList: ['jqbg01/index.html', 'jqbg02/index.html', 'jqbg03/index.html', 'jqbg04/index.html'],
     otherSettings:{
       iceVersion: '0.0.1',

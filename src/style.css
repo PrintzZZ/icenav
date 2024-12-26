@@ -150,7 +150,7 @@ a {
 
 :root {
     --semi-white: 255, 255, 255;
-    --semi-border-radius-small: 3px;
+    --semi-border-radius-small: 6px;
     --semi-transition_duration-none: 0s;
     --semi-transition_function-easeIn: ease-in;
     --semi-transition_delay-none: 0s;
