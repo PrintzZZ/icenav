@@ -52,6 +52,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import axios from 'axios';
 import { useLinkData } from '../store/LinkStore';
+import { useSettingData } from '../store/SettingStore';
 import { message } from 'ant-design-vue';
 import { debounce } from 'lodash-es';
 const baseURL = import.meta.env.VITE_API_URL;
@@ -60,17 +61,27 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 // 按照屏幕宽度计算列数
 const screenWidth = ref(window.innerWidth);
+
+// 获取设置项
+const HotShowNum = computed(() => useSettingData().otherSettings.HotShowNum);
+
+// 更新设置项
+// watch(HotShowNum, (newVal) => {
+//     console.log(newVal)
+// });
+
+
 const colSpan = computed(() => {
     if (screenWidth.value >= 1680) {
-        return 5;
+        return HotShowNum.value ? HotShowNum.value : 5;
     } else if (screenWidth.value >= 1440) {
-        return 4;
+        return HotShowNum.value ? HotShowNum.value : 4;
     } else if (screenWidth.value >= 1000) {
-        return 3;
+        return HotShowNum.value ? HotShowNum.value : 3;
     } else if (screenWidth.value >= 769) {
-        return 2;
+        return HotShowNum.value ? HotShowNum.value : 2;
     } else {
-        return 1;
+        return HotShowNum.value ? HotShowNum.value : 1;
     }
 });
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="ice_menu_like ice_menu_content" ref="LiketabRefs" :class="{'ice_hot':LikeActiveKey==='1'}">
+    <div class="ice_menu_like ice_menu_content" ref="LiketabRefs" :class="{ 'ice_hot': LikeActiveKey === '1' }">
         <a-tabs v-model:activeKey="LikeActiveKey" class="ice_menu_like_tabs" @change="onLikeTabChange">
             <a-tab-pane key="0" tab="我的收藏">
                 <div class="ice_card_content" ref="sortLikeListRefs">
@@ -101,6 +101,15 @@
                 <!-- 热点设置模态框 -->
                 <a-modal v-model:open="HotMoreOpen" title="自定义热点、支持拖拽排序" @ok="HotMoreHandleOk"
                     :destroyOnClose="!HotMoreOpen">
+                    <div class="Hot_setting">
+                        <a-radio-group v-model:value="HotShowNum" button-style="solid" @change="HotShowNumChange">
+                            <a-radio-button value="1">每行显示1个</a-radio-button>
+                            <a-radio-button value="2">显示2个</a-radio-button>
+                            <a-radio-button value="3">显示3个</a-radio-button>
+                            <a-radio-button value="4">显示4个</a-radio-button>
+                            <a-radio-button value="5">显示5个</a-radio-button>
+                        </a-radio-group>
+                    </div>
                     <div class="HotMore_modal_content">
                         <ul class="ice_menu_like_hot_list" ref="sortHotListRefs">
                             <li v-for="(item, index) in HotList" :key="index" :data-id="index" class="hot_item"
@@ -147,6 +156,11 @@ const IceHotRef = ref(null);
 const LiketabRefs = ref(null);
 const sortHotListRefs = ref(null);
 const sortLikeListRefs = ref(null);
+
+const HotShowNum = ref(useSettingData().otherSettings.HotShowNum);
+const HotShowNumChange = (e) => {
+    useSettingData().updateOtherSettings({ HotShowNum: e.target.value });
+};
 
 // 收藏相关
 const LikeMoreOpen = ref(false);
@@ -259,7 +273,7 @@ const HotMoreHandleOk = () => {
         hotSortableInstance = null;
     }
     // 更新热点列表状态 
-    if(HotListTemp.value.length > 0){   
+    if (HotListTemp.value.length > 0) {
         linkStore.updateHotList(HotListTemp.value);
     }
     // 更新热点列表请求
@@ -286,7 +300,7 @@ const initHotSort = () => {
             set: async (sortable) => {
                 const order = sortable.toArray().map(Number);
                 const newList = order.map(i => HotList.value[i]);
-                
+
                 HotListTemp.value = newList;
             }
         },
@@ -370,7 +384,7 @@ onUnmounted(() => {
 // 计算卡片样式
 
 const cardStyle = computed(() => {
-  if(props.isMobile){return {}}
+    if (props.isMobile) { return {} }
     const num = useSettingData().otherSettings.cardNum || 5;
     const gap = 10; // 卡片间距
     const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
@@ -411,10 +425,15 @@ watch(() => HotMoreOpen.value, (newVal) => {
 </script>
 
 <style lang="less" scoped>
-.ice_hot{
-    background-color: var(--semi-color-bg-main)!important;
-    border: none!important;
+.ice_hot {
+    background-color: var(--semi-color-bg-main) !important;
+    border: none !important;
 }
+
+.Hot_setting{
+    margin: 16px 0;
+}
+
 .like-more-modal {
     .preview-card {
         margin-bottom: 24px;

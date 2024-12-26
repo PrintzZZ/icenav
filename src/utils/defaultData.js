@@ -2430,6 +2430,7 @@ export const defaultData = {
       currency: '¥', // 货币符号
       textColor: '#FFFFFF', // 文字颜色
       progressColor: 'blue', // 进度条颜色
+      HotShowNum: 3, // 热门列表每行显示个数
     }
 }
 
