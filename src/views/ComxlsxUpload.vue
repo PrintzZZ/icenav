@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <!-- 关闭按钮 -->
-                                <button class="card-close" @click="actions.remove">
+                                <button class="card-close" @click="actions.remove" aria-label="关闭按钮">
                                     <span class="card-close-icon">
                                         <IconClose />
                                     </span>

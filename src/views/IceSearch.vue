@@ -33,7 +33,7 @@
                 <i class="close_icon" @click="clearSearch" v-if="searchQuery.length > 0">
                     <IconClose />
                 </i>
-                <button type="submit" class="search_btn">
+                <button type="submit" class="search_btn" aria-label="搜索">
                     <i class="search_icon">
                         <IconSearch />
                     </i>

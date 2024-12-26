@@ -14,7 +14,7 @@
                                     <div class="avatar-container">
                                         <!-- <div class="skeleton" ></div> -->
                                         <img :src="item.avatar" @error="item.avatar = null" @load="handleImageLoad"
-                                            :class="{ 'loaded': imageLoaded }" />
+                                            :class="{ 'loaded': imageLoaded }" alt="avatar"/>
                                     </div>
                                 </template>
                                 <div class="error_avatar" v-else style="background-color: #007FFF;">

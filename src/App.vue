@@ -23,7 +23,7 @@
                     </span>
                     <a :href="item.link" class="ice_card_meta" target="_blank">
                       <div class="ice_card_avatar" :class="item.avatar ? '' : 'error'">
-                        <img v-if="item.avatar" :src="item.avatar" @error="item.avatar = null" loading="lazy" />
+                        <img v-if="item.avatar" :src="item.avatar" @error="item.avatar = null" loading="lazy" :alt="item.title"/>
                         <div class="error_avatar" v-else style="background-color: #007FFF;">{{
                           item.title.split('')[0][0] }}
                         </div>

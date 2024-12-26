@@ -47,7 +47,7 @@
             </div>
             <div class="ice_nav_footer">
                 <div class="nav-collapse-btn">
-                    <button class="nav-button" @click.stop="toggleNavCollapse()">
+                    <button class="nav-button" @click.stop="toggleNavCollapse()" aria-label="折叠侧边栏">
                         <component :is="getIcon(isNavCollapsed ? 'IconKanban' : 'IconSidebar')" />
                         <span class="btn-right" :class="{ 'btn_collapsed': isNavCollapsed }">
                             {{ isNavCollapsed ? '' : '收起侧边栏' }}</span>
@@ -259,6 +259,7 @@ onMounted(() => {
 
 .ice_nav::-webkit-scrollbar {
     display: none;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     -webkit-scrollbar-width: none;
     -ms-overflow-style: none;
