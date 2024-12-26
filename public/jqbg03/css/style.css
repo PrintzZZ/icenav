@@ -98,7 +98,6 @@ img {
 /*end reset*/
 
 body {
-	font-family: 'Open Sans', sans-serif;
 	font-size: 100%;
 	background: #2196F3;
 }
@@ -111,7 +110,6 @@ h1 {
 	text-align: center;
 	font-style: italic;
 	margin: 3vw 1vw;
-	font-family: 'Josefin Sans', sans-serif;
 }
 h1 span, h2 i {
 	color: #f7296f;

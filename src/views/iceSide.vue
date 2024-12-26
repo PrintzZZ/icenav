@@ -237,7 +237,6 @@ onMounted(() => {
     .ice_logo_text {
         font-size: 16px;
         line-height: 24px;
-        font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
         font-weight: 600;
         color: var(--semi-color-text-0);
         white-space: nowrap;
@@ -293,7 +292,6 @@ onMounted(() => {
             margin-bottom: 8px;
             font-size: 14px;
             line-height: 20px;
-            font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
             font-weight: 400;
             color: var(--semi-color-text-0);
             width: 100%;
@@ -320,7 +318,6 @@ onMounted(() => {
             margin-bottom: 8px;
             font-size: 14px;
             line-height: 20px;
-            font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
             font-weight: 400;
             color: var(--semi-color-text-0);
             width: 100%;
@@ -402,7 +399,6 @@ onMounted(() => {
                     margin-bottom: 8px;
                     font-size: 14px;
                     line-height: 20px;
-                    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
                     font-weight: 400;
                     color: var(--semi-color-text-0);
                     width: 100%;
@@ -437,7 +433,6 @@ onMounted(() => {
         box-shadow: none;
         font-size: 14px;
         line-height: 20px;
-        font-family: Inter;
         height: 32px;
         display: inline-flex;
         align-items: center;

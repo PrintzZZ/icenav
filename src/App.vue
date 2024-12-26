@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider :theme="isDarkMode ? { algorithm: theme.darkAlgorithm } : {}" :locale="zhCN">
+  <a-config-provider :theme="themeConfig" :locale="zhCN">
     <div class="ice_main" :class="{ mobile: isMobile }">
 
       <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile" />
@@ -62,13 +62,20 @@ import { IconRating } from './components/icons';
 import IceLike from './views/IceLike.vue'
 import IceSide from './views/IceSide.vue'
 import Footer from './views/Footer.vue';
-import ThemeSwitch from './views/ThemeSwitch.vue'
 import { debounce } from 'lodash';
 
 
 const menuList = useLinkData().menuList;
 const LikeList = useLinkData().LikeList;
 const isMobile = ref(false);
+
+// 计算主题配置
+const themeConfig = computed(() => ({
+  algorithm: isDarkMode.value ? theme.darkAlgorithm : undefined,
+  token: {
+    fontFamily: 'CustomFontName'
+  }
+}))
 
 //检测版本
 const checkVersion = () => {

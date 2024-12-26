@@ -4,7 +4,7 @@
         <IceHeader />
         <div class="search_video_bg">
             <iframe v-if="backgroundType === 0" class="search_bg" scrolling="no" sandbox="allow-scripts"
-                :src="computedSrc"></iframe>
+                :src="computedSrc" title="动态背景"></iframe>
             <div v-if="backgroundType === 1" class="search_bg_mask"
                 :style="`backdrop-filter: blur(${backgroundMaskBlur}px);background-color: rgba(0, 0, 0, ${backgroundMask});`">
             </div>
