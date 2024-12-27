@@ -270,6 +270,7 @@ a {
 
 @font-face {
     font-family: 'CustomFontName';
-    src: url('/src/assets/font/DDjinbuti.woff2') format('woff2')
+    src: url('/src/assets/font/DDjinbuti.woff2') format('woff2');
+    font-display: swap;
 }
 

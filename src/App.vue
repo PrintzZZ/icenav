@@ -90,7 +90,11 @@ const checkVersion = () => {
 }
 
 // 当前选中的菜单索引
-const isNavCollapsed = ref(false);
+const isNavCollapsed = ref(useSettingData().otherSettings.collapseSidebar);
+watchEffect(() => {
+  isNavCollapsed.value = useSettingData().otherSettings.collapseSidebar;
+})
+
 
 // 导航的tabRefs
 const tabRefs = ref([]);
@@ -111,10 +115,10 @@ const checkWindowSize = () => {
   // 根据不同宽度设置不同状态
   if (window_width <= 767) {
     isMobile.value = true;
-    isNavCollapsed.value = true;
+    isNavCollapsed.value = useSettingData().otherSettings.collapseSidebar;
   } else if (window_width < 1100) {
     isMobile.value = false;
-    isNavCollapsed.value = true;
+    isNavCollapsed.value = useSettingData().otherSettings.collapseSidebar;
   } else {
     isMobile.value = false;
     isNavCollapsed.value = false;
@@ -128,6 +132,7 @@ onMounted(() => {
   checkWindowSize(); // 初始检查
   // checkVersion();
   window.addEventListener('resize', debouncedCheckSize);
+  isNavCollapsed.value = useSettingData().otherSettings.collapseSidebar;
 });
 
 onUnmounted(() => {
@@ -238,14 +243,15 @@ const cardStyle = computed(() => {
 
     .ice_menu_content {
       width: 100%;
-      min-height: 210px;
       display: flex;
       border-radius: var(--semi-border-radius-small);
       border: 1px solid var(--semi-color-border);
       background: var(--semi-color-bg-1);
       margin: 24px 0;
       padding: 20px;
-      // transition: background-color .2s cubic-bezier(0.645, 0.045, 0.355, 1);
+      will-change: width; // 提示浏览器动画优化
+      backface-visibility: hidden; // 防止动画闪烁
+      transform: translateZ(0); // 启用GPU加速
 
       .ice_menu_content_tabs {
         width: 100%;
@@ -287,7 +293,7 @@ const cardStyle = computed(() => {
         position: relative;
         background-color: var(--semi-color-bg-0);
         border-radius: 8px;
-        padding: 12px 20px 12px 12px ;
+        padding: 12px 20px 12px 12px;
         flex: 0 0 calc(20% - 10px);
         max-width: calc(20% - 10px);
 
@@ -322,8 +328,7 @@ const cardStyle = computed(() => {
         .ice_card_meta {
           margin: -4px 0;
           display: flex;
-
-
+          align-items: center;
 
           .ice_card_avatar>img {
             display: block;
@@ -399,9 +404,11 @@ const cardStyle = computed(() => {
           .ice_card_detail {
             overflow: hidden;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
 
             .ice_card_title {
-              margin-bottom: 8px;
               color: var(--semi-color-text-0);
               font-weight: 500;
               font-size: 16px;
@@ -411,13 +418,14 @@ const cardStyle = computed(() => {
             }
 
             .ice_card_desc {
-              color: var(--semi-color-text-2);
+              color: var(--semi-color-text-3);
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-line-clamp: 1;
               -webkit-box-orient: vertical;
               overflow: hidden;
               text-overflow: ellipsis;
+              font-size: 0.8rem;
             }
           }
         }

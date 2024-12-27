@@ -2441,7 +2441,7 @@ export const defaultData = {
       progressColor: 'blue', // 进度条颜色
       HotShowNum: 3, // 热门列表每行显示个数
       fontFamily: 'CustomFontName', // 字体
-      
+      collapseSidebar: true, // 默认展开侧边栏
     }
 }
 

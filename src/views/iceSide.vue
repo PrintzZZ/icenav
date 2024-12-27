@@ -303,10 +303,7 @@ onMounted(() => {
             font-weight: 600;
         }
 
-        .ice_menu_item_title:hover {
-            background-color: var(--semi-color-fill-0);
-            color: var(--semi-color-text-0);
-        }
+
 
         .ice_menu_item_title {
             cursor: pointer;
@@ -330,6 +327,14 @@ onMounted(() => {
             justify-content: flex-start;
             height: 36px;
             align-items: center;
+            transition: .3s;
+
+            &:hover {
+                background-color: var(--semi-color-fill-0);
+                color: var(--semi-color-text-0);
+                padding-left: 20px;
+            }
+            
 
         }
 

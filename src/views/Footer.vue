@@ -26,7 +26,7 @@
             <span class="footer-bar-link">©️</span>
         </div>
     </div>
-    <a-modal v-model:visible="visible" title="✨️感谢你赋予我前进的力量！" footer>
+    <a-modal v-model:open="visible" title="✨️感谢你赋予我前进的力量！" footer>
         <div class="pay-group">
             <div class="pay-item">
                 <a-image :width="150" src="/images/alipay.png" alt="支付宝" />
