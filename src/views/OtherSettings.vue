@@ -14,12 +14,13 @@
                             <IconImage style="font-size: 30px; color: #A5A5A5; " />
                             <p style="font-size: 12px; color:#A5A5A5;padding: 0 5px;">点击或拖拽文件到此处</p>
                         </a-upload-dragger>
-                        <div class="show_item_img" v-else>
+
+                        <div class="show_item_img" v-else
+                            :style="{ 'background-image': `url(${backgroundState.imgSrc})`, 'background-position': `center ${backgroundState.position}%` }">
                             <IconClose class="close_icon" @click="backgroundState.imgSrc = ''" />
                             <div class="show_item_img_mask"
                                 :style="{ 'backdrop-filter': `blur(${backgroundState.maskBlur}px)`, 'background-color': `rgba(0, 0, 0, ${backgroundState.mask})` }">
                             </div>
-                            <img :src="backgroundState.imgSrc" alt="" style="width: 100%;object-fit: cover;">
                         </div>
                     </div>
                 </transition>
@@ -30,10 +31,28 @@
                 </div>
             </a-card>
             <a-card style="height: 100px;">
-                <a-slider v-model:value="backgroundState.mask" :min="0" :max="1" :step="0.1""
-                    :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
-                <a-slider v-model:value="backgroundState.maskBlur" :min="0" :max="10" :step="1"
-                    :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
+                <div class="background_position">
+                    <div class="background_item">
+                        <span class="desc">上下位置</span>
+                        <a-slider class="slider" v-model:value="backgroundState.position" :min="0" :max="100" :step="1""
+                            :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
+                    </div>
+                    <div class=" background_item">
+                            <div class="background_item_slider">
+                                <span class="desc">遮罩</span>
+                                <a-slider class="slider" v-model:value="backgroundState.mask" :min="0" :max="1"
+                                    :step="0.1""
+                            :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" /></div>
+                            <div class=" background_item_slider">
+                                    <span class="desc">模糊</span>
+                                    <a-slider class="slider" v-model:value="backgroundState.maskBlur" :min="0" :max="10"
+                                        :step="1"
+                                        :disabled="backgroundState.type !== 1 || backgroundState.imgSrc == ''" />
+                            </div>
+                    </div>
+                </div>
+
+
             </a-card>
         </div>
         <div class="title_card_box setting_item">
@@ -474,8 +493,11 @@ const backgroundState = reactive({
     type: settings.backgroundType || 0,
     imgSrc: settings.backgroundImgUrl || '',
     mask: settings.mask == 0 ? 0 : settings.mask || 0.5,
-    maskBlur: settings.maskBlur == 0 ? 0 : settings.maskBlur || 2
+    maskBlur: settings.maskBlur == 0 ? 0 : settings.maskBlur || 2,
+    position: settings.backgroundPosition || 0
 });
+
+
 
 
 // 标题设置相关状态
@@ -555,6 +577,19 @@ const setupWatchers = () => {
             showGetGold: newVal
         });
     });
+
+    watch([
+        () => backgroundState.position,
+        () => backgroundState.mask,
+        () => backgroundState.maskBlur],
+
+        (newVal) => {
+            useSettingData().updateOtherSettings({
+                backgroundPosition: newVal[0],
+                mask: newVal[1],
+                maskBlur: newVal[2]
+            });
+        });
 };
 
 // 图片处理相关逻辑优化
@@ -593,7 +628,8 @@ const saveBackground = () => {
         backgroundImgUrl: saveIndex === 0 ? '' : backgroundState.imgSrc,
         ...(saveIndex === 1 && {
             mask: backgroundState.mask,
-            maskBlur: backgroundState.maskBlur
+            maskBlur: backgroundState.maskBlur,
+            backgroundPosition: backgroundState.position
         })
     };
     useSettingData().updateOtherSettings(settings);
@@ -660,7 +696,41 @@ onMounted(() => {
     gap: 10px;
     flex-wrap: wrap;
 
+    .background_position {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
 
+        .background_item {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 5px;
+
+            .slider {
+                flex: 1;
+            }
+
+            .background_item_slider {
+                width: 48%;
+                display: flex;
+                align-content: center;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 5px;
+
+                .desc {
+                    width: 30px;
+                }
+
+            }
+        }
+    }
 
     .ant-slider {
         &.hover {
@@ -788,7 +858,6 @@ onMounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
             transition: all 0.3s ease;
             cursor: pointer;
             user-select: none;
@@ -942,7 +1011,7 @@ onMounted(() => {
 
     .other_settings_title {
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 500;
         margin-bottom: 5px;
         height: 25px;
     }
@@ -973,6 +1042,11 @@ onMounted(() => {
 
         img {
             max-width: 276px;
+        }
+
+        .show_item_img {
+            height: 100%;
+            background-size: cover;
         }
 
         .show_item_img_mask {

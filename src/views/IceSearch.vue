@@ -8,7 +8,7 @@
             <div v-if="backgroundType === 1" class="search_bg_mask"
                 :style="`backdrop-filter: blur(${backgroundMaskBlur}px);background-color: rgba(0, 0, 0, ${backgroundMask});`">
             </div>
-            <img v-if="backgroundType === 1" class="search_bg_img" :src="backgroundImgUrl" alt="">
+            <div v-if="backgroundType === 1" class="search_bg_img" :style="{'background-image': `url(${backgroundImgUrl})` ,'background-position': `center ${backgroundPosition}%`}"></div>
             <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
         <div class="search_container" :style="{ color: fontColor }">
@@ -118,6 +118,7 @@ const backgroundType = computed(() => useSettingData().otherSettings.backgroundT
 const backgroundImgUrl = computed(() => useSettingData().otherSettings.backgroundImgUrl);
 const backgroundMask = computed(() => useSettingData().otherSettings.mask);
 const backgroundMaskBlur = computed(() => useSettingData().otherSettings.maskBlur);
+const backgroundPosition = computed(() => useSettingData().otherSettings.backgroundPosition);
 const fontColor = computed(() => useSettingData().otherSettings.fontColor);
 const searchInputOpacity = computed(() => useSettingData().otherSettings.searchInputOpacity);
 const searchInputColor = computed(() => useSettingData().otherSettings.searchInputColor);
@@ -209,7 +210,7 @@ onUnmounted(() => {
         .search_bg_img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background-size: cover;
         }
     }
 

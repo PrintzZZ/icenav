@@ -15,15 +15,17 @@
                 :title="child.name">
 
                 <div class="ice_card_content">
-                  <div class="ice_card" 
-                  v-for="(item, itemIndex) in child.item" 
-                  :key="itemIndex" :style="cardStyle">
+
+
+
+                  <div class="ice_card" v-for="(item, itemIndex) in child.item" :key="itemIndex" :style="cardStyle">
                     <span class="like_icon" @click.stop="LikeItem(item)">
                       <IconRating />
                     </span>
                     <a :href="item.link" class="ice_card_meta" target="_blank">
                       <div class="ice_card_avatar" :class="item.avatar ? '' : 'error'">
-                        <img v-if="item.avatar" :src="item.avatar" @error="item.avatar = null" loading="lazy" :alt="item.title"/>
+                        <img v-if="item.avatar" :src="item.avatar" @error="item.avatar = null" loading="lazy"
+                          :alt="item.title" />
                         <div class="error_avatar" v-else style="background-color: #007FFF;">{{
                           item.title.split('')[0][0] }}
                         </div>
@@ -36,6 +38,8 @@
                       </div>
                     </a>
                   </div>
+
+
                 </div>
               </a-tab-pane>
             </a-tabs>
@@ -73,7 +77,7 @@ const isMobile = ref(false);
 const themeConfig = computed(() => ({
   algorithm: isDarkMode.value ? theme.darkAlgorithm : undefined,
   token: {
-    fontFamily: 'CustomFontName'
+    fontFamily: 'CustomFontName',
   }
 }))
 
@@ -169,21 +173,19 @@ onMounted(() => {
 
 // 计算卡片样式
 const cardStyle = computed(() => {
-  if(isMobile.value){return {}}
-    const num = useSettingData().otherSettings.cardNum || 5;
-    const gap = 10; // 卡片间距
-    const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
-    return {
-        flex: `0 0 ${width}`,
-        maxWidth: width,
-        minWidth: '150px', // 设置最小宽度
-    };
+  if (isMobile.value) { return {} }
+  const num = useSettingData().otherSettings.cardNum || 5;
+  const gap = 10; // 卡片间距
+  const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
+  return {
+    flex: `0 0 ${width}`,
+    maxWidth: width,
+    minWidth: '150px', // 设置最小宽度
+  };
 });
 
 </script>
 <style lang="less">
-
-
 .ice_main {
   display: flex;
   flex-direction: row;
@@ -268,36 +270,40 @@ const cardStyle = computed(() => {
       flex-wrap: wrap;
       gap: 10px;
 
-      .ice_card:hover {
-        border: 1px solid #425aef50;
-      }
 
-      .ice_card:hover .like_icon {
-        opacity: 1;
-      }
+
+
+
+
 
       .ice_card {
         user-select: none;
         cursor: pointer;
         transition: box-shadow 0.1s ease-in-out;
-        padding: 24px;
-        border-radius: 0 0 8px 8px;
         border: 1px solid var(--semi-color-border);
-        padding: 0;
-
         font-size: 14px;
         line-height: 1.5714285714285714;
         list-style: none;
         position: relative;
         background-color: var(--semi-color-bg-0);
         border-radius: 8px;
-        padding: 24px;
+        padding: 12px 20px 12px 12px ;
         flex: 0 0 calc(20% - 10px);
         max-width: calc(20% - 10px);
 
-        .like_icon:hover {
-          transform: scale(1.3);
+        &:hover {
+          border: 1px solid rgba(var(--semi-blue-6), 1);
         }
+
+        &:hover .ice_card_title {
+          color: rgba(var(--semi-blue-6), 1) !important;
+        }
+
+        &:hover .like_icon {
+          opacity: 1;
+        }
+
+
 
         .like_icon {
           position: absolute;
@@ -307,18 +313,23 @@ const cardStyle = computed(() => {
           opacity: 0;
           transition: .3s;
 
+          &:hover {
+            transform: scale(1.3);
+          }
+
         }
 
         .ice_card_meta {
           margin: -4px 0;
           display: flex;
 
+
+
           .ice_card_avatar>img {
             display: block;
             width: 76%;
             object-fit: cover;
             border-style: none;
-
           }
 
           .ice_card_avatar {
@@ -385,10 +396,6 @@ const cardStyle = computed(() => {
             border-radius: 50%;
           }
 
-          .ice_card_avatar.error {
-            // background: #00000040;
-          }
-
           .ice_card_detail {
             overflow: hidden;
             flex: 1;
@@ -396,7 +403,7 @@ const cardStyle = computed(() => {
             .ice_card_title {
               margin-bottom: 8px;
               color: var(--semi-color-text-0);
-              font-weight: 600;
+              font-weight: 500;
               font-size: 16px;
               overflow: hidden;
               white-space: nowrap;
@@ -558,7 +565,7 @@ const cardStyle = computed(() => {
 }
 
 .ice_card {
-    margin-bottom: 10px;
-    transition: all 0.3s ease; // 添加过渡效果，使宽度变化更平滑
+  margin-bottom: 10px;
+  transition: all 0.3s ease; // 添加过渡效果，使宽度变化更平滑
 }
 </style>

@@ -2420,6 +2420,7 @@ export const defaultData = {
       backgroundType: 0,
       backgroundImgUrl: "",
       backgroundVideoUrl: "",
+      backgroundPosition: 0, // 背景位置
       mask: 0.5,
       maskBlur: 2,
       searchTitle: "学术搜索引擎",
@@ -2439,6 +2440,8 @@ export const defaultData = {
       textColor: '#FFFFFF', // 文字颜色
       progressColor: 'blue', // 进度条颜色
       HotShowNum: 3, // 热门列表每行显示个数
+      fontFamily: 'CustomFontName', // 字体
+      
     }
 }
 
