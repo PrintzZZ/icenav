@@ -47,8 +47,10 @@
         </div>
         <a-back-top :target="iceContentDom" />
         <Footer />
+        
       </div>
     </div>
+    <ComDocker />
   </a-config-provider>
 
 </template>
@@ -66,6 +68,7 @@ import { IconRating } from './components/icons';
 import IceLike from './views/IceLike.vue'
 import IceSide from './views/IceSide.vue'
 import Footer from './views/Footer.vue';
+import ComDocker from './views/ComDocker.vue';
 import { debounce } from 'lodash';
 
 

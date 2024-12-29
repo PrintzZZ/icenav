@@ -6,7 +6,7 @@
                 <IconUpload style="font-size: 30px; color: #A5A5A5; " />
                 <p style="font-size: 12px; color:#A5A5A5;padding: 0 5px;">点击或拖拽文件到此处</p>
                 <template #itemRender="{ file, actions }">
-                    <a-space>
+                    
                         <div class="list_main">
                             <div class="list_card">
                                 <div class="card-preview">
@@ -46,7 +46,7 @@
                                 </button>
                             </div>
                         </div>
-                    </a-space>
+                    
                 </template>
             </a-upload-dragger>
         </div>

@@ -2442,6 +2442,7 @@ export const defaultData = {
       HotShowNum: 3, // 热门列表每行显示个数
       fontFamily: 'CustomFontName', // 字体
       collapseSidebar: true, // 默认展开侧边栏
+      dockShow: true, // 默认显示dock
     }
 }
 

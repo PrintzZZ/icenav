@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from "rollup-plugin-visualizer"
 
 // https://vite.dev/config/
 // 配置@为src
@@ -12,12 +13,13 @@ export default defineConfig(({ command, mode }) => {
         '@': path.resolve(__dirname, 'src'),
       }
     },
-    plugins: [vue()],
+    plugins: [vue(),visualizer({ open: true }) ],
     build: {
       compress: {
+        drop_debugger: true, // 移除 debugger 语句
         drop_console: true, // 移除 console.log，减小体积
       },
-      chunkSizeWarningLimit: 500, // 设置 chunk 大小警告的阈值（单位 KB）
+      chunkSizeWarningLimit: 1000, // 设置 chunk 大小警告的阈值（单位 KB）
       rollupOptions: {
         output: {
           chunkFileNames: "js/[name]-[hash].js",

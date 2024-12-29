@@ -201,6 +201,15 @@
                     </span>
                 </a-tooltip>
             </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`dock已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`" placement="bottom">
+                    <span class="collapse_box" @click="dockShow">
+                        <component :is="useSettingData().otherSettings.dockShow ?  IconExpand: IconShrink" style="font-size: 0.8em;"/>
+                    </span>
+                </a-tooltip>
+            </a-card>
+
+            
         </div>
         <a-modal v-model:open="showDonateModel" title="✨️感谢你赋予我前进的力量！" footer destroyOnClose>
             <div class="pay-group">
@@ -221,6 +230,7 @@ import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { useLinkData } from '../store/LinkStore';
 import { IconImage, IconLive, IconClose, IconLight, IconDark, IconSave, IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
+import {IconShrink,IconExpand} from '../components/unIcons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
 import LZString from 'lz-string';
@@ -228,6 +238,11 @@ import LZString from 'lz-string';
 const allData = ref()
 const showGetGold = ref(true)
 const showDonateModel = ref(false)
+
+const dockShow = () =>{
+    useSettingData().updateOtherSettings({ dockShow: !useSettingData().otherSettings.dockShow });
+    message.success(`dock已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`);
+}
 
 const showDonate = () => {
     showDonateModel.value = true
@@ -573,6 +588,12 @@ const setupWatchers = () => {
     watch(() => settings.showGetGold, (newVal) => {
         useSettingData().updateOtherSettings({
             showGetGold: newVal
+        });
+    });
+
+    watch(() => settings.dockShow, (newVal) => {
+        useSettingData().updateOtherSettings({
+            dockShow: newVal
         });
     });
 
