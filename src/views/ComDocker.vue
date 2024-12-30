@@ -3,46 +3,46 @@
         <div class="dock-container" id="dock-container" style="left: 50%;" v-if="dockShow && dockerShowNow">
             <div class="dock" id="dock">
                 <ul class="dock-icons">
-                <!-- 右键删除 -->
-                <li class="dock-icon" v-for="(item, index) in dockIcons" :key="item.name" :title="item.name"
-                    @contextmenu.prevent="onRightClick($event, index)">
-                    <a :href="item.url" target="_blank">
-                        <img :src="item.icon" :alt="item.name">
-                    </a>
-                </li>
-                <li class="dock-icon-divider ">
-                    <hr class="dock-divider"> <!-- 添加分割线 -->
-                </li>
-                <li class="dock-icon add-app" title="添加应用" @click="onAddApp">
-                    <i class="dock-icon-svg">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                            focusable="false" aria-hidden="true">
-                            <path d="M9 2a2 2 0 0 0-2 2v1h9c2 0 3 1 3 3v9h1a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9Z"
-                                fill="currentColor"></path>
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M3 9c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Zm6 2a1 1 0 1 1 2 0v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H7a1 1 0 1 1 0-2h2v-2Z"
-                                fill="currentColor"></path>
-                        </svg>
-                    </i>
-                </li>
-                <li class="dock-icon close-app" title="收起" @click="onCloseApp">
-                    <i class="dock-icon-svg">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                            focusable="false" aria-hidden="true">
-                            <path
-                                d="M2.44 2.44a1.5 1.5 0 0 0 0 2.12L6.88 9H4a1.5 1.5 0 0 0 0 3h6.5a1.5 1.5 0 0 0 1.5-1.5V4a1.5 1.5 0 0 0-3 0v2.88L4.56 2.44a1.5 1.5 0 0 0-2.12 0Z"
-                                fill="currentColor">
-                            </path>
-                            <path
-                                d="M20 12a1.5 1.5 0 0 1 0 3h-2.88l4.44 4.44a1.5 1.5 0 1 1-2.12 2.12L15 17.12V20a1.5 1.5 0 1 1-3 0v-6.5a1.5 1.5 0 0 1 1.5-1.5H20Z"
-                                fill="currentColor">
-                            </path>
-                        </svg>
-                    </i>
-                </li>
-            </ul>
+                    <!-- 右键删除 -->
+                    <li class="dock-icon" v-for="(item, index) in dockIcons" :key="item.name" :title="item.name"
+                        @contextmenu.prevent="onRightClick($event, index)">
+                        <a :href="item.url" target="_blank">
+                            <img :src="item.icon" :alt="item.name">
+                        </a>
+                    </li>
+                    <li class="dock-icon-divider ">
+                        <hr class="dock-divider"> <!-- 添加分割线 -->
+                    </li>
+                    <li class="dock-icon add-app" title="添加应用" @click="onAddApp">
+                        <i class="dock-icon-svg">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em"
+                                height="1em" focusable="false" aria-hidden="true">
+                                <path d="M9 2a2 2 0 0 0-2 2v1h9c2 0 3 1 3 3v9h1a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9Z"
+                                    fill="currentColor"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M3 9c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Zm6 2a1 1 0 1 1 2 0v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H7a1 1 0 1 1 0-2h2v-2Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </i>
+                    </li>
+                    <li class="dock-icon close-app" title="收起" @click="onCloseApp">
+                        <i class="dock-icon-svg">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em"
+                                height="1em" focusable="false" aria-hidden="true">
+                                <path
+                                    d="M2.44 2.44a1.5 1.5 0 0 0 0 2.12L6.88 9H4a1.5 1.5 0 0 0 0 3h6.5a1.5 1.5 0 0 0 1.5-1.5V4a1.5 1.5 0 0 0-3 0v2.88L4.56 2.44a1.5 1.5 0 0 0-2.12 0Z"
+                                    fill="currentColor">
+                                </path>
+                                <path
+                                    d="M20 12a1.5 1.5 0 0 1 0 3h-2.88l4.44 4.44a1.5 1.5 0 1 1-2.12 2.12L15 17.12V20a1.5 1.5 0 1 1-3 0v-6.5a1.5 1.5 0 0 1 1.5-1.5H20Z"
+                                    fill="currentColor">
+                                </path>
+                            </svg>
+                        </i>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
     </Transition>
     <!-- 添加应用模态框 -->
     <Modal v-model:open="visible" title="添加网站" @ok="addAppOk" destroyOnClose>
@@ -57,21 +57,14 @@
 </template>
 <script setup>
 // 自动获取图标
-// https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=https://www.iceooh.com
 
-import { ref,watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { Modal, Input, message } from 'ant-design-vue';
 import { useSettingData } from '@/store/SettingStore'
 
 
-const dockIcons = ref([
-    {
-        name: '冰屋数据',
-        url: 'https://www.iceooh.com/',
-        icon: 'https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=https://www.iceooh.com'
-    },
-])
 
+const dockIcons = ref(useSettingData().dockList)
 const visible = ref(false);
 const addAppValue = ref({
     name: '',
@@ -81,15 +74,16 @@ const addAppValue = ref({
 
 
 const onRightClick = (event, index) => {
-    console.log(event, index);
+    // console.log(event, index);
     // 右键删除, 模态框确认后删除
     Modal.confirm({
         title: '确定要删除吗？',
         content: `网站名称：${dockIcons.value[index].name}`,
         centered: true,
-        
+
         onOk: () => {
             dockIcons.value.splice(index, 1);
+            useSettingData().updateDockList(dockIcons.value);
         }
     });
 
@@ -111,9 +105,14 @@ const addAppOk = () => {
         message.error('请输入正确的网站地址');
         return;
     }
-
+    // 获取图标
+    if (!addAppValue.value.icon) {
+        const icon = `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${addAppValue.value.url}`
+        addAppValue.value.icon = icon;
+    }
     // 添加到dockIcons
     dockIcons.value.push(addAppValue.value);
+    useSettingData().updateDockList(dockIcons.value);
     // 关闭模态框
     visible.value = false;
     // 清空输入框
@@ -123,6 +122,8 @@ const addAppOk = () => {
         icon: ''
     };
 }
+
+
 
 const dockShow = ref(true)
 const dockerShowNow = ref(true)
@@ -145,22 +146,22 @@ const onCloseApp = () => {
         }
     });
 }
-watchEffect(()=>{
+watchEffect(() => {
     dockShow.value = useSettingData().otherSettings.dockShow;
 })
 
 </script>
 <style lang="less" scoped>
-
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.5s ease
+    transition: opacity .50s cubic-bezier(0.645, 0.045, 0.355, 1), bottom .50s cubic-bezier(0.645, 0.045, 0.355, 1)
 }
 
 
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+    bottom: -100px!important;
 }
 
 
