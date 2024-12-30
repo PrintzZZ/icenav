@@ -560,12 +560,13 @@ const ImgUploadChange = (info) => {
 // 优化watch函数，使用组合式函数
 const setupWatchers = () => {
     watch(() => titleState.value, (newVal) => {
-        if (newVal.length > 9) {
-            message.error('标题最多9个字');
+        if (newVal.length > 10) {
+            message.error('标题最多10个字');
             return;
         }
         useSettingData().updateOtherSettings({
-            showTitle: titleState.show
+            showTitle: titleState.show,
+            searchTitle: newVal
         });
     });
 
