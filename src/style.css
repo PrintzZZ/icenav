@@ -523,7 +523,7 @@ mark {
 
 @font-face {
     font-family: 'CustomFontName';
-    src: url('/src/assets/font/DDjinbuti.woff2') format('woff2');
+    src: url('https://cdn.iceooh.com/DDjinbuti.woff2') format('woff2');
     font-display: swap;
 }
 

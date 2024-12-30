@@ -65,6 +65,7 @@ import { useSettingData } from '@/store/SettingStore'
 
 
 const dockIcons = ref(useSettingData().dockList)
+
 const visible = ref(false);
 const addAppValue = ref({
     name: '',
@@ -90,6 +91,11 @@ const onRightClick = (event, index) => {
 }
 
 const onAddApp = () => {
+    // 检测数量
+    if (dockIcons.value.length >= 8) {
+        message.error('最多添加8个应用,右键删除');
+        return;
+    }
     visible.value = true;
 }
 
@@ -266,6 +272,12 @@ watchEffect(() => {
                 }
             }
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .dock-container {
+        display: none;
     }
 }
 </style>

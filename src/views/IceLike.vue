@@ -53,7 +53,7 @@
                                 <a-card style="width: 300px">
                                     <a-card-meta :title="LikeMoreItem.title" :description="LikeMoreItem.desc">
                                         <template #avatar>
-                                            <a-avatar shape="square" size="large" :src="LikeMoreItem.avatar"
+                                            <a-avatar shape="square" size="large" :src="LikeMoreItem.avatar == '' ? `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${LikeMoreItem.link}` : LikeMoreItem.avatar"
                                                 @error="handleAvatarError" class="preview-avatar">
                                                 <template #icon>
                                                     <div class="skeleton-avatar"></div>
@@ -66,12 +66,12 @@
                             </div>
 
                             <div class="form-items">
-                                <a-form-item label="标题" name="title">
+                                <a-form-item label="网站标题" name="title">
                                     <a-input v-model:value="LikeMoreItem.title" placeholder="请输入标题"
                                         @change="debouncePreview" />
                                 </a-form-item>
 
-                                <a-form-item label="网址" name="link" :rules="[
+                                <a-form-item label="网站地址" name="link" :rules="[
                                     { required: true, message: '请输入网址' },
                                     { type: 'url', message: '请输入有效的网址' }
                                 ]">
@@ -79,13 +79,13 @@
                                         @change="debouncePreview" />
                                 </a-form-item>
 
-                                <a-form-item label="描述" name="desc">
+                                <a-form-item label="网站描述" name="desc">
                                     <a-textarea v-model:value="LikeMoreItem.desc" placeholder="请输入网站描述"
                                         :auto-size="{ minRows: 2, maxRows: 4 }" @change="debouncePreview" />
                                 </a-form-item>
 
-                                <a-form-item label="图标" name="avatar">
-                                    <a-input v-model:value="LikeMoreItem.avatar" placeholder="请输入图标地址(http/https)"
+                                <a-form-item label="网站图标" name="avatar">
+                                    <a-input v-model:value="LikeMoreItem.avatar" placeholder="不填写链接自动获取网址图标"
                                         @change="debouncePreview">
                                         <template #suffix>
                                             <a-tooltip title="支持http/https图片地址">
@@ -168,7 +168,7 @@ const LikeMoreItem = ref({
     title: 'Iceooh',
     desc: 'Iceooh冰屋数据网',
     link: 'https://www.iceooh.com/',
-    avatar: '/images/favicon.png'
+    avatar: ''
 });
 
 const LikeCancelItem = (item) => {
@@ -256,7 +256,7 @@ const resetForm = () => {
         title: 'Iceooh',
         desc: 'Iceooh冰屋数据网',
         link: 'https://www.iceooh.com/',
-        avatar: '/images/favicon.png'
+        avatar: ''
     };
 };
 
