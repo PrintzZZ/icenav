@@ -1,8 +1,23 @@
 import IconShrink from './IconShrink.vue';
 import IconExpand from './IconExpand.vue';
+import IconMinimize from './IconMinimize.vue';
+import IconMaximize from './IconMaximize.vue';
+import IconTriangle from './IconTriangle.vue';
+import IconChecked from './IconChecked.vue';
+import IconArrow from './IconArrow.vue';
+import IconClose from './IconClose.vue';
+import IconDraggable from './IconDraggable.vue';
 
 
 export {
     IconShrink,
-    IconExpand
+    IconExpand,
+    IconMinimize,
+    IconMaximize,
+    IconTriangle,
+    IconChecked,
+    IconArrow,
+    IconClose,
+    IconDraggable,
+
 };

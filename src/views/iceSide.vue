@@ -27,7 +27,7 @@
                                 </i>
                                 <span class="ice_menu_item_text">{{ menu.name }}</span>
                                 <i class="ice_menu_item_arrow" :class="{ rotated: menu.isOpen }">
-                                    <component :is="getIcon('IconArrow')" v-if="!isNavCollapsed" />
+                                    <IconArrow v-if="!isNavCollapsed"/>
                                 </i>
                             </div>
                         </a-tooltip>
@@ -62,7 +62,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useLinkData } from '../store/LinkStore';
 // 引入所有图标
 import * as Icons from '../components/icons';
-
+import {IconArrow} from '../components/unIcons';
 const menuList = useLinkData().menuList;
 const selectedMenu = ref({ parentIndex: null, childIndex: null });
 const isNavCollapsed = computed(() => props.isNavCollapsed);

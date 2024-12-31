@@ -2374,6 +2374,7 @@ export const defaultData = {
     backgroundImgUrl: "",
     backgroundVideoUrl: "",
     backgroundPosition: 0, // 背景位置
+    backgroundFocus: true, // 背景是否聚焦
     mask: 0.5,
     maskBlur: 2,
     searchTitle: "学术搜索引擎",

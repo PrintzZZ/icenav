@@ -1,7 +1,8 @@
 <template>
     <div class="other_settings">
+        <!-- 背景设置 -->
         <div class="background_box setting_item">
-            <a-card style="height: 210px;overflow: hidden;">
+            <a-card style="height: 320px;overflow: hidden;">
                 <div class="other_settings_title">背景设置</div>
                 <transition name="backgroundTypeFade" tag="div">
                     <div class="show_item" v-if="backgroundState.type === 0">
@@ -29,8 +30,8 @@
                         @change="backgroundTypeChange" />
                     <a-button type="primary" @click="saveBackground" size="small">保存</a-button>
                 </div>
-            </a-card>
-            <a-card style="height: 100px;">
+                <div class="other_settings_title">图片位置<span style="font-size: 12px;color: #a5a5a5;"> 不支持动态背景</span>
+                </div>
                 <div class="background_position">
                     <div class="background_item">
                         <span class="desc">上下位置</span>
@@ -51,8 +52,6 @@
                             </div>
                     </div>
                 </div>
-
-
             </a-card>
         </div>
         <div class="title_card_box setting_item">
@@ -195,22 +194,33 @@
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`当前默认${useSettingData().otherSettings.collapseSidebar ? '收起' : '展开'}侧边栏`" placement="bottom">
+                <a-tooltip :title="`当前默认${useSettingData().otherSettings.collapseSidebar ? '收起' : '展开'}侧边栏`"
+                    placement="bottom">
                     <span class="collapse_box" @click="collapseSidebar">
-                        <component :is="useSettingData().otherSettings.collapseSidebar ? IconSidebar : IconKanban" style="font-size: 0.8em;"/>
+                        <component :is="useSettingData().otherSettings.collapseSidebar ? IconSidebar : IconKanban"
+                            style="font-size: 0.8em;" />
                     </span>
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`Dock栏已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`" placement="bottom">
                     <span class="collapse_box" @click="dockShow">
-                        <component :is="useSettingData().otherSettings.dockShow ?  IconExpand: IconShrink" style="font-size: 0.8em;"/>
+                        <component :is="useSettingData().otherSettings.dockShow ? IconExpand : IconShrink"
+                            style="font-size: 0.8em;" />
                     </span>
                 </a-tooltip>
             </a-card>
-
-            
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`当前首页为${useSettingData().otherSettings.backgroundFocus ? '信息' : '简洁'}`" placement="bottom">
+                    <span class="collapse_box" @click="backgroundFocusChange">
+                        <component :is="useSettingData().otherSettings.backgroundFocus ?  IconMinimize: IconMaximize"
+                            style="font-size: 0.8em;" />
+                    </span>
+                </a-tooltip>
+            </a-card>
         </div>
+
+
         <a-modal v-model:open="showDonateModel" title="✨️感谢你赋予我前进的力量！" footer destroyOnClose>
             <div class="pay-group">
                 <div class="pay-item">
@@ -229,8 +239,8 @@
 import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { useLinkData } from '../store/LinkStore';
-import { IconImage, IconLive, IconClose, IconLight, IconDark, IconSave, IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
-import {IconShrink,IconExpand} from '../components/unIcons';
+import { IconImage, IconLive, IconLight, IconDark, IconSave, IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
+import { IconShrink, IconExpand, IconMaximize, IconMinimize, IconClose } from '../components/unIcons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
 import LZString from 'lz-string';
@@ -239,7 +249,12 @@ const allData = ref()
 const showGetGold = ref(true)
 const showDonateModel = ref(false)
 
-const dockShow = () =>{
+const backgroundFocusChange = () => {
+    useSettingData().updateOtherSettings({ backgroundFocus: !useSettingData().otherSettings.backgroundFocus });
+    message.success(`首页调整为${useSettingData().otherSettings.backgroundFocus ? '信息' : '简洁'}`);
+}
+
+const dockShow = () => {
     useSettingData().updateOtherSettings({ dockShow: !useSettingData().otherSettings.dockShow });
     message.success(`dock已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`);
 }
@@ -260,6 +275,7 @@ const closeGetGold = () => {
 
 const collapseSidebar = () => {
     useSettingData().updateOtherSettings({ collapseSidebar: !useSettingData().otherSettings.collapseSidebar });
+    message.success(`调整为默认${useSettingData().otherSettings.collapseSidebar ? '收起' : '展开'}侧边栏`);
 }
 
 const dataState = ref({
@@ -766,6 +782,8 @@ onMounted(() => {
 
     .ant-card {
         width: 320px;
+        background-color: var(--semi-color-bg-0);
+        border: none;
 
         .ant-card-body {
             padding: 20px;
@@ -1028,12 +1046,26 @@ onMounted(() => {
 
     }
 
+    .other_settings_title::before {
+        content: '';
+        display: block;
+        width: 3px;
+        height: 15px;
+        border-radius: 3px;
+        background-color: var(--main-logo-color);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+    }
 
     .other_settings_title {
         font-size: 16px;
         font-weight: 500;
         margin-bottom: 5px;
         height: 25px;
+        position: relative;
+        padding-left: 8px;
     }
 
     .other_settings_bottom {
@@ -1042,7 +1074,8 @@ onMounted(() => {
         align-items: center;
         align-content: center;
         flex-direction: row;
-        margin-top: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
 

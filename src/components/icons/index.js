@@ -1,4 +1,4 @@
-import IconChecked from './IconChecked.vue';
+
 import IconCalendar from './IconCalendar.vue';
 import IconCheckbox from './IconCheckbox.vue';
 import IconHome from './IconHome.vue';
@@ -8,18 +8,17 @@ import IconWarning from './IconWarning.vue';
 import IconSidebar from './IconSidebar.vue';
 import IconKanban from './IconKanban.vue';
 import IconTick from './IconTick.vue';
-import IconDraggable from './IconDraggable.vue';
-import IconArrow from './IconArrow.vue';
+
+
 import IconImage from './IconImage.vue';
 import IconRating from './IconRating.vue';
-import IconMaxsize from './IconMaxsize.vue';
 import IconBanner from './IconBanner.vue';
 import IconTable from './IconTable.vue';
 import IconSearch from './IconSearch.vue';
-import IconTriangle from './IconTriangle.vue';
+
 import IconSet from './IconSet.vue';
 import IconDatePicker from './IconDatePicker.vue';
-import IconClose from './IconClose.vue';
+
 import IconFile from './IconFile.vue';
 import IconDesc from './IconDesc.vue';
 import IconMenu from './IconMenu.vue';
@@ -36,7 +35,6 @@ import IconReset from './IconReset.vue';
 
 
 export {
-    IconChecked,
     IconCalendar,
     IconCheckbox,
     IconHome,
@@ -46,18 +44,15 @@ export {
     IconSidebar,
     IconKanban,
     IconTick,
-    IconDraggable,
-    IconArrow,
+    
     IconImage,
     IconRating,
-    IconMaxsize,
     IconBanner,
     IconTable,
     IconSearch,
-    IconTriangle,
     IconSet,
     IconDatePicker,
-    IconClose,
+    
     IconFile,
     IconDesc,
     IconMenu,

@@ -1,11 +1,10 @@
 <template>
     <div class="ComMenuDrag">
         <div class="cardDrag_container" ref="dragContainer">
-            <div class="cardDrag_item" v-for="(item, index) in menuList" :key="`${item.name}-${index}`"
-                :data-id="index"
+            <div class="cardDrag_item" v-for="(item, index) in menuList" :key="`${item.name}-${index}`" :data-id="index"
                 :class="{ 'drag-preview': previewIndex === index }">
                 <span class="cardDrag_icon">
-                    <component :is="Icons.IconDraggable" />
+                    <IconDraggable />
                 </span>
                 <span class="cardDrag_title_icon" @click="changeIcon(index)"
                     :class="{ 'active': changeIconIndex === index }">
@@ -26,6 +25,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useLinkData } from '../store/LinkStore';
 import * as Icons from '../components/icons';
+import { IconDraggable } from '../components/unIcons';
 import Sortable from 'sortablejs';
 
 const menuList = ref(useLinkData().menuList);
@@ -92,8 +92,8 @@ onUnmounted(() => {
 
     .cardDrag_container {
         width: 250px;
-        
-        > * {
+
+        >* {
             transition: all 0.3s ease;
         }
     }

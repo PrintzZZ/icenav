@@ -185,7 +185,7 @@ watchEffect(() => {
 .dock-container {
     display: flex;
     position: fixed;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
@@ -193,8 +193,8 @@ watchEffect(() => {
     .dock {
         display: flex;
         align-items: center;
-        background-color: var(--semi-color-bg-0);
-        backdrop-filter: blur(10px);
+        background-color: var(--semi-color-bg-4);
+        backdrop-filter: blur(5px);
         border-radius: 20px;
         padding: 10px;
         border: 1px solid var(--semi-color-border);
@@ -218,7 +218,8 @@ watchEffect(() => {
             .dock-divider {
                 height: 20px;
                 border: 1px solid var(--semi-color-text-3);
-                border-radius: 2px;
+                border-radius: 3px;
+                opacity: 0.3;
             }
 
             .dock-icon-divider {
@@ -266,8 +267,8 @@ watchEffect(() => {
                     width: 100%;
                     height: 100%;
                     font-size: 1.5rem;
-                    color: var(--semi-color-bg-0);
-                    background-color: rgba(var(--semi-blue-5), 1);
+                    color: #fff;
+                    background-color: var(--main-logo-color);
                     border-radius: 12px;
                 }
             }

@@ -331,7 +331,7 @@ defineExpose({
             color: var(--semi-color-text-0);
 
             .card_title_icon {
-                color: #4CC3FA;
+                color: var(--main-logo-color);
                 font-size: 30px;
                 margin-right: 5px;
                 position: relative;
@@ -452,6 +452,8 @@ defineExpose({
         .ant-card {
             width: 320px;
             transition: height 0.3s;
+            background-color: var(--semi-color-bg-0);
+        border: none;
         }
 
         .setPanel_right_left {

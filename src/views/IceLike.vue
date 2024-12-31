@@ -28,7 +28,7 @@
                                 </a-tooltip>
                             </div>
                         </a>
-                    </div>
+                    </div>  
                 </div>
             </a-tab-pane>
             <a-tab-pane key="1" tab="今日热点" v-if="!isMobile">
@@ -131,7 +131,8 @@ import { message } from 'ant-design-vue';
 import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import IceHot from './IceHot.vue';
-import { IconClose, IconWarning } from '../components/icons';
+import { IconWarning } from '../components/icons';
+import {  IconClose, } from '../components/unIcons';
 import Sortable from "sortablejs";
 import { debounce } from 'lodash-es';
 

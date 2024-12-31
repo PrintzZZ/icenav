@@ -70,6 +70,7 @@ const handleClick = () => {
     flex-direction: row;
     align-items: center;
     font-size: 0.9rem;
+    color: var(--semi-color-text-2);
 }
 
 .footer-bar-left .footer-iceooh {

@@ -412,6 +412,7 @@ mark {
   
   :root[data-theme='dark'] {
     
+    --main-logo-color: #00aaff;
     --semi-blue-0: 5, 49, 112;
     --semi-blue-1: 10, 70, 148;
     --semi-blue-2: 19, 92, 184;
@@ -436,7 +437,8 @@ mark {
     --semi-color-bg-1: #232429;
     --semi-color-bg-2: #35363c;
     --semi-color-bg-3: #43444a;
-    --semi-color-bg-main: #0A0A05;
+    --semi-color-bg-4: #1b1d1fa6;
+    --semi-color-bg-main: #1B1D1F;
     --semi-color-text-0: rgba(var(--semi-grey-0), 1);
     --semi-color-text-2: rgba(var(--semi-grey-0), .62);
     --semi-color-primary-light-default: rgba(var(--semi-blue-9), 1);
@@ -464,12 +466,13 @@ mark {
   }
   
   :root[data-theme='light'] {
+    --main-logo-color: #4D6BFE;
     --semi-blue-0: 234, 245, 255;
     --semi-blue-1: 203, 231, 254;
     --semi-blue-2: 152, 205, 253;
     --semi-blue-3: 101, 178, 252;
     --semi-blue-4: 50, 149, 251;
-    --semi-blue-5: 51,152,255;
+    --semi-blue-5: 77,107,254;
     --semi-blue-6: 0, 98, 214;
     --semi-blue-7: 0, 79, 179;
     --semi-blue-8: 0, 61, 143;
@@ -488,6 +491,7 @@ mark {
     --semi-color-bg-1: rgba(var(--semi-white), .9);
     --semi-color-bg-2: rgba(var(--semi-white), .8);
     --semi-color-bg-3: #f5f5f5;
+    --semi-color-bg-4: #ffffffcc;
     --semi-color-bg-main: #F1F5F8;
     --semi-color-nav-bg: rgba(var(--semi-white), 1);
     --semi-color-border: rgba(var(--semi-grey-9), .08);

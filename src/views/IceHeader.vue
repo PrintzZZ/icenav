@@ -109,7 +109,7 @@ const modelClose = () => {
     .ant-modal-content {
         display: flex;
         flex-direction: column;
-        background-color: var(--semi-color-bg-0);
+        background-color: var(--semi-color-bg-main);
     }
 
     .ant-modal-body {

@@ -46,10 +46,10 @@
           </div>
         </div>
         <a-back-top :target="iceContentDom" />
-        <Footer />
-        
+        <IceFooter />
       </div>
     </div>
+    
     <ComDocker />
   </a-config-provider>
 
@@ -67,7 +67,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import { IconRating } from './components/icons';
 import IceLike from './views/IceLike.vue'
 import IceSide from './views/IceSide.vue'
-import Footer from './views/Footer.vue';
+import IceFooter from './views/IceFooter.vue';
 import ComDocker from './views/ComDocker.vue';
 import { debounce } from 'lodash';
 
@@ -213,6 +213,7 @@ const cardStyle = computed(() => {
   justify-content: flex-start;
   align-items: center;
   flex: 1;
+  position: relative;
   // min-width: 900px;
 
   .ice_main_content {

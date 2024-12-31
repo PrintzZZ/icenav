@@ -1,5 +1,5 @@
 <template>
-    <div class="ice_search_content">
+    <div class="ice_search_content" :class="{'background_focus': !useSettingData().otherSettings.backgroundFocus}">
 
         <IceHeader />
         <div class="search_video_bg">
@@ -11,7 +11,7 @@
             <div v-if="backgroundType === 1" class="search_bg_img" :style="{'background-image': `url(${backgroundImgUrl})` ,'background-position': `center ${backgroundPosition}%`}"></div>
             <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
-        <div class="search_container" :style="{ color: fontColor }">
+        <div class="search_container" :style="{ color: fontColor }" >
             <div class="search_title" v-if="useSettingData().otherSettings.showTitle">
                 <h2>{{ useSettingData().otherSettings.searchTitle }}</h2>
             </div>
@@ -27,7 +27,8 @@
                 <input type="text" class="search_input" :placeholder="searchFrom.placeholder" v-model="searchQuery"
                     autocomplete="off" name="search_input" 
                     :style="{ 
-                        backgroundColor: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})` 
+                        backgroundColor: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})`,
+                        color: searchInputColor ? `#fff` : `#000` 
                     }"
                     />
                 <i class="close_icon" @click="clearSearch" v-if="searchQuery.length > 0">
@@ -59,7 +60,9 @@
 </template>
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
-import { IconSearch, IconTriangle, IconClose } from '../components/icons';
+import { IconSearch } from '../components/icons';
+
+import { IconTriangle, IconClose } from '../components/unIcons';
 import IceHeader from '../views/IceHeader.vue';
 import ComGetGold from '../views/ComGetGold.vue';
 import { useLinkData } from '../store/LinkStore';
@@ -170,13 +173,18 @@ onUnmounted(() => {
 
 </script>
 <style lang="less">
+.ice_search_content.background_focus{
+    padding-top:  30vh;
+    padding-bottom: calc(70vh - 250px);
+}
 .ice_search_content {
     width: 100%;
-    height: 450px;
+    // height: 50vh;
     // background-color: #071336a8;
-    padding-top: 120px;
-    padding-bottom: 200px;
+    padding-top:  10vh;
+    padding-bottom: 10vh;
     position: relative;
+    transition: padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
     .search_weather{
         position: absolute;
         top: 20px;
@@ -224,6 +232,7 @@ onUnmounted(() => {
         max-width: 800px;
         margin: 0 auto;
         padding: 0 20px;
+        height: 250px;
 
         .search_form {
             width: 100%;
@@ -274,7 +283,7 @@ onUnmounted(() => {
             color: #757575;
             cursor: pointer;
             padding: 0 10px;
-            border-right: #23232399 solid 2px;
+            border-right: #23232399 solid 1px;
             opacity: 0.3;
             transition: opacity 0.3s ease-in-out;
         }

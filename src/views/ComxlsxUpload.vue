@@ -60,7 +60,8 @@
 import { ref } from 'vue';
 import { useLinkData } from '../store/LinkStore';
 import { message } from 'ant-design-vue';
-import { IconUpload, IconFile, IconWarning, IconClose, IconChecked } from '../components/icons';
+import { IconUpload, IconFile, IconWarning  } from '../components/icons';
+import { IconChecked, IconClose, } from '../components/unIcons';
 import * as XLSX from 'xlsx'
 
 const fileList = ref([]);
