@@ -1911,11 +1911,6 @@ export const defaultData = {
               "title": "秒搜",
               "avatar": "/faviconPic/秒搜.png",
               "link": "https://miaosou.fun/"
-            },
-            {
-              "title": "盘有圈",
-              "avatar": "/faviconPic/盘有圈.png",
-              "link": "https://panyq.com/"
             }
           ]
         }

@@ -127,6 +127,7 @@
                     </div>
                 </a-tooltip>
             </a-card>
+            
         </div>
         <div class="setting_item ">
             <a-card style="width: 320px;height: 100px;">
@@ -163,6 +164,16 @@
                 </a-tooltip>
             </a-card>
         </div>
+
+        <div class="setting_item update_box">
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`检查更新`" placement="bottom">
+                    <ComUpdate />
+                </a-tooltip>
+            </a-card>
+        </div>
+
+
         <div class="setting_item get_gold_box">
             <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`${showGetGold ? '关闭今日进度' : '开启今日进度'}`" placement="bottom">
@@ -243,6 +254,7 @@ import { IconImage, IconLive, IconLight, IconDark,  IconKanban, IconImport, Icon
 import { IconShrink, IconExpand, IconMaximize, IconMinimize,IconSave, IconClose } from '../components/unIcons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
+import ComUpdate from './ComUpdate.vue';
 import LZString from 'lz-string';
 
 const allData = ref()
@@ -817,6 +829,10 @@ onMounted(() => {
             background-color: var(--semi-color-fill-0);
             transform: scale(1.15);
         }
+    }
+
+    .update_box{
+        width: 100px;
     }
 
     .export_box {

@@ -11,6 +11,7 @@ import IconGlobe from './IconGlobe.vue';
 import IconLanguage from './IconLanguage.vue';
 import IconSave from './IconSave.vue';
 import IconArchive from './IconArchive.vue';
+import IconSync from './IconSync.vue';
 
 export {
     IconShrink,
@@ -26,4 +27,5 @@ export {
     IconLanguage,
     IconSave,
     IconArchive,
+    IconSync,
 };
