@@ -49,22 +49,22 @@
         <IceFooter />
       </div>
     </div>
-    
+
     <ComDocker />
   </a-config-provider>
 
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted, onBeforeUpdate, watchEffect, computed } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUpdate, watchEffect, computed, h } from 'vue';
 import IceSearch from './views/IceSearch.vue'
 import { useLinkData } from './store/LinkStore';
 import { useSettingData } from './store/SettingStore';
 
-import { theme, message } from 'ant-design-vue'
+import { theme, message, notification, Button } from 'ant-design-vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 
 
-import { IconRating } from './components/icons';
+import { IconRating, IconToast } from './components/icons';
 import IceLike from './views/IceLike.vue'
 import IceSide from './views/IceSide.vue'
 import IceFooter from './views/IceFooter.vue';
@@ -87,10 +87,36 @@ const themeConfig = computed(() => ({
 //检测版本
 const checkVersion = () => {
   const version = useSettingData().otherSettings.iceVersion;
-  if (version != '0.0.1') {
-    message.warning('当前版本为' + version + ', 请更新到最新版本');
+  if (version != '0.0.2') {
+    openNotification();
   }
 }
+const openNotification = () => {
+  const key = `open${Date.now()}`;
+  notification.open({
+    message: '随便逛逛吧~CTRL+D收藏本站',
+    description: h('span', null, [
+      '支持多种自定义设置，全部导航数据私有化！尺寸颜色数量还有热点视图，支持导入导出表格编辑，快来试试吧~ ',
+      h('a', { style: 'color: #108ee9',href: 'https://txc.qq.com/products/679436/change-log', target: '_blank' }, '更新日志')
+    ]),
+    top: '40px',
+    style: {
+      width: '370px',
+    },
+    class: 'notification-custom-class',
+    icon: () => h(IconToast, { style: 'color: #108ee9' }),
+    key,
+    btn: h(Button, {
+      type: 'primary',
+      size: 'small',
+      style: 'margin-left: 10px;',
+      onClick: () => {
+        notification.close(key);
+        useSettingData().updateOtherSettings({ iceVersion: '0.0.2' });
+      }
+    }, () => '不再提示'),
+  });
+};
 
 // 当前选中的菜单索引
 const isNavCollapsed = ref(useSettingData().otherSettings.collapseSidebar);
@@ -133,7 +159,7 @@ const debouncedCheckSize = debounce(checkWindowSize, 200);
 
 onMounted(() => {
   checkWindowSize(); // 初始检查
-  // checkVersion();
+  checkVersion();
   window.addEventListener('resize', debouncedCheckSize);
   isNavCollapsed.value = useSettingData().otherSettings.collapseSidebar;
 });

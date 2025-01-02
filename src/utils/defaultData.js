@@ -2368,7 +2368,6 @@ export const defaultData = {
   }],
   backgroundList: ['jqbg01/index.html', 'jqbg02/index.html', 'jqbg03/index.html', 'jqbg04/index.html'],
   otherSettings: {
-    iceVersion: '0.0.1',
     defaultTheme: "light",
     backgroundTypeList: ["iframe", "img", "video"],
     backgroundType: 0,
