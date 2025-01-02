@@ -1,6 +1,8 @@
 <template>
     <div class="ice_header">
-        <div class="ice_header_left"></div>
+        <div class="ice_header_left">
+            <ComEasyTool />
+        </div>
         <div class="ice_header_right">
             <Comweather />
             <a-tooltip placement="bottom" title="切换主题">
@@ -49,6 +51,7 @@ import { useLinkData } from '../store/LinkStore';
 import ThemeSwitch from './ThemeSwitch.vue';
 import IceSetPanel from './IceSetPanel.vue';
 import Comweather from './ComWeather.vue';
+import ComEasyTool from './ComEasyTool.vue';
 // 切换背景
 const easySetClick = () => useLinkData().updateBackground();
 

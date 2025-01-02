@@ -239,8 +239,8 @@
 import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { useLinkData } from '../store/LinkStore';
-import { IconImage, IconLive, IconLight, IconDark, IconSave, IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
-import { IconShrink, IconExpand, IconMaximize, IconMinimize, IconClose } from '../components/unIcons';
+import { IconImage, IconLive, IconLight, IconDark,  IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
+import { IconShrink, IconExpand, IconMaximize, IconMinimize,IconSave, IconClose } from '../components/unIcons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
 import LZString from 'lz-string';

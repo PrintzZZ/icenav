@@ -8,17 +8,13 @@ import IconWarning from './IconWarning.vue';
 import IconSidebar from './IconSidebar.vue';
 import IconKanban from './IconKanban.vue';
 import IconTick from './IconTick.vue';
-
-
 import IconImage from './IconImage.vue';
 import IconRating from './IconRating.vue';
 import IconBanner from './IconBanner.vue';
 import IconTable from './IconTable.vue';
 import IconSearch from './IconSearch.vue';
-
 import IconSet from './IconSet.vue';
 import IconDatePicker from './IconDatePicker.vue';
-
 import IconFile from './IconFile.vue';
 import IconDesc from './IconDesc.vue';
 import IconMenu from './IconMenu.vue';
@@ -28,7 +24,6 @@ import Icontabs from './Icontabs.vue';
 import IconDark from './IconDark.vue';
 import IconLight from './IconLight.vue';
 import IconIceooh from './IconIceooh.vue';
-import IconSave from './IconSave.vue';
 import IconImport from './IconImport.vue';
 import IconExport from './IconExport.vue';
 import IconReset from './IconReset.vue';
@@ -44,7 +39,6 @@ export {
     IconSidebar,
     IconKanban,
     IconTick,
-    
     IconImage,
     IconRating,
     IconBanner,
@@ -52,7 +46,6 @@ export {
     IconSearch,
     IconSet,
     IconDatePicker,
-    
     IconFile,
     IconDesc,
     IconMenu,
@@ -62,7 +55,6 @@ export {
     IconDark,
     IconLight,
     IconIceooh,
-    IconSave,
     IconImport,
     IconExport,
     IconReset,

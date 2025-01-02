@@ -14,6 +14,12 @@ export const defaultData = {
               "link": "https://chatgpt.com/"
             },
             {
+              "title": "DeepSeek",
+              "avatar": "/faviconPic/DeepSeek.png",
+              "desc": "深度求索AI产品。",
+              "link": "https://www.deepseek.com/"
+            },
+            {
               "title": "通义千问",
               "avatar": "/faviconPic/通义千问.png",
               "desc": "阿里AI产品。文件解析出乎意料的好。",
@@ -2377,7 +2383,7 @@ export const defaultData = {
     backgroundFocus: true, // 背景是否聚焦
     mask: 0.5,
     maskBlur: 2,
-    searchTitle: "学术搜索引擎",
+    searchTitle: "冰屋导航Iceooh",
     showTitle: true,
     fontColor: "#ffffff",
     searchInputColor: true,
@@ -2397,5 +2403,6 @@ export const defaultData = {
     fontFamily: 'CustomFontName', // 字体
     collapseSidebar: true, // 默认展开侧边栏
     dockShow: true, // 默认显示dock
+    toolList: [], // 导航工具列表
   }
 }
