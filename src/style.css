@@ -411,8 +411,9 @@ mark {
   }
   
   :root[data-theme='dark'] {
-    
+    --semi-red-5:252, 114, 90;
     --main-logo-color: #00aaff;
+
     --semi-blue-0: 5, 49, 112;
     --semi-blue-1: 10, 70, 148;
     --semi-blue-2: 19, 92, 184;
@@ -467,6 +468,7 @@ mark {
   
   :root[data-theme='light'] {
     --main-logo-color: #4D6BFE;
+    --semi-red-5:249,57,32    ;
     --semi-blue-0: 234, 245, 255;
     --semi-blue-1: 203, 231, 254;
     --semi-blue-2: 152, 205, 253;

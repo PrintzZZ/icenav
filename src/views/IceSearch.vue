@@ -55,6 +55,7 @@
                 </ul>
             </div>
         </div>
+        <ComTodoList style="position: absolute;bottom: 106px;right: 10px;z-index: 100;" v-if="isMobile"/>
         <ComGetGold style="position: absolute;bottom: 10px;right: 10px;z-index: 100;" v-if="isMobile"/>
     </div>
 </template>
@@ -65,6 +66,7 @@ import { IconSearch } from '../components/icons';
 import { IconTriangle, IconClose } from '../components/unIcons';
 import IceHeader from '../views/IceHeader.vue';
 import ComGetGold from '../views/ComGetGold.vue';
+import ComTodoList from '../views/ComTodoList.vue';
 import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import { IndexDBCache } from '../utils/indexedDB'
