@@ -248,28 +248,31 @@ import LZString from 'lz-string';
 const showDonateModel = ref(false)
 const settings = useSettingData().otherSettings;
 
-
+// 首页高度
 const backgroundFocusChange = () => {
     settings.backgroundFocus = !settings.backgroundFocus
     message.success(`首页调整为${settings.backgroundFocus ? '信息' : '简洁'}`);
 }
 
+// todo列表
 const todoListShow = () => {
     settings.todoListShow = !settings.todoListShow
     message.success(`todo列表已${settings.todoListShow ? '隐藏' : '显示'}`);
 }
 
+// dock栏
 const dockShow = () => {
     settings.dockShow = !settings.dockShow
     message.success(`dock栏已${settings.dockShow ? '显示' : '隐藏'}`);
 }
 
-
+// 打赏
 const closeGetGold = () => {
     settings.showGetGold = !settings.showGetGold
     message.success(`已${settings.showGetGold ? '开启' : '关闭'}今日进度`);
 }
 
+// 侧边栏
 const collapseSidebar = () => {
     settings.collapseSidebar = !settings.collapseSidebar
     message.success(`调整为默认${settings.collapseSidebar ? '收起' : '展开'}侧边栏`);
@@ -1119,7 +1122,7 @@ onMounted(() => {
 
         .show_item_img_mask {
             position: absolute;
-            width: 276px;
+            width: 280px;
             height: 100px;
             // top: calc(20px + 30px + 10px);
             // left: 20px;

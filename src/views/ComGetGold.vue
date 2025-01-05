@@ -1,6 +1,6 @@
 <template>
 
-    <div class="earnings-container" v-if="showGetGold">
+    <div class="earnings-container" v-if="useSettingData().otherSettings.showGetGold">
         <transition-group name="earnings-fade" tag="div">
             <div class="earnings-card earnings-setting" key="setting">
                 <i class="icon-setting" @click="earningsOpen = true;">
@@ -85,8 +85,7 @@
                     <span class="label">文字颜色</span>
                     <a-input-group compact style="width: 220px">
                         <a-select v-model:value="textColor" style="width: 50%">
-                            <a-select-option v-for="item in textOptions" :value="item.value">{{ item.label
-                                }}</a-select-option>
+                            <a-select-option v-for="item in textOptions" :value="item.value">{{ item.label }}</a-select-option>
                         </a-select>
                         <a-input v-model:value="textColor" style="width: 50%" />
                     </a-input-group>
@@ -123,22 +122,13 @@ const workHoursPerDay = computed(() => {
     const endTimeInMinutes = endHour.value * 60 + endMinute.value;
     return (endTimeInMinutes - startTimeInMinutes) / 60;
 });
-// const showGetGold = useSettingData().otherSettings.showGetGold;
-const showGetGold = ref(false)
-watchEffect(() => {
-    showGetGold.value = useSettingData().otherSettings.showGetGold;
-})
 
-const showSettings = ref(false);
-const hover = ref(false);
 const earningsOpen = ref(false);
-
 const Currency = ref('¥');
-
 const textColor = ref(['#FFFFFF']);
 const textOptions = ref([{ value: '#FFFFFF', label: '白色' }, { value: '#000000', label: '黑色' },]);
 
-let colorList = [
+const colorList = [
     { value: 'blue', lable: '蓝色', proColor: '#0095EE', backColor: '#95D8F8' },
     { value: 'orange', lable: '橙色', proColor: '#FC8800', backColor: '#FED998' },
     { value: 'red', lable: '红色', proColor: '#F93920', backColor: '#FDB7A5' },
@@ -256,7 +246,6 @@ onMounted(() => {
         monthlySalary: monthlySalary.value,
         workDays: workDays.value,
         currency: Currency.value,
-        showGetGold: showGetGold,
         textColor: textColor.value,
         progressColor: progressColor.value
     };
@@ -279,9 +268,9 @@ const tempSettings = ref({
     monthlySalary: monthlySalary.value,
     workDays: workDays.value,
     currency: Currency.value,
-    showGetGold: showGetGold.value,
     textColor: textColor.value,
-    progressColor: progressColor.value
+    progressColor: progressColor.value,
+    titleText: showMainText.value
 });
 
 // 工作时间范围
@@ -309,7 +298,6 @@ const saveSettings = () => {
 
     // 保存到 SettingStore
     useSettingData().updateOtherSettings({
-        showGetGold: tempSettings.value.showGetGold,
         monthlySalary: monthlySalary.value,
         startHour: startHour.value,
         endHour: endHour.value,
@@ -333,7 +321,6 @@ const cancelSettings = () => {
         monthlySalary: monthlySalary.value,
         workDays: workDays.value,
         currency: Currency.value,
-        showGetGold: showGetGold.value,
         textColor: textColor.value,
         progressColor: progressColor.value
     };
