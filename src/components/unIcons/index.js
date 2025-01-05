@@ -12,6 +12,11 @@ import IconLanguage from './IconLanguage.vue';
 import IconSave from './IconSave.vue';
 import IconArchive from './IconArchive.vue';
 import IconSync from './IconSync.vue';
+import IconCheckList from './IconCheckList.vue';
+import IconList from './IconList.vue';
+import IconCoffeeDark from './IconCoffeeDark.vue';
+import IconCoffeeLight from './IconCoffeeLight.vue';
+
 
 export {
     IconShrink,
@@ -28,4 +33,8 @@ export {
     IconSave,
     IconArchive,
     IconSync,
+    IconCheckList,
+    IconList,
+    IconCoffeeDark,
+    IconCoffeeLight,
 };

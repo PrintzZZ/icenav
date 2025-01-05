@@ -1908,11 +1908,10 @@ export const defaultData = {
         {
           "name": "网盘搜索",
           "item": [{
-              "title": "秒搜",
-              "avatar": "/faviconPic/秒搜.png",
-              "link": "https://miaosou.fun/"
-            }
-          ]
+            "title": "秒搜",
+            "avatar": "/faviconPic/秒搜.png",
+            "link": "https://miaosou.fun/"
+          }]
         }
       ]
     }
@@ -2397,6 +2396,15 @@ export const defaultData = {
     fontFamily: 'CustomFontName', // 字体
     collapseSidebar: true, // 默认展开侧边栏
     dockShow: true, // 默认显示dock
-    toolList: [], // 导航工具列表
-  }
+    todoListShow: true, // 默认显示todo列表
+  },
+  todoList: [{
+      text: '任务1: 点击完成',
+      completed: false
+    },
+    {
+      text: '任务2: 增加与删除',
+      completed: false
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="ice_search_content" :class="{'background_focus': !useSettingData().otherSettings.backgroundFocus}">
+    <div class="ice_search_content" :class="{ 'background_focus': !useSettingData().otherSettings.backgroundFocus }">
 
         <IceHeader />
         <div class="search_video_bg">
@@ -8,29 +8,29 @@
             <div v-if="backgroundType === 1" class="search_bg_mask"
                 :style="`backdrop-filter: blur(${backgroundMaskBlur}px);background-color: rgba(0, 0, 0, ${backgroundMask});`">
             </div>
-            <div v-if="backgroundType === 1" class="search_bg_img" :style="{'background-image': `url(${backgroundImgUrl})` ,'background-position': `center ${backgroundPosition}%`}"></div>
+            <div v-if="backgroundType === 1" class="search_bg_img"
+                :style="{ 'background-image': `url(${backgroundImgUrl})`, 'background-position': `center ${backgroundPosition}%` }">
+            </div>
             <video v-if="backgroundType === 2" class="search_bg" src="" autoplay loop muted></video>
         </div>
-        <div class="search_container" :style="{ color: fontColor }" >
+        <div class="search_container" :style="{ color: fontColor }">
             <div class="search_title" v-if="useSettingData().otherSettings.showTitle">
                 <h2>{{ useSettingData().otherSettings.searchTitle }}</h2>
             </div>
             <div class="search_menu">
                 <div class="search_menu_line" :style="{ left: lineStyle.left + 'px', width: lineStyle.width + 'px' }">
                 </div>
-                <div class="search_menu_item"  :class="{ active: menu.active }" v-for="(menu, index) in searchMenu"
-                    :key="index" @click="menuClick(index, $event)"  >
+                <div class="search_menu_item" :class="{ active: menu.active }" v-for="(menu, index) in searchMenu"
+                    :key="index" @click="menuClick(index, $event)">
                     <span class="search_menu_name">{{ menu.name }}</span>
                 </div>
             </div>
             <form @submit.prevent="handleSubmit" method="get" target="_blank" class="search_form">
                 <input type="text" class="search_input" :placeholder="searchFrom.placeholder" v-model="searchQuery"
-                    autocomplete="off" name="search_input" 
-                    :style="{ 
+                    autocomplete="off" name="search_input" :style="{
                         backgroundColor: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})`,
-                        color: searchInputColor ? `#fff` : `#000` 
-                    }"
-                    />
+                        color: searchInputColor ? `#fff` : `#000`
+                    }" />
                 <i class="close_icon" @click="clearSearch" v-if="searchQuery.length > 0">
                     <IconClose />
                 </i>
@@ -45,9 +45,9 @@
                     <li v-for="(item, itemindex) in searchMenu[searchMenuActiveIndex].engines" :key="itemindex"
                         class="search_list_item" :class="{ active: searchListActiveIndex == itemindex }"
                         @click="listClick(itemindex)">
-                        <i class="search_list_icon" :style="{ 
-                        color: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})` 
-                    }">
+                        <i class="search_list_icon" :style="{
+                            color: searchInputColor ? `rgba(0, 0, 0, ${searchInputOpacity})` : `rgba(255, 255, 255, ${searchInputOpacity})`
+                        }">
                             <IconTriangle />
                         </i>
                         {{ item.name }}
@@ -55,8 +55,10 @@
                 </ul>
             </div>
         </div>
-        <ComTodoList style="position: absolute;bottom: 106px;right: 10px;z-index: 100;" v-if="isMobile"/>
-        <ComGetGold style="position: absolute;bottom: 10px;right: 10px;z-index: 100;" v-if="isMobile"/>
+        <div class="search_footer" v-if="isMobile">
+            <ComTodoList />
+            <ComGetGold />
+        </div>
     </div>
 </template>
 <script setup>
@@ -85,13 +87,13 @@ const searchFrom = ref({
 // 监听窗口大小变化
 const isMobile = ref(false);
 const checkWindowSize = () => {
-  const window_width = window.innerWidth;
-  // 根据不同宽度设置不同状态
-  if (window_width < 768) {
-    isMobile.value = false;
-  } else {
-    isMobile.value = true;
-  }
+    const window_width = window.innerWidth;
+    // 根据不同宽度设置不同状态
+    if (window_width < 768) {
+        isMobile.value = false;
+    } else {
+        isMobile.value = true;
+    }
 };
 
 const menuClick = (index, event) => {
@@ -146,8 +148,8 @@ const loadBackgroundImage = async () => {
         if (allData && allData.length > 0) {
             const imageFile = allData[0].imageFile;
             backgroundImage.value = URL.createObjectURL(imageFile);
-            useSettingData().updateOtherSettings({  
-                backgroundImgUrl:  backgroundImage.value 
+            useSettingData().updateOtherSettings({
+                backgroundImgUrl: backgroundImage.value
             });
         }
     } catch (err) {
@@ -156,8 +158,8 @@ const loadBackgroundImage = async () => {
 };
 
 
-onMounted(() => {   
-    if(backgroundType.value === 1){
+onMounted(() => {
+    if (backgroundType.value === 1) {
         loadBackgroundImage();
     }
     checkWindowSize()
@@ -175,19 +177,31 @@ onUnmounted(() => {
 
 </script>
 <style lang="less">
-.ice_search_content.background_focus{
-    padding-top:  30vh;
+.search_footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ice_search_content.background_focus {
+    padding-top: 30vh;
     padding-bottom: calc(70vh - 250px);
 }
+
 .ice_search_content {
     width: 100%;
     // height: 50vh;
     // background-color: #071336a8;
-    padding-top:  10vh;
+    padding-top: 10vh;
     padding-bottom: 10vh;
     position: relative;
     transition: padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
-    .search_weather{
+
+    .search_weather {
         position: absolute;
         top: 20px;
         left: 20px;
@@ -307,6 +321,11 @@ onUnmounted(() => {
             // background-color: rgba(0, 0, 0, 0.6);
             outline: 0;
             border: none;
+
+            &::placeholder {
+                opacity: 0.6;
+                mix-blend-mode: difference;
+            }
         }
 
         .search_title {

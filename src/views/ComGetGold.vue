@@ -1,9 +1,8 @@
 <template>
 
-    <div class="earnings-container" v-if="showGetGold" @mouseleave="showSettings = false"
-        @mouseenter="showSettings = true">
-        <transition name="earnings-fade">
-            <div class="earnings-card earnings-setting" v-if="showSettings">
+    <div class="earnings-container" v-if="showGetGold">
+        <transition-group name="earnings-fade" tag="div">
+            <div class="earnings-card earnings-setting" key="setting">
                 <i class="icon-setting" @click="earningsOpen = true;">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                         focusable="false" aria-hidden="true">
@@ -18,14 +17,16 @@
                 </i>
             </div>
 
-            <div class="earnings-card" v-else>
+            <div class="earnings-card earnings-main" key="card">
                 <div class="earnings-header">
                     <p class="title" v-if="progressWidth == 0">
-                        <span class="title-start" :style="{ color: textColor }">今天预计可以赚 {{ Currency }} {{ dailySalary.toFixed(2) }}</span>
+                        <span class="title-start" :style="{ color: textColor }">今天预计可以赚 {{ Currency }} {{
+                            dailySalary.toFixed(2) }}</span>
                     </p>
                     <p class="title" v-if="progressWidth > 0 && progressWidth < 100">
                         <span class="icon">💰</span>
-                        <span class="title-text" :style="{ color: textColor }">{{ showMainText }}{{ Currency }}{{ currentEarnings.toFixed(2) }}</span>
+                        <span class="title-text" :style="{ color: textColor }">{{ showMainText }}{{ Currency }} {{
+                            currentEarnings.toFixed(2) }}</span>
                     </p>
                     <p class="title" v-if="progressWidth >= 100">
                         <span class="icon">💼</span>
@@ -35,19 +36,20 @@
                 </div>
                 <div class="earnings-footer">
                     <div class="progress-bar" :style="{ backgroundColor: showColor.backColor, }">
-                        <div class="progress" :style="{ width: progressWidth + '%' ,backgroundColor: showColor.proColor}"></div>
+                        <div class="progress"
+                            :style="{ width: progressWidth + '%', backgroundColor: showColor.proColor }"></div>
                     </div>
                 </div>
             </div>
-        </transition>
+        </transition-group>
 
-        <a-modal v-model:open="earningsOpen" title="💰 薪酬设置" @ok="saveSettings" @cancel="cancelSettings"
+        <a-modal v-model:open="earningsOpen" title="💰 自定义设置" @ok="saveSettings" @cancel="cancelSettings"
             :maskClosable="false" width="400px">
             <div class="earnings-settings">
                 <div class="settings-item">
-                    <span class="label">月薪设置</span>
+                    <span class="label">每月薪酬</span>
                     <a-input-number v-model:value="tempSettings.monthlySalary" :min="0" :max="1000000"
-                        :addon-before="Currency" style="width: 200px" />
+                        :addon-before="Currency" style="width: 220px" />
                 </div>
 
                 <div class="settings-item">
@@ -63,24 +65,28 @@
 
                 <div class="settings-item">
                     <span class="label">每月工作天数</span>
-                    <a-input-number v-model:value="tempSettings.workDays" :min="1" :max="31" style="width: 200px" />
+                    <a-input-number v-model:value="tempSettings.workDays" :min="1" :max="31" style="width: 220px" />
                 </div>
 
                 <div class="settings-item">
-                    <span class="label">货币符号</span>
-                    <a-select v-model:value="tempSettings.currency" style="width: 200px">
-                        <a-select-option value="¥">人民币 (¥)</a-select-option>
-                        <a-select-option value="$">美元 ($)</a-select-option>
-                        <a-select-option value="€">欧元 (€)</a-select-option>
-                        <a-select-option value="£">英镑 (£)</a-select-option>
-                    </a-select>
+                    <span class="label">薪酬符号</span>
+                    <a-input-group compact style="width: 220px">    
+                        <a-select v-model:value="tempSettings.currency" style="width: 50%">
+                            <a-select-option value="¥">人民币</a-select-option>
+                            <a-select-option value="$">美元</a-select-option>
+                            <a-select-option value="€">欧元</a-select-option>
+                            <a-select-option value="👻">👻</a-select-option>
+                        </a-select>
+                        <a-input v-model:value="tempSettings.currency" style="width: 50%" />
+                    </a-input-group>
                 </div>
 
                 <div class="settings-item">
                     <span class="label">文字颜色</span>
-                    <a-input-group compact style="width: 200px">
+                    <a-input-group compact style="width: 220px">
                         <a-select v-model:value="textColor" style="width: 50%">
-                            <a-select-option v-for="item in textOptions" :value="item.value">{{ item.label }}</a-select-option>
+                            <a-select-option v-for="item in textOptions" :value="item.value">{{ item.label
+                                }}</a-select-option>
                         </a-select>
                         <a-input v-model:value="textColor" style="width: 50%" />
                     </a-input-group>
@@ -88,7 +94,7 @@
 
                 <div class="settings-item">
                     <span class="label">进度颜色</span>
-                    <a-select v-model:value="progressColor" style="width: 200px">
+                    <a-select v-model:value="progressColor" style="width: 220px">
                         <a-select-option value="blue">蓝色</a-select-option>
                         <a-select-option value="orange">橙色</a-select-option>
                         <a-select-option value="red">红色</a-select-option>
@@ -98,7 +104,6 @@
             </div>
         </a-modal>
     </div>
-
 </template>
 
 <script setup>
@@ -120,11 +125,12 @@ const workHoursPerDay = computed(() => {
 });
 // const showGetGold = useSettingData().otherSettings.showGetGold;
 const showGetGold = ref(false)
-watchEffect(()=>{
+watchEffect(() => {
     showGetGold.value = useSettingData().otherSettings.showGetGold;
 })
 
-const showSettings = ref(false)
+const showSettings = ref(false);
+const hover = ref(false);
 const earningsOpen = ref(false);
 
 const Currency = ref('¥');
@@ -133,13 +139,13 @@ const textColor = ref(['#FFFFFF']);
 const textOptions = ref([{ value: '#FFFFFF', label: '白色' }, { value: '#000000', label: '黑色' },]);
 
 let colorList = [
-    {value:'blue',lable:'蓝色',proColor:'#0095EE',backColor:'#95D8F8'},
-    {value:'orange',lable:'橙色',proColor:'#FC8800',backColor:'#FED998'},
-    {value:'red',lable:'红色',proColor:'#F93920',backColor:'#FDB7A5'},
-    {value:'green',lable:'绿色',proColor:'#3BB346',backColor:'#A4E0A7'}
+    { value: 'blue', lable: '蓝色', proColor: '#0095EE', backColor: '#95D8F8' },
+    { value: 'orange', lable: '橙色', proColor: '#FC8800', backColor: '#FED998' },
+    { value: 'red', lable: '红色', proColor: '#F93920', backColor: '#FDB7A5' },
+    { value: 'green', lable: '绿色', proColor: '#3BB346', backColor: '#A4E0A7' }
 ]
 const progressColor = ref('blue');
-const showColor = computed(()=>{
+const showColor = computed(() => {
     return colorList.find(item => item.value === progressColor.value);
 })
 
@@ -286,8 +292,8 @@ const workTimeRange = ref([
 
 // 保存设置
 const saveSettings = () => {
-    if (!tempSettings.value.monthlySalary || !workTimeRange.value[0] || !workTimeRange.value[1]) {
-        message.error('请填写完整信息');
+    if (!tempSettings.value.monthlySalary || !workTimeRange.value[0] || !workTimeRange.value[1] || !tempSettings.value.workDays) {
+        message.error('你还有内容未填写哦~');
         return;
     }
 
@@ -357,26 +363,21 @@ const cancelSettings = () => {
 .earnings-container {
     width: var(--earnings-card-width);
     height: var(--earnings-card-height);
-
-    .earnings-fade-enter-from,
-    .earnings-fade-leave-to {
-        opacity: 0;
-        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
-    }
-
-    .earnings-fade-leave-active {
-        position: absolute;
-
-    }
+    position: relative;
+    overflow: hidden;
 
     .earnings-setting {
-        display: flex;
         flex-direction: row;
         align-content: center;
         justify-content: center;
         align-items: center;
         font-size: 30px;
         cursor: pointer;
+        visibility: hidden;
+        animation: flip-out .3s ease-in forwards;
+        position: absolute;
+        top: 0;
+        left: 0;
 
         .icon-setting {
             width: calc(var(--earnings-card-height) - 30px);
@@ -403,6 +404,8 @@ const cancelSettings = () => {
         height: 100%;
         // border-bottom: 1px solid #ffffff9c;
         background-color: var(--earnings-card-background-color);
+        display: flex;
+
 
         .earnings-header {
             display: flex;
@@ -423,6 +426,7 @@ const cancelSettings = () => {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 margin: 0;
+                cursor: pointer;
 
                 .icon {
                     font-size: var(--earnings-font-size);
@@ -432,6 +436,7 @@ const cancelSettings = () => {
 
                 .title-text {
                     margin-left: 20px;
+                    cursor: pointer;
                 }
             }
 
@@ -440,6 +445,7 @@ const cancelSettings = () => {
                 font-weight: 400;
                 color: var(--earnings-font-color-2);
                 margin: 0;
+                cursor: pointer;
             }
         }
 
@@ -471,6 +477,51 @@ const cancelSettings = () => {
                 }
             }
         }
+    }
+
+    .earnings-main {
+        display: block;
+        animation: flip-in .3s ease-out forwards;
+    }
+
+    &:hover {
+        .earnings-setting {
+            display: flex;
+            animation: flip-in .3s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .earnings-main {
+            animation: flip-out .3s ease-in forwards;
+        }
+    }
+}
+
+@keyframes flip-in {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    }
+
+    100% {
+        opacity: 1;
+        visibility: visible;
+        transform: perspective(400px) rotate3d(1, 0, 0, 0deg);
+    }
+}
+
+@keyframes flip-out {
+    0% {
+        opacity: 1;
+        visibility: visible;
+        transform: perspective(400px) rotate3d(1, 0, 0, 0deg);
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
     }
 }
 
@@ -504,7 +555,7 @@ const cancelSettings = () => {
 }
 
 .earnings-settings {
-    padding: 10px;
+    padding: 10px 0;
 
     .settings-item {
         display: flex;
@@ -527,7 +578,7 @@ const cancelSettings = () => {
             display: flex;
             align-items: center;
             gap: 8px;
-            width: 200px;
+            width: 220px;
 
             .time-separator {
                 color: var(--semi-color-text-2);

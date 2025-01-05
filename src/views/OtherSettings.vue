@@ -58,7 +58,7 @@
             <a-card class="title_card" style="height: 100px;">
                 <div class="other_settings_title">标题设置</div>
                 <div class="title_card_bottom">
-                    <a-input v-model:value="titleState.value" :placeholder="useSettingData().otherSettings.searchTitle"
+                    <a-input v-model:value="titleState.value" :placeholder="settings.searchTitle"
                         :disabled="!titleState.show" style="width: 180px;" />
                     <a-switch v-model:checked="titleState.show" checked-children="显" un-checked-children="隐" />
                 </div>
@@ -88,46 +88,28 @@
         <div class="disPaly_box setting_item">
             <a-card style="width: 100px;height: 100px;cursor: pointer;" @click="toggleTheme">
                 <a-tooltip :title="`切换主题`" placement="bottom">
-                    <div class="theme_switch_icon easy_item" :class="{ 'isDark': isDarkMode }">
-                        <IconLight v-if="isDarkMode" />
-                        <IconDark v-else />
+                    <div class="theme_switch_icon easy_item" :class="{ 'isDark': settings.defaultTheme === 'dark' }">
+                        <component :is="settings.defaultTheme === 'dark' ? IconLight : IconDark" />
                     </div>
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`每行显示${cardNum}个卡片`" placement="bottom">
+                <a-tooltip :title="`每行显示${settings.cardNum}个卡片`" placement="bottom">
                     <div class="disPaly_title easy_item" @click="changeCardNum">
-                        {{ cardNum }}
+                        {{ settings.cardNum }}
                     </div>
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
                 <a-tooltip :title="`打赏作者`" placement="bottom">
-                    <div class="donate easy_item" @click="showDonate">
-                        <i>
-                            <svg t="1734327317060" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" p-id="10132" width="1em" height="1em">
-                                <path
-                                    d="M669.9 960.2h-321c-37 0-68.1-28.9-70.9-65.7l-58.8-666.9v-0.9c0-30.7 25-55.7 55.7-55.7h469c30.7 0 55.7 25 55.7 55.7l-0.1 1.8-58.8 666.2c-2.7 36.7-33.9 65.5-70.8 65.5zM260.3 226L319 891.1c1.2 15.8 14.3 27.9 29.9 27.9h320.9c15.6 0 28.7-12.2 29.9-27.7L758.4 226c-0.4-7.7-6.8-13.9-14.6-13.9h-469c-7.7 0-14.1 6.2-14.5 13.9z"
-                                    :fill="`${isDarkMode ? '#FFF' : '#55422D'}`" p-id="10133"></path>
-                                <path
-                                    d="M219.9 340.4l36.3 444.4c0.8 10.3 9.4 18.2 19.7 18.2h467c10.3 0 18.9-7.9 19.7-18.2l36.3-444.4c0.9-11.5-8.2-21.4-19.7-21.4H239.6c-11.6 0-20.7 9.8-19.7 21.4z"
-                                    :fill="`${isDarkMode ? '#00835e' : '#006440'}`" p-id="10134"></path>
-                                <path
-                                    d="M740 176.1H285.1c-17.1 0-28.7-17.2-22.4-33.1l13.9-34.9c3.7-9.2 12.5-15.2 22.4-15.2h427.1c9.9 0 18.8 6 22.4 15.2l13.9 34.9c6.4 15.9-5.3 33.1-22.4 33.1z"
-                                    :fill="`${isDarkMode ? '#FFF' : '#55422D'}`" p-id="10135"></path>
-                                <path
-                                    d="M787.6 226.7H231.2c-9.1 0-16.1-8.2-14.6-17.2l12-71.8c1.2-7.1 7.4-12.3 14.6-12.3h532.4c7.2 0 13.4 5.2 14.6 12.3l12 71.8c1.5 9-5.5 17.2-14.6 17.2zM669.6 93.8h63.9V66.7c0-1.4-1.1-2.5-2.5-2.5h-58.9c-1.4 0-2.5 1.1-2.5 2.5v27.1z"
-                                    :fill="`${isDarkMode ? '#FFF' : '#55422D'}`" p-id="10136"></path>
-                                <path
-                                    d="M421.4 637.9c-6.1-0.1-11.9-3-15.5-7.9-25.8-33.9-13.3-93.2 30.4-136.9 44.2-44.2 104.3-56.5 138-29.5 2 1.6 1.5 4.8-1 5.6-8.2 2.8-24.9 11.5-47.9 39-27.8 33.3-20.2 57.7-60.1 103.7-19 22-33.7 26.1-43.9 26zM596.7 484c6.7 0 12.9 3.3 16.9 8.7 25.1 34 12.4 92.7-31 136.1-44.2 44.2-104.3 56.5-138 29.5-2-1.6-1.5-4.8 1-5.6 8.2-2.8 24.9-11.5 47.9-39 27.8-33.3 20.2-57.7 60.1-103.7 18.4-21.5 32.8-25.9 43.1-26z"
-                                    fill="#FFFFFF" p-id="10137"></path>
-                            </svg>
+                    <div class="donate easy_item" @click="showDonateModel = true">
+                        <i class="bounce-icon">
+                            <component :is="settings.defaultTheme === 'dark' ? IconCoffeeDark : IconCoffeeLight" />
                         </i>
                     </div>
                 </a-tooltip>
             </a-card>
-            
+
         </div>
         <div class="setting_item ">
             <a-card style="width: 320px;height: 100px;">
@@ -176,9 +158,9 @@
 
         <div class="setting_item get_gold_box">
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`${showGetGold ? '关闭今日进度' : '开启今日进度'}`" placement="bottom">
+                <a-tooltip :title="`${settings.showGetGold ? '关闭今日进度' : '开启今日进度'}`" placement="bottom">
                     <i class="icon_box" @click="closeGetGold"
-                        :style="{ 'filter': `blur(${showGetGold ? '0' : '5'}px)` }">
+                        :style="{ 'filter': `blur(${settings.showGetGold ? '0' : '5'}px)` }">
                         <svg class="icon" style="vertical-align: middle;fill: currentColor;overflow: hidden;"
                             viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9890"
                             width="1em" height="1em">
@@ -205,27 +187,32 @@
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`当前默认${useSettingData().otherSettings.collapseSidebar ? '收起' : '展开'}侧边栏`"
-                    placement="bottom">
+                <a-tooltip :title="`当前默认${settings.collapseSidebar ? '收起' : '展开'}侧边栏`" placement="bottom">
                     <span class="collapse_box" @click="collapseSidebar">
-                        <component :is="useSettingData().otherSettings.collapseSidebar ? IconSidebar : IconKanban"
+                        <component :is="settings.collapseSidebar ? IconSidebar : IconKanban"
                             style="font-size: 0.8em;" />
                     </span>
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`Dock栏已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`" placement="bottom">
+                <a-tooltip :title="`Dock栏已${settings.dockShow ? '显示' : '隐藏'}`" placement="bottom">
                     <span class="collapse_box" @click="dockShow">
-                        <component :is="useSettingData().otherSettings.dockShow ? IconExpand : IconShrink"
+                        <component :is="settings.dockShow ? IconExpand : IconShrink" style="font-size: 0.8em;" />
+                    </span>
+                </a-tooltip>
+            </a-card>
+            <a-card style="width: 100px;height: 100px;">
+                <a-tooltip :title="`当前首页为${settings.backgroundFocus ? '信息' : '简洁'}`" placement="bottom">
+                    <span class="collapse_box" @click="backgroundFocusChange">
+                        <component :is="settings.backgroundFocus ? IconMinimize : IconMaximize"
                             style="font-size: 0.8em;" />
                     </span>
                 </a-tooltip>
             </a-card>
             <a-card style="width: 100px;height: 100px;">
-                <a-tooltip :title="`当前首页为${useSettingData().otherSettings.backgroundFocus ? '信息' : '简洁'}`" placement="bottom">
-                    <span class="collapse_box" @click="backgroundFocusChange">
-                        <component :is="useSettingData().otherSettings.backgroundFocus ?  IconMinimize: IconMaximize"
-                            style="font-size: 0.8em;" />
+                <a-tooltip :title="`${settings.todoListShow ? '显示' : '隐藏'}todo列表`" placement="bottom">
+                    <span class="collapse_box" @click="todoListShow" style="font-size: 30px;">
+                        <component :is="settings.todoListShow ? IconList : IconCheckList" />
                     </span>
                 </a-tooltip>
             </a-card>
@@ -250,55 +237,69 @@
 import { reactive, ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useSettingData } from '../store/SettingStore';
 import { useLinkData } from '../store/LinkStore';
-import { IconImage, IconLive, IconLight, IconDark,  IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
-import { IconShrink, IconExpand, IconMaximize, IconMinimize,IconSave, IconClose } from '../components/unIcons';
+import { IconImage, IconLive, IconLight, IconDark, IconKanban, IconImport, IconExport, IconReset, IconSidebar } from '../components/icons';
+import { IconShrink, IconExpand, IconMaximize, IconMinimize, IconSave, IconClose, IconCheckList, IconList, IconCoffeeDark, IconCoffeeLight } from '../components/unIcons';
 import { message, Modal } from 'ant-design-vue';
 import { IndexDBCache } from '../utils/indexedDB';
 import ComUpdate from './ComUpdate.vue';
 import LZString from 'lz-string';
 
-const allData = ref()
-const showGetGold = ref(true)
+
 const showDonateModel = ref(false)
+const settings = useSettingData().otherSettings;
+
 
 const backgroundFocusChange = () => {
-    useSettingData().updateOtherSettings({ backgroundFocus: !useSettingData().otherSettings.backgroundFocus });
-    message.success(`首页调整为${useSettingData().otherSettings.backgroundFocus ? '信息' : '简洁'}`);
+    settings.backgroundFocus = !settings.backgroundFocus
+    message.success(`首页调整为${settings.backgroundFocus ? '信息' : '简洁'}`);
+}
+
+const todoListShow = () => {
+    settings.todoListShow = !settings.todoListShow
+    message.success(`todo列表已${settings.todoListShow ? '隐藏' : '显示'}`);
 }
 
 const dockShow = () => {
-    useSettingData().updateOtherSettings({ dockShow: !useSettingData().otherSettings.dockShow });
-    message.success(`dock已${useSettingData().otherSettings.dockShow ? '显示' : '隐藏'}`);
+    settings.dockShow = !settings.dockShow
+    message.success(`dock栏已${settings.dockShow ? '显示' : '隐藏'}`);
 }
 
-const showDonate = () => {
-    showDonateModel.value = true
-}
 
 const closeGetGold = () => {
-    showGetGold.value = !showGetGold.value;
-    useSettingData().updateOtherSettings({ showGetGold: showGetGold.value });
-    if (showGetGold.value) {
-        message.success('已开启今日进度');
-    } else {
-        message.success('已关闭今日进度');
-    }
+    settings.showGetGold = !settings.showGetGold
+    message.success(`已${settings.showGetGold ? '开启' : '关闭'}今日进度`);
 }
 
 const collapseSidebar = () => {
-    useSettingData().updateOtherSettings({ collapseSidebar: !useSettingData().otherSettings.collapseSidebar });
-    message.success(`调整为默认${useSettingData().otherSettings.collapseSidebar ? '收起' : '展开'}侧边栏`);
+    settings.collapseSidebar = !settings.collapseSidebar
+    message.success(`调整为默认${settings.collapseSidebar ? '收起' : '展开'}侧边栏`);
 }
 
+// 每行卡片数
+const changeCardNum = () => {
+    settings.cardNum = settings.cardNum + 1;
+    if (settings.cardNum > 8) {
+        settings.cardNum = 1;
+    }
+}
+
+// 切换主题
+const toggleTheme = () => {
+    settings.defaultTheme = settings.defaultTheme === 'dark' ? 'light' : 'dark'
+    useLinkData().updateBackground(settings.defaultTheme === 'dark' ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', settings.defaultTheme)
+}
+
+// 数据统计
 const dataState = ref({
     engineNum: 0,
     pageNum: 0,
     likeNum: 0
 })
-
+const allData = ref()
 const getAllData = () => {
     allData.value = {
-        settingsData: useSettingData().otherSettings,
+        settingsData: settings,
         hotData: useLinkData().HotList,
         searchData: useLinkData().searchMenu,
         menuData: useLinkData().menuList,
@@ -527,7 +528,7 @@ const beforeUpload = (file) => {
     return false;
 };
 
-const settings = useSettingData().otherSettings;
+
 // 背景设置相关状态
 const backgroundState = reactive({
     typeList: ['动态', '图片'],
@@ -537,9 +538,6 @@ const backgroundState = reactive({
     maskBlur: settings.maskBlur == 0 ? 0 : settings.maskBlur || 2,
     position: settings.backgroundPosition || 0
 });
-
-
-
 
 // 标题设置相关状态
 const titleState = reactive({
@@ -555,15 +553,82 @@ const searchState = reactive({
 });
 
 const saveColor = () => {
-    useSettingData().updateOtherSettings({
-        fontColor: titleState.color
-    });
+    settings.fontColor = titleState.color
 };
 
 // 背景类型defaultType用于初始化控制
 const defaultType = ref(backgroundState.typeList[backgroundState.type]);
 const backgroundTypeChange = (value) => {
     backgroundState.type = value === '图片' ? 1 : 0;
+};
+
+
+// 优化watch函数，使用组合式函数
+const setupWatchers = () => {
+    // 防抖函数
+    const debounce = (fn, delay) => {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    };
+    // 设置数据
+    const settingData = useSettingData();
+    const updateSettings = debounce((settingsOption) => {
+        settingData.updateOtherSettings(settingsOption);
+    }, 300);
+
+    watch(() => titleState.value, (newVal, oldVal) => {
+        if (newVal === oldVal) return;
+        if (newVal.length > 10) {
+            message.error('标题最多10个字');
+            return;
+        }
+        updateSettings({
+            showTitle: titleState.show,
+            searchTitle: newVal
+        });
+    });
+
+
+    watch(() => ({
+        showTitle: titleState.show,
+        opacity: searchState.opacity,
+        isDark: searchState.isDark,
+    }), (newVal) => {
+        updateSettings({
+            showTitle: newVal.showTitle,
+            searchInputOpacity: newVal.opacity,
+            searchInputColor: newVal.isDark
+        });
+    });
+
+    watch(() => ({
+        showGetGold: settings.showGetGold,
+        todoListShow: settings.todoListShow,
+        dockShow: settings.dockShow,
+        cardNum: settings.cardNum,
+        defaultTheme: settings.defaultTheme,
+
+    }), (newVal) => {
+        updateSettings(newVal);
+    });
+
+
+    watch(() => ({
+        position: backgroundState.position,
+        mask: backgroundState.mask,
+        maskBlur: backgroundState.maskBlur,
+    }), (newVal) => {
+        updateSettings({
+            backgroundPosition: newVal.position,
+            mask: newVal.mask,
+            maskBlur: newVal.maskBlur
+        });
+    });
+
+
 };
 
 // 重写上传文件action
@@ -573,72 +638,14 @@ const fileUpload = async ({ file, onSuccess, onError }) => {
     onSuccess();
 };
 
-
 // 图片上传
 const ImgUploadChange = (info) => {
-    //  https://blog.csdn.net/weiCong_Ling/article/details/131437456
     if (info.file.status === 'done') {
-        // console.log('上传成功', info.file);
         backgroundState.imgSrc = URL.createObjectURL(info.file.originFileObj);
     } else if (info.file.status === 'error') {
         // console.error('上传失败');
     }
 }
-
-// 优化watch函数，使用组合式函数
-const setupWatchers = () => {
-    watch(() => titleState.value, (newVal) => {
-        if (newVal.length > 10) {
-            message.error('标题最多10个字');
-            return;
-        }
-        useSettingData().updateOtherSettings({
-            showTitle: titleState.show,
-            searchTitle: newVal
-        });
-    });
-
-    watch(() => titleState.show, (newVal) => {
-        useSettingData().updateOtherSettings({
-            showTitle: newVal
-        });
-    });
-
-    watch([
-        () => searchState.opacity,
-        () => searchState.isDark
-    ], ([newOpacity, newIsDark]) => {
-        useSettingData().updateOtherSettings({
-            searchInputOpacity: newOpacity,
-            searchInputColor: newIsDark
-        });
-    });
-
-    watch(() => settings.showGetGold, (newVal) => {
-        useSettingData().updateOtherSettings({
-            showGetGold: newVal
-        });
-    });
-
-    watch(() => settings.dockShow, (newVal) => {
-        useSettingData().updateOtherSettings({
-            dockShow: newVal
-        });
-    });
-
-    watch([
-        () => backgroundState.position,
-        () => backgroundState.mask,
-        () => backgroundState.maskBlur],
-
-        (newVal) => {
-            useSettingData().updateOtherSettings({
-                backgroundPosition: newVal[0],
-                mask: newVal[1],
-                maskBlur: newVal[2]
-            });
-        });
-};
 
 // 图片处理相关逻辑优化
 const imageDB = new IndexDBCache({
@@ -684,32 +691,10 @@ const saveBackground = () => {
     message.success(`更换${saveIndex === 0 ? '动态' : '图片'}背景成功`);
 };
 
-// 切换主题
-const isDarkMode = ref(false)
-const toggleTheme = () => {
-    isDarkMode.value = !isDarkMode.value
-    useSettingData().updateOtherSettings({ defaultTheme: isDarkMode.value ? 'dark' : 'light' })
-    document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
-    //切换背景
-    useLinkData().updateBackground(isDarkMode.value ? 'dark' : 'light');
-}
-// 自动监听并响应变化
-watchEffect(() => {
-    // console.log('Other settings updated:', useSettingData().otherSettings.defaultTheme); 
-    isDarkMode.value = useSettingData().otherSettings.defaultTheme === 'dark' ? true : false
-});
 
-// 每行卡片数
-const cardNum = ref(useSettingData().otherSettings.cardNum || 5);
-const changeCardNum = () => {
-    cardNum.value = cardNum.value + 1;
-    if (cardNum.value > 8) {
-        cardNum.value = 1;
-    }
-    useSettingData().updateOtherSettings({
-        cardNum: cardNum.value
-    });
-}
+
+
+
 
 // 初始化
 onMounted(() => {
@@ -717,6 +702,7 @@ onMounted(() => {
     setupWatchers();
     getAllData();
 });
+
 </script>
 <style lang="less">
 .pay-group {
@@ -831,7 +817,7 @@ onMounted(() => {
         }
     }
 
-    .update_box{
+    .update_box {
         width: 100px;
     }
 
@@ -944,36 +930,49 @@ onMounted(() => {
 
         .donate {
             &:hover {
-                animation: flipInY 1s ease;
-                animation-delay: 0.3s;
                 background-color: var(--semi-color-fill-0);
-                backface-visibility: visible !important;
+            }
+
+            .bounce-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            &:hover .bounce-icon {
+                animation: bounceReverse 2s ease infinite;
+                backface-visibility: visible !important; // 解决动画抖动问题
+                transform-origin: center;
             }
         }
 
-        @keyframes flipInY {
+        @keyframes bounceReverse {
             0% {
-                transform: perspective(400px) rotateY(90deg);
-                animation-timing-function: ease-in;
-                opacity: 0;
+                transform: translateY(0) scaleY(1);
+            }
+
+            20% {
+                transform: translateY(-15px) scaleY(1.1);
             }
 
             40% {
-                transform: perspective(400px) rotateY(-20deg);
-                animation-timing-function: ease-in;
+                transform: translateY(0) scaleY(0.85);
+            }
+
+            50% {
+                transform: translateY(0) scaleY(1) rotateY(180deg);
             }
 
             60% {
-                transform: perspective(400px) rotateY(10deg);
-                opacity: 1;
+                transform: translateY(-15px) scaleY(1.05);
             }
 
             80% {
-                transform: perspective(400px) rotateY(-5deg);
+                transform: translateY(0) scaleY(0.95);
             }
 
             100% {
-                transform: perspective(400px);
+                transform: translateY(0) scaleY(1) rotateY(360deg);
             }
         }
     }
