@@ -2369,17 +2369,17 @@ export const defaultData = {
   otherSettings: {
     defaultTheme: "light",
     backgroundTypeList: ["iframe", "img", "video"],
-    backgroundType: 0,
-    backgroundImgUrl: "",
+    backgroundType: 1,
+    backgroundImgUrl: "https://cdn.iceooh.com/defaultBg.webp",
     backgroundVideoUrl: "",
-    backgroundPosition: 0, // 背景位置
+    backgroundPosition: 50, // 背景位置
     backgroundFocus: true, // 背景是否聚焦
-    mask: 0.5,
-    maskBlur: 2,
+    mask: 0,
+    maskBlur: 0,
     searchTitle: "冰屋导航Iceooh",
     showTitle: true,
     fontColor: "#ffffff",
-    searchInputColor: true,
+    searchInputColor: false, // 搜索框文字颜色
     searchInputOpacity: 0.6,
     cardNum: 5,
     showGetGold: true, // 是否显示激励小组件

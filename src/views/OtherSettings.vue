@@ -551,7 +551,7 @@ const titleState = reactive({
 
 // 搜索框设置相关状态
 const searchState = reactive({
-    isDark: settings.searchInputColor || true,
+    isDark: settings.searchInputColor || false,
     opacity: settings.searchInputOpacity || 0.6
 });
 
