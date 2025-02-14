@@ -1,12 +1,13 @@
 <template>
   <a-config-provider :theme="themeConfig" :locale="zhCN">
     <div class="ice_main" :class="{ mobile: isMobile }">
-
-      <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile" />
-
+      <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile"  />
       <div class="ice_content" id="ice_content">
         <IceSearch />
         <div class="ice_main_content">
+          <IceSideMini :tabRefs="tabRefs" v-if="isNavCollapsed && !isMobile"/>
+
+
           <IceLike :is-mobile="isMobile" v-model:is-nav-collapsed="isNavCollapsed" />
           <div class="ice_menu_content" v-for="(menu, index) in menuList" :key="index" :id="menu.name"
             :ref="(el) => setTabRef(el, index)">
@@ -47,6 +48,7 @@
         </div>
         <a-back-top :target="iceContentDom" />
         <IceFooter />
+
       </div>
     </div>
 
@@ -65,8 +67,9 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
 
 
 import { IconRating, IconToast } from './components/icons';
-import IceLike from './views/IceLike.vue'
-import IceSide from './views/IceSide.vue'
+import IceLike from './views/IceLike.vue';
+import IceSide from './views/IceSide.vue';
+import IceSideMini from './views/IceSideMini.vue';
 import IceFooter from './views/IceFooter.vue';
 import ComDocker from './views/ComDocker.vue';
 import { debounce } from 'lodash';
@@ -97,7 +100,7 @@ const openNotification = () => {
     message: '随便逛逛吧~CTRL+D收藏本站',
     description: h('span', null, [
       '支持多种自定义设置，全部导航数据私有化！尺寸颜色数量还有热点视图，支持导入导出表格编辑，快来试试吧~ ',
-      h('a', { style: 'color: #108ee9',href: 'https://txc.qq.com/products/679436/change-log', target: '_blank' }, '更新日志')
+      h('a', { style: 'color: #108ee9', href: 'https://txc.qq.com/products/679436/change-log', target: '_blank' }, '更新日志')
     ]),
     top: '40px',
     style: {
@@ -240,14 +243,18 @@ const cardStyle = computed(() => {
   align-items: center;
   flex: 1;
   position: relative;
+  transition: all 0.3s ease-in-out;
   // min-width: 900px;
 
   .ice_main_content {
     width: 100%;
-    padding: 0 20px;
+    padding: 0 12%;
     background-color: var(--semi-color-bg-main);
+    position: relative;
+    padding-top: 24px;
 
     .ice_menu_like {
+      margin-top: 0!important;
       .ice_menu_like_tabs {
         width: 100%;
 
@@ -554,6 +561,9 @@ const cardStyle = computed(() => {
       max-width: calc(33% - 10px);
       flex: 0 0 calc(33% - 10px);
     }
+    .ice_main_content{
+      padding: 24px;
+    }
   }
 
 }
@@ -563,7 +573,7 @@ const cardStyle = computed(() => {
     position: relative;
 
     .ice_main_content {
-      padding: 0;
+      padding: 12px;
 
       .ice_menu_content {
         border: none;

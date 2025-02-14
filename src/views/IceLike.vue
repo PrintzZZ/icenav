@@ -317,10 +317,10 @@ const initHotSort = () => {
 const onLikeTabChange = () => {
     if (props.isMobile) return;
     if (LikeActiveKey.value === '1') {
-        emit('update:isNavCollapsed', true);
+        // emit('update:isNavCollapsed', true);
         LiketabRefs.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-        emit('update:isNavCollapsed', false);
+        // emit('update:isNavCollapsed', false);
     }
 };
 
@@ -563,8 +563,8 @@ watch(() => HotMoreOpen.value, (newVal) => {
         // 拖动把手样式
         .drag-handle {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 0px;
+            left: 5px;
             cursor: grab;
             opacity: 0;
             transition: opacity 0.2s;

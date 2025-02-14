@@ -2,6 +2,9 @@
     <!-- 邮箱网盘翻译等小组件 -->
     <div class="com-easy-tool">
         <ul class="com-easy-tool-list">
+            <i class="com-easy-tool-item" style="width: 35px; cursor: pointer;" @click="toggleSidebar()">
+                <IconMenu :style="{ color: fontColor }" />
+            </i>
             <li v-for="(tool, index) in toolList" :key="tool.name" class="com-easy-tool-item"
                 :style="{ color: fontColor }">
                 <a-tooltip :title="`${tool.name}设置`">
@@ -32,6 +35,7 @@
 </template>
 <script setup>
 import { ref, computed, markRaw } from 'vue'
+import { IconMenu } from '../components/icons';
 import { IconLanguage, IconSave, IconGlobe, IconArchive } from '../components/unIcons';
 import { useSettingData } from '../store/SettingStore';
 import { message } from 'ant-design-vue';
@@ -174,7 +178,11 @@ const setToolCancel = () => {
     setToolModal.value = false;
 }
 
-
+const toggleSidebar = () => {
+    useSettingData().updateOtherSettings({
+        collapseSidebar: !useSettingData().otherSettings.collapseSidebar
+    });
+}
 
 const fontColor = computed(() => useSettingData().otherSettings.fontColor);
 
@@ -232,10 +240,11 @@ const fontColor = computed(() => useSettingData().otherSettings.fontColor);
 
 .tool-settings {
 
-    .desc{
+    .desc {
         font-size: 12px;
         color: var(--semi-color-text-3);
     }
+
     .tool-settings-title {
         margin: 10px 0;
         color: var(--semi-color-text-2);

@@ -194,6 +194,7 @@ onUnmounted(() => {
 
 .ice_search_content {
     width: 100%;
+    
     // height: 50vh;
     // background-color: #071336a8;
     padding-top: 10vh;

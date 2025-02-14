@@ -1,15 +1,20 @@
 <template>
+    <!-- 移动端侧边栏 -->
     <div class="ice_side_btn" @click="toggleNavCollapse()" v-if="isMobile">
         <component :is="getIcon('IconMenu')" />
     </div>
-    <div class="ice_side_mask" :class="{ show: !isNavCollapsed }" @click="toggleNavCollapse()">
-        <div class="ice_side" :style="{ width: isNavCollapsed ? '60px' : '200px', }">
+
+    <!-- PC端侧边栏 -->
+
+    <div class="ice_side_mask" :class="{ show: !isNavCollapsed && isMobile}" @click="toggleNavCollapse()">
+
+        <div class="ice_side" :class="isNavCollapsed ? 'hidden' : 'show'">
             <div class="ice_nav_header">
-                <div class="ice_logo" :class="{ collapsed: isNavCollapsed }">
+                <div class="ice_logo">
                     <a href="/" target="">
                         <img src="/images/favicon.png" alt="ICEOOH冰屋学术导航logo" class="ice_logo_icon">
                     </a>
-                    <span class="ice_logo_text" v-if="!isNavCollapsed">
+                    <span class="ice_logo_text">
                         <span class="ice_logo_main">冰屋综合导航</span>
                         <span class="ice_logo_sub">ICEOOH.COM</span>
                     </span>
@@ -27,7 +32,7 @@
                                 </i>
                                 <span class="ice_menu_item_text">{{ menu.name }}</span>
                                 <i class="ice_menu_item_arrow" :class="{ rotated: menu.isOpen }">
-                                    <IconArrow v-if="!isNavCollapsed"/>
+                                    <IconArrow v-if="!isNavCollapsed" />
                                 </i>
                             </div>
                         </a-tooltip>
@@ -45,7 +50,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="ice_nav_footer">
+            <!-- <div class="ice_nav_footer">
                 <div class="nav-collapse-btn">
                     <button class="nav-button" @click.stop="toggleNavCollapse()" aria-label="折叠侧边栏">
                         <component :is="getIcon(isNavCollapsed ? 'IconKanban' : 'IconSidebar')" />
@@ -53,16 +58,16 @@
                             {{ isNavCollapsed ? '' : '收起侧边栏' }}</span>
                     </button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useLinkData } from '../store/LinkStore';
-// 引入所有图标
 import * as Icons from '../components/icons';
-import {IconArrow} from '../components/unIcons';
+import { IconArrow } from '../components/unIcons';
 const menuList = useLinkData().menuList;
 const selectedMenu = ref({ parentIndex: null, childIndex: null });
 const isNavCollapsed = computed(() => props.isNavCollapsed);
@@ -136,9 +141,11 @@ const getCollapseStyle = (menu) => {
 
 // 导航折叠状态
 const toggleNavCollapse = () => {
+    if (!props.isMobile) {
+        return;
+    }
     const newValue = !props.isNavCollapsed;
     emit('update:isNavCollapsed', newValue);
-
 };
 // 监听侧边栏折叠状态
 watch(() => props.isNavCollapsed, (newVal) => {
@@ -170,13 +177,24 @@ onMounted(() => {
 });
 
 </script>
+
 <style lang="less">
 .ice_side_btn {
     display: none;
 }
 
+
+.ice_side.hidden {
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
+    border: none;
+}
+
 .ice_side {
-    // width: 30%;
+    width: 200px;
     background-color: var(--semi-color-nav-bg);
     border-right: 1px solid var(--semi-color-border);
     box-sizing: border-box;
@@ -185,7 +203,6 @@ onMounted(() => {
     overflow: hidden;
     padding-left: 8px;
     padding-right: 8px;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-user-select: none;
     user-select: none;
     width: 200px;
@@ -199,6 +216,7 @@ onMounted(() => {
     will-change: width; // 提示浏览器动画优化
     backface-visibility: hidden; // 防止动画闪烁
     transform: translateZ(0); // 启用GPU加速
+    transition: .3s;
 }
 
 .ice_nav_header {
@@ -334,7 +352,7 @@ onMounted(() => {
                 color: var(--semi-color-text-0);
                 padding-left: 20px;
             }
-            
+
 
         }
 
@@ -512,7 +530,7 @@ onMounted(() => {
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.3s ease;
+        transition: 0.3s ease;
 
         &.show {
             opacity: 1;
@@ -521,10 +539,11 @@ onMounted(() => {
     }
 
     .ice_side {
+        width: 200px;
         position: fixed;
         height: 100%;
         transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: 0.3s ease;
 
         .show & {
             transform: translateX(0);

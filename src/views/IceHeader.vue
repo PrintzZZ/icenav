@@ -88,16 +88,17 @@ const modelClose = () => {
 <style lang="less">
 .ice_header {
     width: 100%;
-    height: 40px;
+    // height: 40px;
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 26px;
+    padding: 5px 26px;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999;
+
 }
 .ice_setPanel_modal {
     .ant-modal {
