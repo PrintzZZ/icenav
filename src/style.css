@@ -464,6 +464,8 @@ mark {
     --semi-hottiem-bg-2: #ed702d;
     --semi-hottiem-bg-3: #eead3f;
     --semi-edit-1: #454545;
+    --semi-miniSidebar-item: #0f487f;
+    --semi-miniSidebar-item-hover: #0e3f6d;
   }
   
   :root[data-theme='light'] {
@@ -518,6 +520,8 @@ mark {
     --semi-hottiem-bg-2: #ed702d;
     --semi-hottiem-bg-3: #eead3f;
     --semi-edit-1: #fff;
+    --semi-miniSidebar-item: #d0e8ff;
+    --semi-miniSidebar-item-hover: #bddfff;
   }
   
   body {

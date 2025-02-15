@@ -2,14 +2,15 @@
     <div class="miniSticky">
         <div class="sideMini">
             <ul class="miniList">
-                <li v-for="(item, index) in menuList" :key="item.name" class="miniItem">
+                <li v-for="(item, index) in menuList" :key="item.name" class="miniItem"
+                    :class="{ 'active': selectedIndex === index }" @click.stop="toggleMenu(index)">
                     <i class="miniItemIcon">
                         <component :is="getIcon(item.icon)" />
                     </i>
                     <span>{{ item.name }}</span>
                     <ul class="miniSubChild">
                         <li v-for="(subItem, childIndex) in item.child" :key="subItem.name" class="miniSubItem"
-                        @click.stop="selectItem(index, childIndex)">
+                            @click.stop="selectItem(index, childIndex)">
                             <span class="miniSubItemSpan">{{ subItem.name }}</span>
                         </li>
                     </ul>
@@ -33,6 +34,10 @@ const props = defineProps({
 });
 // console.log(menuList);
 
+const toggleMenu = (index) => {
+    selectedIndex.value = index;
+    scrollToTab(index)
+};
 
 
 // 滚动到对应的tab
@@ -46,9 +51,11 @@ const scrollToTab = (index) => {
 };
 
 // 选中子菜单
+const selectedIndex = ref(0);
 const selectItem = (parentIndex, childIndex) => {
     selectedMenu.value = { parentIndex, childIndex };
     menuList[parentIndex].activeKey = `${parentIndex}-${childIndex}`;
+    selectedIndex.value = parentIndex;
     scrollToTab(parentIndex);
 };
 
@@ -79,13 +86,13 @@ const getIcon = (iconName) => {
     position: absolute !important;
     top: 0;
     left: calc(-24px - 124px);
-    padding: 8px 0px;
-    background: #fff;
+    padding: 2px 0px 8px 0px;
+    background: var(--semi-color-bg-1);
     box-shadow: 0 0 0.1rem 0 rgba(158, 158, 158, 0.1);
     border-radius: var(--semi-border-radius-small);
-    border: 1px solid #abb7ec4f;
+    border: 1px solid var(--semi-color-border);
     transition: border-color 0.3s ease;
-    
+
 
     .miniList {
         margin: 0;
@@ -102,9 +109,8 @@ const getIcon = (iconName) => {
         position: relative;
         list-style: none;
         cursor: pointer;
-        margin: 0px 5px;
+        margin: 4px 5px;
         padding: 12px 12px;
-        margin: 0px 5px;
         height: 39px;
         font-size: 14px;
         display: flex;
@@ -114,6 +120,21 @@ const getIcon = (iconName) => {
         &:hover {
             background-color: var(--semi-color-fill-0);
             color: var(--semi-color-text-0);
+            position: relative;
+            right: 16px;
+            background: linear-gradient(to right, var(--semi-miniSidebar-item) 10%, #ff1e0000 100%);
+            border-radius: 6px 6px 6px 0;
+            box-shadow: 0 10px 40px -10px rgba(0, 64, 128, .2);
+        }
+
+        &:hover::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0px;
+            border-width: 0 10px 10px 0;
+            border-style: solid;
+            border-color: transparent var(--semi-miniSidebar-item-hover) transparent transparent;
         }
 
         &:hover .miniSubChild {
@@ -124,12 +145,13 @@ const getIcon = (iconName) => {
         }
 
         &.active {
-            background-color: var(--semi-color-fill-0);
+            background-color: var(--semi-color-primary-light-default);
             color: var(--semi-color-text-0);
         }
     }
 
     span {
+        color: var(--semi-color-text-0);
         margin-left: 8px;
     }
 }
@@ -138,7 +160,7 @@ const getIcon = (iconName) => {
     min-width: 245px;
     padding: 6px;
     position: absolute;
-    background: #fff;
+    background: var(--semi-color-bg-1);
     border-radius: 8px;
     box-shadow: 0 5px 20px 0px rgb(0 0 0 / 5%);
     -webkit-transition: .3s;
