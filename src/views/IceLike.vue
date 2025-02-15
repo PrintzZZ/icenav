@@ -9,7 +9,7 @@
                             <IconClose />
                         </span>
                         <a :href="item.link" class="ice_card_meta" target="_blank">
-                            <div class="ice_card_avatar" :class="[item.avatar ? '' : 'error', 'skeleton-loading']">
+                            <div class="ice_card_avatar" :class="[item.avatar ? '' : 'errorImg', 'skeleton-loading']">
                                 <template v-if="item.avatar">
                                     <div class="avatar-container">
                                         <!-- <div class="skeleton" ></div> -->
@@ -501,7 +501,7 @@ watch(() => HotMoreOpen.value, (newVal) => {
         }
     }
 
-    &.error {
+    &.errorImg {
         background: rgba(0, 0, 0, 0.25);
 
         .error_avatar {

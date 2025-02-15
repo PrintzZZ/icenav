@@ -58,7 +58,8 @@ const handleClick = () => {
     flex-wrap: wrap;
     align-items: center;
     line-height: 1;
-    padding: 20px;
+    padding: 20px 8%;
+    background: var(--semi-color-bg-0);
 }
 
 .cursor {

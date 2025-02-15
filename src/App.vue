@@ -1,51 +1,66 @@
 <template>
   <a-config-provider :theme="themeConfig" :locale="zhCN">
     <div class="ice_main" :class="{ mobile: isMobile }">
-      <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile"  />
+      <IceSide v-model:isNavCollapsed="isNavCollapsed" :tabRefs="tabRefs" :isMobile="isMobile" />
       <div class="ice_content" id="ice_content">
         <IceSearch />
-        <div class="ice_main_content">
-          <IceSideMini :tabRefs="tabRefs" v-if="isNavCollapsed && !isMobile"/>
 
+        <div class="ice_con_content">
+          <IceSideMini :tabRefs="tabRefs" v-if="isNavCollapsed && !isMobile" />
+          <div class="ice_nav_content">
+            <IceLike :is-mobile="isMobile" v-model:is-nav-collapsed="isNavCollapsed" />
+            <div class="ice_menu_content" v-for="(menu, index) in menuList" :key="index" :id="menu.name"
+              :ref="(el) => setTabRef(el, index)">
+              <a-tabs v-model:activeKey="menu.activeKey" class="ice_menu_content_tabs">
+                <a-tab-pane :tab="child.name" v-for="(child, childIndex) in menu.child" :key="`${index}-${childIndex}`"
+                  :title="child.name">
 
-          <IceLike :is-mobile="isMobile" v-model:is-nav-collapsed="isNavCollapsed" />
-          <div class="ice_menu_content" v-for="(menu, index) in menuList" :key="index" :id="menu.name"
-            :ref="(el) => setTabRef(el, index)">
-            <a-tabs v-model:activeKey="menu.activeKey" class="ice_menu_content_tabs">
-              <a-tab-pane :tab="child.name" v-for="(child, childIndex) in menu.child" :key="`${index}-${childIndex}`"
-                :title="child.name">
+                  <div class="ice_card_content">
+                    <div class="ice_card" v-for="(item, itemIndex) in child.item" :key="itemIndex" :style="cardStyle">
+                      <span class="like_icon" @click.stop="LikeItem(item)">
+                        <IconRating />
+                      </span>
+                      <a :href="item.link" class="ice_card_meta" target="_blank">
 
-                <div class="ice_card_content">
-
-
-
-                  <div class="ice_card" v-for="(item, itemIndex) in child.item" :key="itemIndex" :style="cardStyle">
-                    <span class="like_icon" @click.stop="LikeItem(item)">
-                      <IconRating />
-                    </span>
-                    <a :href="item.link" class="ice_card_meta" target="_blank">
-                      <div class="ice_card_avatar" :class="item.avatar ? '' : 'error'">
-                        <img v-if="item.avatar" :src="item.avatar" @error="item.avatar = null" loading="lazy"
-                          :alt="item.title" />
-                        <div class="error_avatar" v-else style="background-color: #007FFF;">{{
-                          item.title.split('')[0][0] }}
+                        <!-- 头像存在 -->
+                        <div class="ice_card_avatar" v-if="item.avatar">
+                          <img v-if="item.avatar" :src="item.avatar" loading="lazy" :alt="item.title" />
+                          <div class="error_avatar" v-else style="background-color: #007FFF;">{{
+                            item.title.split('')[0][0] }}
+                          </div>
                         </div>
-                      </div>
-                      <div class="ice_card_detail">
-                        <div class="ice_card_title">{{ item.title }}</div>
-                        <a-tooltip placement="bottom" :title="item.desc">
-                          <div class="ice_card_desc">{{ item.desc }}</div>
-                        </a-tooltip>
-                      </div>
-                    </a>
+                        <!-- 头像不存在 -->
+                        <div class="ice_card_avatar" v-else>
+                          <img v-if="!item.load"
+                            :src="'https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=' + encodeURIComponent(item.link)"
+                            @load="(event) => checkImgLoad(item, event)" loading="lazy" :alt="item.title" />
+                          <div class="error_avatar" v-else style="background-color: #007FFF;">{{
+                            item.title.split('')[0][0] }}
+                          </div>
+
+                        </div>
+
+                        <div class="ice_card_detail">
+                          <div class="ice_card_title">{{ item.title }}</div>
+                          <a-tooltip placement="bottom" :title="item.desc">
+                            <div class="ice_card_desc">{{ item.desc }}</div>
+                          </a-tooltip>
+                        </div>
+                      </a>
+                    </div>
+
+
                   </div>
+                </a-tab-pane>
+              </a-tabs>
+            </div>
 
-
-                </div>
-              </a-tab-pane>
-            </a-tabs>
           </div>
+
         </div>
+
+
+
         <a-back-top :target="iceContentDom" />
         <IceFooter />
 
@@ -78,6 +93,17 @@ import { debounce } from 'lodash';
 const menuList = useLinkData().menuList;
 const LikeList = useLinkData().LikeList;
 const isMobile = ref(false);
+
+const checkImgLoad = (item, event) => {
+  const img = event.target;
+  const width = img.naturalWidth;
+  if (width < 32) {
+    item.load = '使用占位';
+    item.avatar = '';
+  }else{
+    item.avatar = img.src;
+  }
+};
 
 // 计算主题配置
 const themeConfig = computed(() => ({
@@ -222,6 +248,7 @@ const cardStyle = computed(() => {
 });
 
 </script>
+
 <style lang="less">
 .ice_main {
   display: flex;
@@ -244,17 +271,17 @@ const cardStyle = computed(() => {
   flex: 1;
   position: relative;
   transition: all 0.3s ease-in-out;
+  background-color: var(--semi-color-bg-main);
   // min-width: 900px;
 
-  .ice_main_content {
-    width: 100%;
-    padding: 0 12%;
+  .ice_nav_content {
+
     background-color: var(--semi-color-bg-main);
     position: relative;
-    padding-top: 24px;
 
     .ice_menu_like {
-      margin-top: 0!important;
+      margin-top: 0 !important;
+
       .ice_menu_like_tabs {
         width: 100%;
 
@@ -284,7 +311,7 @@ const cardStyle = computed(() => {
       border-radius: var(--semi-border-radius-small);
       border: 1px solid var(--semi-color-border);
       background: var(--semi-color-bg-1);
-      margin: 24px 0;
+      margin: 12px 0;
       padding: 20px;
       will-change: width; // 提示浏览器动画优化
       backface-visibility: hidden; // 防止动画闪烁
@@ -372,6 +399,10 @@ const cardStyle = computed(() => {
             width: 76%;
             object-fit: cover;
             border-style: none;
+          }
+
+          .ice_card_avatar.error {
+            display: none;
           }
 
           .ice_card_avatar {
@@ -471,6 +502,25 @@ const cardStyle = computed(() => {
   }
 }
 
+.ice_con_content {
+  width: 100%;
+  max-width: 1800px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px;
+  position: relative;
+
+  .ice_nav_content {
+    flex: 1;
+    width: calc(100% - 124px - 12px);
+  }
+}
+
+
+
 .LikeMore_modal_content {
   display: flex;
   flex-direction: column;
@@ -561,9 +611,6 @@ const cardStyle = computed(() => {
       max-width: calc(33% - 10px);
       flex: 0 0 calc(33% - 10px);
     }
-    .ice_main_content{
-      padding: 24px;
-    }
   }
 
 }
@@ -572,9 +619,7 @@ const cardStyle = computed(() => {
   #IceoohNavigate .mobile {
     position: relative;
 
-    .ice_main_content {
-      padding: 12px;
-
+    .ice_nav_content {
       .ice_menu_content {
         border: none;
         padding: 0 10px;

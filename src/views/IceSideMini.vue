@@ -1,5 +1,4 @@
 <template>
-    <div class="miniSticky">
         <div class="sideMini">
             <ul class="miniList">
                 <li v-for="(item, index) in menuList" :key="item.name" class="miniItem"
@@ -17,7 +16,6 @@
                 </li>
             </ul>
         </div>
-    </div>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -74,28 +72,21 @@ const getIcon = (iconName) => {
 </script>
 
 <style scoped>
-.miniSticky {
-    display: block !important;
-    position: sticky;
-    top: 24px;
-    z-index: 999;
-}
-
 .sideMini {
-    width: 124px;
-    position: absolute !important;
-    top: 0;
-    left: calc(-24px - 124px);
-    padding: 2px 0px 8px 0px;
-    background: var(--semi-color-bg-1);
-    box-shadow: 0 0 0.1rem 0 rgba(158, 158, 158, 0.1);
-    border-radius: var(--semi-border-radius-small);
-    border: 1px solid var(--semi-color-border);
-    transition: border-color 0.3s ease;
-
-
+    min-width: 124px;
     .miniList {
+        position: sticky;
+        top: 12px;
+        z-index: 999;
+        width: 124px;
+        padding: 2px 0px 8px 0px;
+        background: var(--semi-color-bg-1);
+        box-shadow: 0 0 0.1rem 0 rgba(158, 158, 158, 0.1);
+        border-radius: var(--semi-border-radius-small);
+        border: 1px solid var(--semi-color-border);
+        transition: border-color 0.3s ease;
         margin: 0;
+        width: 100%;
     }
 
     .miniItemIcon {
@@ -121,8 +112,9 @@ const getIcon = (iconName) => {
             background-color: var(--semi-color-fill-0);
             color: var(--semi-color-text-0);
             position: relative;
+            width: calc(100% + 16px);
             right: 16px;
-            background: linear-gradient(to right, var(--semi-miniSidebar-item) 10%, #ff1e0000 100%);
+            background: linear-gradient(to right, var(--semi-miniSidebar-item) 10%, #ff1e0000 100%)!important;
             border-radius: 6px 6px 6px 0;
             box-shadow: 0 10px 40px -10px rgba(0, 64, 128, .2);
         }

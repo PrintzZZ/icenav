@@ -197,6 +197,7 @@ onUnmounted(() => {
     
     // height: 50vh;
     // background-color: #071336a8;
+    z-index: 999;
     padding-top: 10vh;
     padding-bottom: 10vh;
     position: relative;
@@ -313,7 +314,7 @@ onUnmounted(() => {
             height: 50px;
             font-size: 1pc;
             transition: 0.3s;
-            border-radius: 50px;
+            border-radius: 6px;
             // color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 9px 20px;
