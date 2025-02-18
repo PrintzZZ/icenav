@@ -9,16 +9,14 @@
                             <IconClose />
                         </span>
                         <a :href="item.link" class="ice_card_meta" target="_blank">
-                            <div class="ice_card_avatar" :class="[item.avatar ? '' : 'errorImg', 'skeleton-loading']">
-                                <template v-if="item.avatar">
-                                    <div class="avatar-container">
-                                        <!-- <div class="skeleton" ></div> -->
-                                        <img :src="item.avatar" @error="item.avatar = null" @load="handleImageLoad"
-                                            :class="{ 'loaded': imageLoaded }" alt="avatar"/>
+                            <div class="ice_card_avatar">
+                                <div class="avatar-container">
+                                    <img v-if="!item.load" :src="item.avatar" loading="lazy" :alt="item.title"
+                                        @load="(event) => checkImgLoad(item, event)" :class="{ 'loaded': imageLoaded }"
+                                        alt="avatar" />
+                                    <div class="error_avatar" v-else style="background-color: #007FFF;">{{
+                                        item.title.split('')[0][0] }}
                                     </div>
-                                </template>
-                                <div class="error_avatar" v-else style="background-color: #007FFF;">
-                                    {{ item.title.split(' ')[0][0] }}
                                 </div>
                             </div>
                             <div class="ice_card_detail">
@@ -28,7 +26,7 @@
                                 </a-tooltip>
                             </div>
                         </a>
-                    </div>  
+                    </div>
                 </div>
             </a-tab-pane>
             <a-tab-pane key="1" tab="今日热点" v-if="!isMobile">
@@ -50,16 +48,20 @@
                     <div class="like-more-modal">
                         <a-form :model="LikeMoreItem" :rules="rules" ref="formRef" layout="vertical">
                             <div class="preview-card">
-                                <a-card style="width: 300px">
-                                    <a-card-meta :title="LikeMoreItem.title" :description="LikeMoreItem.desc">
+                                <a-card style="width: 300px;">
+                                    <a-card-meta :title="LikeMoreItem.title" >
                                         <template #avatar>
-                                            <a-avatar shape="square" size="large" :src="LikeMoreItem.avatar == '' ? `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${LikeMoreItem.link}` : LikeMoreItem.avatar"
+                                            <a-avatar shape="square" size="large"
+                                                :src="LikeMoreItem.avatar == '' ? `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${LikeMoreItem.link}` : LikeMoreItem.avatar"
                                                 @error="handleAvatarError" class="preview-avatar">
                                                 <template #icon>
                                                     <div class="skeleton-avatar"></div>
                                                 </template>
                                                 {{ LikeMoreItem.title?.[0] || 'N/A' }}
                                             </a-avatar>
+                                        </template>
+                                        <template #description>
+                                            <div class="ellipsis-text">{{ LikeMoreItem.desc }}</div>
                                         </template>
                                     </a-card-meta>
                                 </a-card>
@@ -132,7 +134,7 @@ import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import IceHot from './IceHot.vue';
 import { IconWarning } from '../components/icons';
-import {  IconClose, } from '../components/unIcons';
+import { IconClose, } from '../components/unIcons';
 import Sortable from "sortablejs";
 import { debounce } from 'lodash-es';
 
@@ -203,7 +205,7 @@ const rules = {
         { required: true, message: '请输入网址' },
         { type: 'url', message: '请输入有效的网址' }
     ],
-    desc: [{ required: true, message: '请输入描述' }]
+    desc: [{ required: false, message: '请输入描述' }]
 };
 
 // 优化预览更新
@@ -229,6 +231,13 @@ const LikeMoreHandleOk = async () => {
             message.warning('已收藏过了');
             return;
         }
+
+        // 自动获取头像
+        if (LikeMoreItem.value.avatar == '') {
+            const imgUrl = `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${LikeMoreItem.value.link}`;
+            LikeMoreItem.value.avatar = imgUrl;
+        }
+
 
         const newList = [...LikeList.value, { ...LikeMoreItem.value }];
         await linkStore.updateLikeList(newList);
@@ -327,9 +336,16 @@ const onLikeTabChange = () => {
 // 添加图片加载状态控制
 const imageLoaded = ref(false);
 
-const handleImageLoad = (event) => {
-    event.target.classList.add('loaded');
+const checkImgLoad = (item, event) => {
     imageLoaded.value = true;
+    const img = event.target;
+    const width = img.naturalWidth;
+    if (width < 32) {
+        item.load = '使用占位';
+        item.avatar = '';
+    } else {
+        item.avatar = img.src;
+    }
 };
 
 // 修改收藏排序初始化
@@ -431,8 +447,16 @@ watch(() => HotMoreOpen.value, (newVal) => {
     border: none !important;
 }
 
-.Hot_setting{
+.Hot_setting {
     margin: 16px 0;
+}
+
+.ellipsis-text {
+  white-space: nowrap;       /* 不换行 */
+  overflow: hidden;          /* 超出隐藏 */
+  text-overflow: ellipsis;   /* 省略号 */
+  width: 100%;               /* 限制宽度 */
+  display: block;
 }
 
 .like-more-modal {

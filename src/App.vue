@@ -100,7 +100,7 @@ const checkImgLoad = (item, event) => {
   if (width < 32) {
     item.load = '使用占位';
     item.avatar = '';
-  }else{
+  } else {
     item.avatar = img.src;
   }
 };
@@ -396,7 +396,7 @@ const cardStyle = computed(() => {
 
           .ice_card_avatar>img {
             display: block;
-            width: 76%;
+            width: 100%;
             object-fit: cover;
             border-style: none;
           }
@@ -412,20 +412,19 @@ const cardStyle = computed(() => {
             line-height: 30px;
             list-style: none;
             position: relative;
-            display: inline-block;
             overflow: hidden;
             white-space: nowrap;
             text-align: center;
             background: #00000000;
             border: 1px solid transparent;
-            width: 40px;
-            height: 40px;
-            // border-radius: 50%;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             flex-direction: column;
             flex-wrap: nowrap;
             justify-content: center;
+            border-radius: 6px;
 
           }
 
@@ -444,7 +443,7 @@ const cardStyle = computed(() => {
             border: 1px solid transparent;
             width: 38px;
             height: 38px;
-            border-radius: 50%;
+            // border-radius: 50%;
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -466,7 +465,7 @@ const cardStyle = computed(() => {
             justify-content: center;
             align-items: center;
             background-color: #bdbdbd47;
-            border-radius: 50%;
+            border-radius: 10%;
           }
 
           .ice_card_detail {
