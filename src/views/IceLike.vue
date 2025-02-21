@@ -3,10 +3,12 @@
         <a-tabs v-model:activeKey="LikeActiveKey" class="ice_menu_like_tabs" @change="onLikeTabChange">
             <a-tab-pane key="0" tab="我的收藏">
                 <div class="ice_card_content" ref="sortLikeListRefs">
-                    <div class="ice_card" v-for="(item, key) in LikeList" :key="key" :data-id="key" :style="cardStyle">
+
+                    <!-- 卡片样式1 -->
+                    <div class="ice_like_card" v-for="(item, key) in LikeList" :key="key" :data-id="key">
                         <div class="drag-handle">⋮⋮</div>
-                        <span class="like_icon" @click.stop="LikeCancelItem(item)" style="color: #bfbfbf;">
-                            <IconClose />
+                        <span class="like_close_icon" @click.stop="LikeCancelItem(item)" >
+                            <IconTriangleDown />
                         </span>
                         <a :href="item.link" class="ice_card_meta" target="_blank">
                             <div class="ice_card_avatar">
@@ -20,9 +22,8 @@
                                 </div>
                             </div>
                             <div class="ice_card_detail">
-                                <div class="ice_card_title">{{ item.title }}</div>
                                 <a-tooltip placement="bottom" :title="item.desc">
-                                    <div class="ice_card_desc">{{ item.desc }}</div>
+                                    <div class="ice_card_title">{{ item.title }}</div>
                                 </a-tooltip>
                             </div>
                         </a>
@@ -49,7 +50,7 @@
                         <a-form :model="LikeMoreItem" :rules="rules" ref="formRef" layout="vertical">
                             <div class="preview-card">
                                 <a-card style="width: 300px;">
-                                    <a-card-meta :title="LikeMoreItem.title" >
+                                    <a-card-meta :title="LikeMoreItem.title">
                                         <template #avatar>
                                             <a-avatar shape="square" size="large"
                                                 :src="LikeMoreItem.avatar == '' ? `https://t3.gstatic.cn/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=128&url=${LikeMoreItem.link}` : LikeMoreItem.avatar"
@@ -129,12 +130,12 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, nextTick, onUnmounted } from 'vue';
-import { message } from 'ant-design-vue';
+import { message,Modal } from 'ant-design-vue';
 import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import IceHot from './IceHot.vue';
 import { IconWarning } from '../components/icons';
-import { IconClose, } from '../components/unIcons';
+import { IconClose,IconTriangleDown } from '../components/unIcons';
 import Sortable from "sortablejs";
 import { debounce } from 'lodash-es';
 
@@ -150,7 +151,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:isNavCollapsed']);
-
+ 
 const LikeActiveKey = ref('0');
 const linkStore = useLinkData();
 const LikeList = computed(() => linkStore.LikeList);
@@ -175,9 +176,21 @@ const LikeMoreItem = ref({
 });
 
 const LikeCancelItem = (item) => {
-    const newList = LikeList.value.filter(i => i.link !== item.link);
-    linkStore.updateLikeList(newList);
+
+    Modal.confirm({
+        title: '确认删除收藏',
+        content: `确认删除 "${item.title}" 收藏？`,
+        onOk: async () => {
+            await linkStore.updateLikeList(LikeList.value.filter(i => i.link !== item.link));
+            message.success('删除成功');
+        },
+        onCancel: () => {
+            message.info('已取消');
+        }
+    });
 };
+
+
 
 const LikeMore = () => {
     if (LikeActiveKey.value === '0') {
@@ -354,7 +367,7 @@ const initLikeSort = () => {
 
     return Sortable.create(sortLikeListRefs.value, {
         animation: 150,
-        handle: ".ice_card",
+        handle: ".ice_like_card",
         ghostClass: "sortable-ghost",
         chosenClass: "sortable-chosen",
         dragClass: "sortable-drag",
@@ -400,17 +413,17 @@ onUnmounted(() => {
 
 // 计算卡片样式
 
-const cardStyle = computed(() => {
-    if (props.isMobile) { return {} }
-    const num = useSettingData().otherSettings.cardNum || 5;
-    const gap = 10; // 卡片间距
-    const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
-    return {
-        flex: `0 0 ${width}`,
-        maxWidth: width,
-        minWidth: '150px', // 设置最小宽度
-    };
-});
+// const cardStyle = computed(() => {
+//     if (props.isMobile) { return {} }
+//     const num = useSettingData().otherSettings.cardNum || 5;
+//     const gap = 10; // 卡片间距
+//     const width = `calc((100% - ${gap * (num - 1)}px) / ${num})`;
+//     return {
+//         flex: `0 0 ${width}`,
+//         maxWidth: width,
+//         minWidth: '150px', // 设置最小宽度
+//     };
+// });
 
 // 监听列表变化，确保排序正确
 watch(LikeList, () => {
@@ -452,11 +465,15 @@ watch(() => HotMoreOpen.value, (newVal) => {
 }
 
 .ellipsis-text {
-  white-space: nowrap;       /* 不换行 */
-  overflow: hidden;          /* 超出隐藏 */
-  text-overflow: ellipsis;   /* 省略号 */
-  width: 100%;               /* 限制宽度 */
-  display: block;
+    white-space: nowrap;
+    /* 不换行 */
+    overflow: hidden;
+    /* 超出隐藏 */
+    text-overflow: ellipsis;
+    /* 省略号 */
+    width: 100%;
+    /* 限制宽度 */
+    display: block;
 }
 
 .like-more-modal {
@@ -486,7 +503,7 @@ watch(() => HotMoreOpen.value, (newVal) => {
     position: relative;
     width: 40px;
     height: 40px;
-    // border-radius: 50%;
+    border-radius: 6px;
     overflow: hidden;
     flex-shrink: 0; // 防止头像被压缩
 
@@ -581,8 +598,67 @@ watch(() => HotMoreOpen.value, (newVal) => {
 }
 
 .ice_card_content {
-    .ice_card {
+    .ice_like_card {
         position: relative;
+        width: 80px;
+        height: 80px;
+        list-style: none;
+        position: relative;
+        background-color: var(--semi-color-bg-0);
+        border-radius: 8px;
+        
+        &:hover {
+            border: 1px solid var(--semi-color-border);
+        }
+
+        &:hover {
+            .like_close_icon {
+                opacity: 1;
+            }
+        }
+
+        .ice_card_meta {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+            width: 100%;
+            height: 100%;
+
+            .ice_card_detail {
+                height: 20px;
+
+                .ice_card_title {
+                    font-size: 12px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
+                    color: var(--semi-color-text-2);
+                }
+            }
+        }
+
+        // 删除按钮样式
+        .like_close_icon {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            opacity: 0;
+            transition: all 0.2s;
+            color: #bfbfbf;
+            cursor: pointer;
+            transform: rotate(-45deg);
+            font-size: 16px;
+
+            &:hover {
+                color: red;
+                transform: scale(1.2) rotate(-45deg);;
+            }
+        }
 
         // 拖动把手样式
         .drag-handle {

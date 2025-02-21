@@ -16,6 +16,7 @@ import IconCheckList from './IconCheckList.vue';
 import IconList from './IconList.vue';
 import IconCoffeeDark from './IconCoffeeDark.vue';
 import IconCoffeeLight from './IconCoffeeLight.vue';
+import IconTriangleDown from './IconTriangleDown.vue';
 
 
 export {
@@ -37,4 +38,5 @@ export {
     IconList,
     IconCoffeeDark,
     IconCoffeeLight,
+    IconTriangleDown
 };

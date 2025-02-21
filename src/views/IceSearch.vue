@@ -73,10 +73,18 @@ import { useLinkData } from '../store/LinkStore';
 import { useSettingData } from '../store/SettingStore';
 import { IndexDBCache } from '../utils/indexedDB'
 
+
+const settings = useSettingData().otherSettings;
 const searchMenu = useLinkData().searchMenu;
+
 
 const searchMenuActiveIndex = ref(0);
 const searchListActiveIndex = ref(0);
+watchEffect(() => {
+    searchMenuActiveIndex.value = settings.searchMenuActiveIndex;
+    searchListActiveIndex.value = settings.searchListActiveIndex;
+});
+
 const lineStyle = ref({ left: 0, width: 0 });
 const searchQuery = ref("");
 const searchFrom = ref({
@@ -97,6 +105,11 @@ const checkWindowSize = () => {
 };
 
 const menuClick = (index, event) => {
+    useSettingData().updateOtherSettings({
+        searchMenuActiveIndex: index,
+        searchListActiveIndex: 0}
+    );
+    
     searchMenu.forEach(item => {
         item.active = false;
     });
@@ -112,6 +125,9 @@ const menuClick = (index, event) => {
     searchListActiveIndex.value = 0;
 }
 const listClick = (index) => {
+    useSettingData().updateOtherSettings({
+        searchListActiveIndex: index,}
+    );
     searchListActiveIndex.value = index;
     searchFrom.value = searchMenu[searchMenuActiveIndex.value].engines[index];
 }
@@ -119,16 +135,39 @@ const listClick = (index) => {
 const handleSubmit = () => window.open(searchFrom.value.link + searchQuery.value, '_blank');
 const clearSearch = () => searchQuery.value = '';
 
+// 背景类型
 const computedSrc = computed(() => `${useLinkData().backgroundData}`);
 
-const backgroundType = computed(() => useSettingData().otherSettings.backgroundType);
-const backgroundImgUrl = computed(() => useSettingData().otherSettings.backgroundImgUrl);
-const backgroundMask = computed(() => useSettingData().otherSettings.mask);
-const backgroundMaskBlur = computed(() => useSettingData().otherSettings.maskBlur);
-const backgroundPosition = computed(() => useSettingData().otherSettings.backgroundPosition);
-const fontColor = computed(() => useSettingData().otherSettings.fontColor);
-const searchInputOpacity = computed(() => useSettingData().otherSettings.searchInputOpacity);
-const searchInputColor = computed(() => useSettingData().otherSettings.searchInputColor);
+// const backgroundType = computed(() => settings.backgroundType);
+// const backgroundImgUrl = computed(() => settings.backgroundImgUrl);
+// const backgroundMask = computed(() => settings.mask);
+// const backgroundMaskBlur = computed(() => settings.maskBlur);
+// const backgroundPosition = computed(() => settings.backgroundPosition);
+// const fontColor = computed(() => settings.fontColor);
+// const searchInputOpacity = computed(() => settings.searchInputOpacity);
+// const searchInputColor = computed(() => settings.searchInputColor);
+// 代码简化
+const {
+  backgroundType,
+  backgroundImgUrl,
+  backgroundMask,
+  backgroundMaskBlur,
+  backgroundPosition,
+  fontColor,
+  searchInputOpacity,
+  searchInputColor,
+} = Object.fromEntries(
+  [
+    'backgroundType',
+    'backgroundImgUrl',
+    'mask',
+    'maskBlur',
+    'backgroundPosition',
+    'fontColor',
+    'searchInputOpacity',
+    'searchInputColor'
+  ].map(prop => [prop, computed(() => settings[prop])])
+)
 
 // 初始化 IndexDB 实例
 const backgroundImage = ref('');

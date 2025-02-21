@@ -3159,6 +3159,8 @@ export const defaultData = {
     collapseSidebar: true, // 默认展开侧边栏
     dockShow: true, // 默认显示dock
     todoListShow: true, // 默认显示todo列表
+    searchMenuActiveIndex: 0, // 搜索菜单默认选中项索引
+    searchListActiveIndex: 0, // 搜索列表默认选中项索引
   },
   todoList: [{
     text: '任务1: 点击完成',
