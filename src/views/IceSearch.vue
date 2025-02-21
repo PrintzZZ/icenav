@@ -80,16 +80,16 @@ const searchMenu = useLinkData().searchMenu;
 
 const searchMenuActiveIndex = ref(0);
 const searchListActiveIndex = ref(0);
+const searchFrom = ref({ name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd' });
+
 watchEffect(() => {
     searchMenuActiveIndex.value = settings.searchMenuActiveIndex;
     searchListActiveIndex.value = settings.searchListActiveIndex;
+    searchFrom.value = searchMenu[searchMenuActiveIndex.value].engines[searchListActiveIndex.value];
 });
 
 const lineStyle = ref({ left: 0, width: 0 });
 const searchQuery = ref("");
-const searchFrom = ref({
-    name: '百度', link: 'https://www.baidu.com/s?wd=', placeholder: '百度一下', namearrt: 'wd'
-});
 
 //判断是否是移动端
 // 监听窗口大小变化
