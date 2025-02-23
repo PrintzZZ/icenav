@@ -642,6 +642,19 @@ watch(() => HotMoreOpen.value, (newVal) => {
             }
         }
 
+
+        // 错误头像样式
+        .error_avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
         // 删除按钮样式
         .like_close_icon {
             position: absolute;
