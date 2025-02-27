@@ -116,12 +116,13 @@ const themeConfig = computed(() => ({
 //检测版本
 const checkVersion = () => {
   const version = useSettingData().otherSettings.iceVersion;
-  if (version != '0.0.2') {
+  if (version != '0.0.4') {
     openNotification();
   }
 }
 const openNotification = () => {
   const key = `open${Date.now()}`;
+
   notification.open({
     message: '随便逛逛吧~CTRL+D收藏本站',
     description: h('span', null, [
@@ -141,7 +142,8 @@ const openNotification = () => {
       style: 'margin-left: 10px;',
       onClick: () => {
         notification.close(key);
-        useSettingData().updateOtherSettings({ iceVersion: '0.0.2' });
+        useSettingData().updateOtherSettings({ toolList: null });
+        useSettingData().updateOtherSettings({ iceVersion: '0.0.4' });
       }
     }, () => '不再提示'),
   });

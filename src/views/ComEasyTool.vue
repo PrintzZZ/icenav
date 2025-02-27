@@ -9,7 +9,7 @@
                 :style="{ color: fontColor }">
                 <a-tooltip :title="`${tool.name}设置`">
                     <i class="com-easy-tool-icon" @click="setTool(index)">
-                        <component :is="tool.icon" />
+                        <component :is="getIcon(tool.icon)" />
                     </i>
                 </a-tooltip>
                 <a :href="tool.url" target="_blank" :style="{ color: fontColor }" :alt="tool.name">{{ tool.name }}</a>
@@ -36,14 +36,15 @@
 <script setup>
 import { ref, computed, markRaw } from 'vue'
 import { IconMenu } from '../components/icons';
-import { IconLanguage, IconSave, IconGlobe, IconArchive } from '../components/unIcons';
+import * as Icons from '../components/unIcons';
 import { useSettingData } from '../store/SettingStore';
 import { message } from 'ant-design-vue';
+import { watchEffect } from 'vue';
 
 const toolList = ref([
     {
         name: '邮箱',
-        icon: markRaw(IconLanguage),
+        icon: 'IconLanguage',
         url: 'https://mail.qq.com',
         backup: [
             {
@@ -70,7 +71,7 @@ const toolList = ref([
     },
     {
         name: '网盘',
-        icon: markRaw(IconSave),
+        icon: 'IconSave',
         url: 'https://pan.baidu.com',
         backup: [
             {
@@ -89,7 +90,7 @@ const toolList = ref([
     },
     {
         name: '翻译',
-        icon: markRaw(IconGlobe),
+        icon: 'IconGlobe',
         url: 'https://fanyi.baidu.com',
         backup: [
             {
@@ -116,7 +117,7 @@ const toolList = ref([
     },
     {
         name: '文档',
-        icon: markRaw(IconArchive),
+        icon: 'IconArchive',
         url: 'https://docs.qq.com',
         backup: [
             {
@@ -143,6 +144,15 @@ const toolList = ref([
     }
 ])
 
+watchEffect(()=>{
+    toolList.value = useSettingData().otherSettings.toolList ? useSettingData().otherSettings.toolList : toolList.value;
+})
+
+// 获取图标组件的方法
+const getIcon = (iconName) => {
+    return Icons[iconName] || null;
+};
+
 const currentTool = ref(null);
 const selectedUrl = ref('');
 const customUrl = ref('');
@@ -166,6 +176,8 @@ const setToolOk = () => {
     } else {
         currentTool.value.url = selectedUrl.value;
     }
+
+    // console.log(toolList.value);
     useSettingData().updateOtherSettings({
         toolList: toolList.value
     });
